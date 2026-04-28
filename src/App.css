@@ -1,3 +1,13 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Narly";
+  src: url("/src/assets/fonts/Narly.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: "Rubik";
   src: url("/src/assets/fonts/Rubik80sFade-Regular.ttf") format("truetype");
@@ -23,8 +33,6 @@
   font-display: swap;
 }
 
-@import "tailwindcss";
-
 /* ===== THEME VARIABLES ===== */
 :root,
 [data-theme="eighties"] {
@@ -46,32 +54,41 @@
   --second-header-font: "Silkscreen-Regular", monospace;
 
   --overlay-color: rgba(0, 0, 0, 0.3);
+
+  --gradient: linear-gradient(
+    to right,
+    #faeb2c,
+    #f52789,
+    #e900ff,
+    #1685f8,
+    #3d144c
+  );
 }
 
 [data-theme="analog"] {
-  --color-bg-primary: #474747;
-  --color-bg-secondary: #777676;
-  --color-bg-accent: #dca1fa;
+  --color-bg-primary: #131313;
+  --color-bg-secondary: #504f4f;
+  --color-bg-accent: #514c45;
 
   --color-text-primary: #ffffff;
   --color-text-muted: #b3b3b3;
-  --color-text-accent: #ffdcac;
+  --color-text-accent: #8d7753;
 
-  --color-border: #209f17;
-  --color-border-accent: #2f9e00;
-  --color-accent-primary: #008e3b;
+  --color-border: #5b5b5b;
+  --color-border-accent: #999999;
+  --color-accent-primary: #a18a4e;
 
   --background-image: url("/src/assets/bg/static.jpg");
   --background-size: 200px 200px;
-  --header-font: "Silkscreen-Bold", monospace;
+  --header-font: "Narly", monospace;
   --second-header-font: "Silkscreen-Regular", monospace;
 
   --overlay-color: rgba(0, 0, 0, 0.3);
 }
 
 [data-theme="forum"] {
-  --color-bg-primary: #474747;
-  --color-bg-secondary: #777676;
+  --color-bg-primary: #141414;
+  --color-bg-secondary: #545353;
   --color-bg-accent: #dca1fa;
 
   --color-text-primary: #ffffff;
@@ -84,7 +101,7 @@
 
   --background-image: url("../public/images/fancy-wallpaper.svg");
   --background-size: 100px 100px;
-  --header-font: "Silkscreen-Bold", monospace;
+  --header-font: "Narly", monospace;
   --second-header-font: "Silkscreen-Regular", monospace;
 
   --overlay-color: rgba(0, 0, 0, 0.3);
@@ -131,6 +148,26 @@
 
   --overlay-color: rgba(255, 255, 255, 0.7);
 }
+
+@theme {
+  --color-theme-bg-primary: var(--color-bg-primary);
+  --color-theme-bg-secondary: var(--color-bg-secondary);
+  --color-theme-bg-accent: var(--color-bg-accent);
+  --color-theme-text-primary: var(--color-text-primary);
+  --color-theme-text-muted: var(--color-text-muted);
+  --color-theme-text-accent: var(--color-text-accent);
+  --color-theme-text-secondary: var(
+    --color-text-secondary,
+    var(--color-text-muted)
+  );
+  --color-theme-border: var(--color-border);
+  --color-theme-border-accent: var(--color-border-accent);
+  --color-theme-accent-primary: var(--color-accent-primary);
+  --color-theme-accent-secondary: var(
+    --color-accent-secondary,
+    var(--color-accent-primary)
+  );
+}
 /* Apply theme colors to html and body */
 html,
 body {
@@ -148,11 +185,12 @@ html {
 
 body {
   min-height: 100vh;
+  overflow: hidden;
 }
 
 .App {
   text-align: center;
-  background-color: var(--color-bg-primary);
+  background-color: transparent;
   color: var(--color-text-primary);
   height: 100vh;
   width: 100vw;
@@ -160,41 +198,60 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: auto;
   transition:
     background-color 0.5s ease,
     color 0.5s ease;
 }
 
+.BackgroundColor {
+  background-color: var(--color-bg-primary);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
 .StaticBackground {
-  height: 100vh;
-  width: 100vw;
   background-image: url("/src/assets/bg/static.jpg");
   background-repeat: repeat;
-  background-size: 200px 200px;
-  opacity: 1;
+  background-size: 50px 50px;
+  opacity: 0.14;
   position: absolute;
-  top: 0;
-  left: 0;
-  inset: -200%;
-  z-index: 9999;
-  animation: shift 1s ease-in-out infinite;
+  inset: -1%;
+  top: -5px;
+  left: -5px;
+  z-index: 0;
+  overflow: hidden;
+  animation: shift 0.2s linear infinite both;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.StaticForeground {
+  position: absolute;
+  opacity: 0.03;
+  height: 150%;
+  width: 6px;
+  background-color: whitesmoke;
+  z-index: 2;
+  overflow: hidden;
+  animation: moveAcross 25s linear infinite;
+  --mask:
+    radial-gradient(
+        7.75px at calc(100% + 4.8px) 50%,
+        #0000 calc(99% - 3px),
+        #000 calc(101% - 3px) 99%,
+        #0000 101%
+      )
+      calc(50% - 3.5px + 0.5px) calc(50% - 8px)/7px 16px repeat-y,
+    radial-gradient(
+        7.75px at -4.8px 50%,
+        #0000 calc(99% - 3px),
+        #000 calc(101% - 3px) 99%,
+        #0000 101%
+      )
+      calc(50% + 3.5px) 50%/7px 16px repeat-y;
+  -webkit-mask: var(--mask);
+  mask: var(--mask);
 }
 
 h1,
@@ -202,6 +259,13 @@ h2 {
   font-family: var(--header-font);
   font-weight: 800;
   text-wrap: balance;
+  font-size: 2.5rem;
+  background-image: var(--gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  display: inline-block;
 }
 
 h3,
@@ -606,12 +670,21 @@ input[type="textarea"]:hover {
 
 @keyframes shift {
   0% {
-    transform: translateX(10px) translateY(10px);
-  }
-  50% {
-    transform: translateX(-10px) translateY(-10px);
+    transform: translateX(5px) translateY(5px);
   }
   100% {
-    transform: translateX(10px) translateY(10px);
+    transform: translateX(-5px) translateY(-5px);
+  }
+}
+
+@keyframes moveAcross {
+  0% {
+    transform: translateX(-100vw) translateY(0);
+  }
+  50% {
+    transform: translateX(50vw) translateY(10vw);
+  }
+  100% {
+    transform: translateX(100vw) translateY(0vw);
   }
 }

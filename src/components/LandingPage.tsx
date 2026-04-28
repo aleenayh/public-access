@@ -188,8 +188,12 @@ export function LandingPage({
 
 	return (
 		<div className="App flex items-center justify-center p-8">
+			<div className="BackgroundColor"></div>
 			<div className="StaticBackground"></div>
-			<div className="max-w-md w-full flex flex-col gap-6">
+			<div className="StaticForeground"/>
+			<div className="StaticForeground -right-5"/>
+			<div className="StaticForeground -right-15"/>
+			<div className="max-w-md w-full flex flex-col gap-6 z-0">
 				<h1 className="flex justify-center w-full text-theme-text-accent">
 					Public Access
 				</h1>
