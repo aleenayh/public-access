@@ -6,11 +6,13 @@ import React, {
 } from "react";
 import z from "zod";
 
-// Context value includes state AND actions
+type ThemeOptions = "eighties" | "light" | "analog" | "forum" | "dark";
 interface PreferencesContextValue {
 	prefersReducedMotion: boolean;
 	prefersImmediateDice: boolean;
+	theme: ThemeOptions;
 	saveMotionPreference: (prefersReducedMotion: boolean) => void;
+	saveTheme: (theme: ThemeOptions) => void;
 	saveImmediateDicePreference: (prefersImmediateDice: boolean) => void;
 }
 
@@ -27,11 +29,14 @@ const savedPreferenceSchema = z
 	.object({
 		prefersReducedMotion: z.boolean(),
 		prefersImmediateDice: z.boolean(),
+		theme: z.enum(["eighties", "light", "analog", "forum", "dark"]),
 	})
 	.catch({
 		prefersReducedMotion: false,
 		prefersImmediateDice: false,
+		theme: "analog",
 	});
+
 
 export const PreferencesProvider: React.FC<PreferencesProviderProps> = ({
 	children,
@@ -49,7 +54,10 @@ export const PreferencesProvider: React.FC<PreferencesProviderProps> = ({
 	const [prefersImmediateDice, setPrefersImmediateDice] = useState(
 		savedPreferences.prefersImmediateDice,
 	);
-
+	const [theme, setTheme] = useState<ThemeOptions>(
+		savedPreferences.theme ?? "analog",
+	);
+	document.documentElement.setAttribute("data-theme", theme);
 	const saveMotionPreference = (prefersReducedMotion: boolean) => {
 		setPrefersReducedMotion(prefersReducedMotion);
 		localStorage.setItem(
@@ -57,6 +65,7 @@ export const PreferencesProvider: React.FC<PreferencesProviderProps> = ({
 			JSON.stringify({
 				prefersReducedMotion,
 				prefersImmediateDice,
+				theme
 			}),
 		);
 	};
@@ -67,16 +76,26 @@ export const PreferencesProvider: React.FC<PreferencesProviderProps> = ({
 			JSON.stringify({
 				prefersReducedMotion,
 				prefersImmediateDice,
+				theme
 			}),
 		);
 	};
-
+	const saveTheme = (theme: ThemeOptions) => {
+		setTheme(theme);
+		document.documentElement.setAttribute("data-theme", theme);
+		localStorage.setItem(
+			"public-access-user-preferences",
+			JSON.stringify({ theme, prefersReducedMotion, prefersImmediateDice }),
+		);
+	};
 	// Context value
 	const value: PreferencesContextValue = {
 		prefersReducedMotion,
 		prefersImmediateDice,
 		saveMotionPreference,
 		saveImmediateDicePreference,
+		theme,
+		saveTheme,
 	};
 
 	return (

@@ -33,78 +33,112 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "Verve";
+  src: url("/src/assets/fonts/Verve.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Verve-Shadow";
+  src: url("/src/assets/fonts/VerveShadow.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ComputerFont";
+  src: url("/src/assets/fonts/ComputerFont.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Electrolize";
+  src: url("/src/assets/fonts/Electrolize-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ===== THEME VARIABLES ===== */
-:root,
 [data-theme="eighties"] {
-  --color-bg-primary: #656565;
-  --color-bg-secondary: #929292;
-  --color-bg-accent: #dca1fa;
+  --color-bg-primary: hsl(330, 30%, 20%);
+  --color-bg-secondary: hsl(330, 100%, 74%);
+  --color-bg-accent: hsl(345, 63%, 71%);
 
-  --color-text-primary: #ffffff;
-  --color-text-muted: #b3b3b3;
-  --color-text-accent: #ffdcac;
+  --color-text-primary: hsl(330, 30%, 95%);
+  --color-text-muted: hsl(330, 30%, 80%);
+  --color-text-accent: hsl(180, 69%, 47%);
 
-  --color-border: #87e7ff;
-  --color-border-accent: #6f5266;
-  --color-accent-primary: #aa9b7b;
+  --color-border: hsl(0, 80%, 40%);
+  --color-border-accent: hsl(90, 30%, 40%);
+  --color-accent-primary: hsl(90, 50%, 50%);
 
   --background-image: url("../public/images/fancy-wallpaper.svg");
   --background-size: 100px 100px;
-  --header-font: "Rubik", monospace;
-  --second-header-font: "Silkscreen-Regular", monospace;
+  --header-font: "Verve-Shadow", monospace;
+  --font-scale: 2rem;
+  --second-header-font: "Verve", monospace;
 
   --overlay-color: rgba(0, 0, 0, 0.3);
 
   --gradient: linear-gradient(
     to right,
-    #faeb2c,
-    #f52789,
-    #e900ff,
-    #1685f8,
-    #3d144c
+    hsl(330, 100%, 50%),
+    hsl(326, 100%, 50%),
+    hsl(66, 100%, 50%),
+    hsl(200, 100%, 50%),
+    hsl(280, 100%, 50%),
+    hsl(288, 100%, 50%)
   );
 }
 
 [data-theme="analog"] {
-  --color-bg-primary: #131313;
-  --color-bg-secondary: #504f4f;
-  --color-bg-accent: #514c45;
+  --color-bg-primary: hsl(270, 10%, 10%);
+  --color-bg-secondary: hsl(270, 15%, 20%);
+  --color-bg-accent: hsl(270, 20%, 30%);
 
-  --color-text-primary: #ffffff;
-  --color-text-muted: #b3b3b3;
-  --color-text-accent: #8d7753;
+  --color-text-primary: hsl(230, 20%, 80%);
+  --color-text-muted: hsl(230, 30%, 50%);
+  --color-text-accent: hsl(290, 40%, 60%);
 
-  --color-border: #5b5b5b;
-  --color-border-accent: #999999;
-  --color-accent-primary: #a18a4e;
-
-  --background-image: url("/src/assets/bg/static.jpg");
-  --background-size: 200px 200px;
   --header-font: "Narly", monospace;
+  --font-scale: 1.5rem;
   --second-header-font: "Silkscreen-Regular", monospace;
 
   --overlay-color: rgba(0, 0, 0, 0.3);
 }
 
 [data-theme="forum"] {
-  --color-bg-primary: #141414;
-  --color-bg-secondary: #545353;
-  --color-bg-accent: #dca1fa;
+  --color-bg-primary: hsl(90, 10%, 20%);
+  --color-bg-secondary: hsl(90, 15%, 30%);
+  --color-bg-accent: hsl(90, 20%, 40%);
 
-  --color-text-primary: #ffffff;
-  --color-text-muted: #b3b3b3;
-  --color-text-accent: #ffdcac;
+  --color-text-primary: hsl(70, 20%, 80%);
+  --color-text-muted: hsl(70, 30%, 50%);
+  --color-text-accent: hsl(70, 40%, 60%);
 
-  --color-border: #ff8787;
-  --color-border-accent: #6f525b;
-  --color-accent-primary: #aa7b88;
+  --color-border: hsl(90, 30%, 30%);
+  --color-border-accent: hsl(90, 40%, 40%);
+  --color-accent-primary: hsl(110, 50%, 50%);
 
-  --background-image: url("../public/images/fancy-wallpaper.svg");
-  --background-size: 100px 100px;
-  --header-font: "Narly", monospace;
+  --header-font: "ComputerFont", monospace;
+  --font-scale: 2rem;
   --second-header-font: "Silkscreen-Regular", monospace;
 
   --overlay-color: rgba(0, 0, 0, 0.3);
+  --gradient: linear-gradient(
+    to right,
+    hsl(330, 30%, 50%),
+    hsl(66, 30%, 50%),
+    hsl(200, 30%, 50%),
+    hsl(288, 30%, 50%)
+  );
 }
 
 [data-theme="dark"] {
@@ -123,10 +157,16 @@
   --color-blood: #8b0000;
 
   --background-image: none;
-  --header-font: "CinzelDecorativeBlack", cursive;
-  --second-header-font: "Questrial", sans-serif;
+  --header-font: "Rubik", monospace;
+  --font-scale: 1rem;
+  --second-header-font: "Silkscreen-Regular", sans-serif;
 
   --overlay-color: rgba(0, 0, 0, 0.7);
+  --gradient: linear-gradient(
+    to top,
+    var(--color-text-primary),
+    var(--color-text-accent)
+  );
 }
 [data-theme="light"] {
   --color-bg-primary: #f9fbfb;
@@ -143,10 +183,12 @@
   --color-accent-primary: #000000;
   --color-blood: #cc0000;
   --background-image: none;
-  --header-font: "CinzelDecorativeBlack", cursive;
-  --second-header-font: "Questrial", sans-serif;
+  --header-font: "Rubik", monospace;
+  --font-scale: 1rem;
+  --second-header-font: "Silkscreen-Regular", sans-serif;
 
   --overlay-color: rgba(255, 255, 255, 0.7);
+  --gradient: linear-gradient(to top, whitesmoke, var(--color-text-accent));
 }
 
 @theme {
@@ -168,23 +210,19 @@
     var(--color-accent-primary)
   );
 }
-/* Apply theme colors to html and body */
+
 html,
 body {
+  height: 100%;
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
-  font-family: "Questrial", sans-serif;
+  font-family: "Electrolize", sans-serif;
   transition:
     background-color 0.5s ease,
     color 0.5s ease;
 }
 
-html {
-  min-height: 100%;
-}
-
 body {
-  min-height: 100vh;
   overflow: hidden;
 }
 
@@ -254,18 +292,260 @@ body {
   mask: var(--mask);
 }
 
+@keyframes wobble {
+  0% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes wander1 {
+  0% {
+    transform: translate(-5px, 5px);
+  }
+  25% {
+    transform: translate(-5px, -5px);
+  }
+  50% {
+    transform: translate(5px, -5px);
+  }
+  75% {
+    transform: translate(-5px, -5px);
+  }
+  100% {
+    transform: translate(10px, -10px);
+  }
+}
+
+@keyframes wander2 {
+  0% {
+    transform: translate(-7px, 12px);
+  }
+  25% {
+    transform: translate(-7px, -5px);
+  }
+  50% {
+    transform: translate(5px, -3px);
+  }
+  75% {
+    transform: translate(3px, -9px);
+  }
+  100% {
+    transform: translate(7px, -9px);
+  }
+}
+
+@keyframes wander3 {
+  0% {
+    transform: translate(7px, 5px);
+  }
+  25% {
+    transform: translate(-7px, 5px);
+  }
+  50% {
+    transform: translate(-5px, -5px);
+  }
+  75% {
+    transform: translate(0px, -10px);
+  }
+  100% {
+    transform: translate(5px, -5px);
+  }
+}
+@keyframes wavy {
+  0% {
+    border-style: solid;
+  }
+  100% {
+    border-style: dashed;
+  }
+}
+
+.Triangle {
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  background-color: var(--shape-color);
+  opacity: 0.6;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  animation: wobble 4s var(--animation-delay) backwards infinite alternate;
+}
+.Circle {
+  border-radius: 50%;
+  background-color: transparent;
+  border: 2px dashed var(--shape-color);
+  position: absolute;
+  width: 100px;
+  height: 100px;
+}
+.Circle:nth-child(3n) {
+  animation: wander3 calc(var(--animation-speed-variance) + 8s)
+    var(--animation-delay) backwards infinite alternate ease-in-out;
+}
+.Circle:nth-child(3n + 1) {
+  animation: wander1 calc(var(--animation-speed-variance) + 8s)
+    var(--animation-delay) backwards infinite alternate ease-in-out;
+}
+.Circle:nth-child(3n + 2) {
+  animation: wander2 calc(var(--animation-speed-variance) + 8s)
+    var(--animation-delay) backwards infinite alternate ease-in-out;
+}
+.CircleFilled {
+  clip-path: circle(50% at 50% 50%);
+  background-color: var(--shape-color);
+  opacity: 0.6;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+}
+.CircleFilled:nth-child(3n) {
+  animation: wander3 calc(var(--animation-speed-variance) + 8s)
+    var(--animation-delay) backwards infinite alternate ease-in-out;
+}
+.CircleFilled:nth-child(3n + 1) {
+  animation: wander1 calc(var(--animation-speed-variance) + 8s)
+    var(--animation-delay) backwards infinite alternate ease-in-out;
+}
+.CircleFilled:nth-child(3n + 2) {
+  animation: wander2 calc(var(--animation-speed-variance) + 8s)
+    var(--animation-delay) backwards infinite alternate ease-in-out;
+}
+.Rectangle {
+  background-color: transparent;
+  border: 2px solid var(--shape-color);
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  animation: wobble 4s var(--animation-delay) backwards ease-in-out infinite
+    alternate;
+}
+
 h1,
 h2 {
   font-family: var(--header-font);
   font-weight: 800;
   text-wrap: balance;
-  font-size: 2.5rem;
+  font-size: calc(var(--font-scale) * 2);
+}
+/* [data-theme="analog"] h1 {
+  animation: glitch 1s linear infinite;
+} */
+@keyframes bumpY {
+  25% {
+    rotate: -5deg;
+  }
+  50% {
+    transform: translateY(-25px) scale(0.9);
+    rotate: 5deg;
+  }
+  75% {
+    rotate: -5deg;
+  }
+}
+[data-theme="light"] h1,
+[data-theme="dark"] h1 {
   background-image: var(--gradient);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
+}
+[data-theme="eighties"] .animatedHeaderLetter {
+  position: relative;
+  background-image: var(--gradient);
+  background-size: calc(sibling-count() * 100%) 100%;
+  background-position: calc(
+      (sibling-index() - 1) * 100% / (sibling-count() - 1)
+    )
+    center;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: bumpY 2.5s calc(sibling-index() * 0.8s) linear forwards;
   display: inline-block;
+  white-space: pre;
+}
+
+[data-theme="forum"] .animatedHeaderLetter {
+  position: relative;
+  background-image: var(--gradient);
+  background-size: calc(sibling-count() * 100%) 100%;
+  background-position: calc(
+      (sibling-index() - 1) * 100% / (sibling-count() - 1)
+    )
+    center;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  display: inline-block;
+  white-space: pre;
+}
+
+@keyframes glitch {
+  2%,
+  64% {
+    transform: translate(2px, 0) skew(0deg);
+  }
+  4%,
+  60% {
+    transform: translate(-2px, 0) skew(0deg);
+  }
+  62% {
+    transform: translate(0, 0) skew(5deg);
+  }
+}
+
+[data-theme="analog"] h1:before,
+h1:after {
+  content: attr(title);
+  position: absolute;
+  left: 0;
+}
+
+/* [data-theme="analog"] h1:before {
+  animation: glitchTop 1s linear infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+} */
+
+@keyframes glitchTop {
+  2%,
+  64% {
+    transform: translate(2px, -2px);
+  }
+  4%,
+  60% {
+    transform: translate(-2px, 2px);
+  }
+  62% {
+    transform: translate(13px, -1px) skew(-13deg);
+  }
+}
+
+/* [data-theme="analog"] h1:after {
+  animation: glitchBotom 1.5s linear infinite;
+  clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+  -webkit-clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+} */
+
+@keyframes glitchBotom {
+  2%,
+  64% {
+    transform: translate(-2px, 0);
+  }
+  4%,
+  60% {
+    transform: translate(-2px, 0);
+  }
+  62% {
+    transform: translate(-22px, 5px) skew(21deg);
+  }
 }
 
 h3,
