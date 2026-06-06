@@ -10,7 +10,7 @@ import { ContentPane } from "./ContentPane";
 			<SettingsPopout/>
 			<AnimatedHeader text="Public Access"/>
 
-<div className="flex gap-4 flex-1 px-4">
+<div className="flex gap-4 flex-1 px-4 overflow-auto">
 			<ContentPane />
 			<CharacterPane />
 			</div>

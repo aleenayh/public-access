@@ -650,6 +650,21 @@ input[type="number"]:hover {
   border-color: var(--color-border-accent);
 }
 
+.wordCloudButton {
+  width: fit-content;
+  display: inline;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid transparent;
+}
+.wordCloudButton:hover {
+  background-color: var(--color-bg-accent);
+  color: var(--color-text-accent);
+  border-color: var(--color-border-accent);
+  filter: brightness(1.1);
+}
+
 a {
   color: var(--color-text-accent);
   text-decoration: underline;
