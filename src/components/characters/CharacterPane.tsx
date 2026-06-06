@@ -6,7 +6,19 @@ export function CharacterPane() {
 		<StyledPane variant="vertical">
 			<HeaderNav/>
 
-			Character content goes here ...
+			Character Name
+
+			<p>Conditions</p>
+
+			<p>Ability Boxes</p>
+
+			<p>Moves</p>
+
+			<p>Questions & XP</p>
+
+			<p>Keys</p>
+
+			<p>Look, Pronouns, Takes You Back</p>
 		</StyledPane>
 	);
 }
