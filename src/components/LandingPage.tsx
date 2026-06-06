@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { type GameState, gameStateSchema } from "../context/types";
 import {
@@ -9,6 +9,10 @@ import {
 } from "../lib/firebase";
 import { validateGameState } from "../utils/schemaValidation";
 import { StyledButton } from "../components/shared/StyledButton";
+import { usePreferences } from "../context/PreferencesContext";
+import { BackgroundAnimations } from "./BackgroundAnimations";
+import { AnimatedHeader } from "./shared/AnimatedHeader";
+import { SettingsPopout } from "./shared/SettingsPopout";
 
 type LandingStep =
 	| "name"
@@ -188,15 +192,10 @@ export function LandingPage({
 
 	return (
 		<div className="App flex items-center justify-center p-8">
-			<div className="BackgroundColor"></div>
-			<div className="StaticBackground"></div>
-			<div className="StaticForeground"/>
-			<div className="StaticForeground -right-5"/>
-			<div className="StaticForeground -right-15"/>
+			<BackgroundAnimations/>
+			<SettingsPopout />
 			<div className="max-w-md w-full flex flex-col gap-6 z-0">
-				<h1 className="flex justify-center w-full text-theme-text-accent">
-					Public Access
-				</h1>
+				<AnimatedHeader text="Public Access"/>
 
 				{error && (
 					<div className="bg-red-900/30 border border-red-700 text-red-200 px-4 py-3 rounded-lg text-center">
@@ -280,10 +279,7 @@ function NameStep({
 }) {
 	return (
 		<div className="flex flex-col gap-4">
-			<h4 className="text-center text-theme-text-muted flex flex-col">
-				<div>0 CREDITS REMAINING</div> 
-				<div>ENTER NAME<span className="blinking">:</span></div>
-			</h4>
+				<FlavorTextByTheme/>
 			<input
 				type="text"
 				value={playerName}
@@ -300,6 +296,48 @@ function NameStep({
 		</div>
 	);
 }
+
+function FlavorTextByTheme() {
+	const { theme } = usePreferences();
+
+	const userName = useMemo(() => {
+		const randomNouns = ["dinolvr", "mightyWizard", "braiiiiiiiiins", "squidboy", "piglet", "pilates4life", "g33ky", "fantaC", "buffalobuffalo", "cheeseLord", "ducky", "princessPeach", "headNtheClouds", "rainingMen", "notoriousSpammy", "ElGato", "penguinP", "smiley"];
+		//memo prevents rerender
+	 // eslint-disable-next-line react-hooks/purity
+	 return (randomNouns[Math.floor(Math.random() * randomNouns.length)]+ Math.random().toFixed(4).slice(2))
+	}, []);
+	switch (theme) {
+		case "analog":
+			
+	}
+		if (theme === "analog") {
+			return (
+				<h4 className="text-center text-theme-text-muted flex flex-col">
+					<div>0 CREDITS REMAINING</div>
+					<div>
+						ENTER NAME<span className="blinking">:</span>
+					</div>
+				</h4>
+			);
+		} else 		if (theme === "forum") {
+
+			return <>
+				<p>
+					Welcome back <strong className="text-theme-text-accent">{userName}!</strong>
+				</p>
+				<p>Set forum display name to continue:</p>
+			</>
+		} else 		if (theme === "eighties") {
+			return (<p>Enter your name, dude</p>);
+		}
+
+
+		return (
+			<>
+			Enter your name:
+			</>
+		)
+	}
 
 function ChooseStep({
 	playerName,

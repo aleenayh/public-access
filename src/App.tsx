@@ -9,6 +9,7 @@ import { PreferencesProvider } from "./context/PreferencesContext";
 import { type GameState, PlayerRole, type UserInfo } from "./context/types";
 import ErrorBoundary from "./ErrorBoundary";
 import { nameToPlayerId } from "./lib/firebase";
+import { BackgroundAnimations } from "./components/BackgroundAnimations";
 
 function App() {
 	const searchParams = new URLSearchParams(window.location.search);
@@ -29,6 +30,7 @@ function App() {
 
 	if (!gameHash || !userName || !userId) {
 		return (
+			<PreferencesProvider>
 			<LandingPage
 				setGameHash={setGameHash}
 				userName={userName}
@@ -37,6 +39,7 @@ function App() {
 				setUserId={setUserId}
 				setStartingState={setStartingState}
 			/>
+			</PreferencesProvider>
 		);
 	}
 
@@ -50,6 +53,7 @@ function App() {
 		<div className="App">
 			<ErrorBoundary>
 				<PreferencesProvider>
+				<BackgroundAnimations/>
 				<GameProvider
 					gameHash={gameHash}
 					userInfo={userInfo}
@@ -57,6 +61,7 @@ function App() {
 				>
 					<Tooltip.Provider>
 						<Toaster />
+
 						<Game />
 					</Tooltip.Provider>
 				</GameProvider>

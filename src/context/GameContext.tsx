@@ -228,7 +228,7 @@ const localSchemaVersion = getLocalSchemaVersion();
 		const player = gameState.players.find((player) => player.id === userInfo.id);
 		if (player && userInfo.role !== player.role) {
 			//the game state has the definitive role 
-			setUserInfo({ ...userInfo, role: player.role })
+			setUserInfo((prev: UserInfo) => ({ ...prev, role: player.role }))
 			localStorage.setItem(`playerRole_${gameHash}`, player.role)
 		}
 		if (userAlreadyExists) return;
