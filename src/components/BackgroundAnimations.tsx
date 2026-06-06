@@ -107,13 +107,9 @@ export function BackgroundAnimations() {
 
     if (theme === "analog") {
         return <StaticBackground />;
-    } else if (theme === "light") {
-        return null;
-    } else if (theme === "dark") {
-        return null;
-    } else if (theme === "forum") {
-        return null;
     } else if (theme === "eighties") {
         return <GeometricShapeBackground />;
+    } else {
+        return null;
     }
 }
