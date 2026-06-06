@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { catchWithWarning } from "../utils/schemaValidation";	
+import { characterSchema } from "../components/characters/types";
 
 export const PlayerRole = {
 	KEEPER: "keeper",
@@ -34,8 +35,7 @@ const playerSchema = z.object({
 		.enum([PlayerRole.KEEPER, PlayerRole.PLAYER])
 		.catch(catchWithWarning("player.role", PlayerRole.PLAYER)),
 	//no warning - null character is valid but dropped by firebase
-	character: 
-		z.unknown().nullable().catch(null), //TODO
+	character:characterSchema.nullable().catch(null),
 });
 
 export type Player = z.infer<typeof playerSchema>;
