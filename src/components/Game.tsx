@@ -1,5 +1,5 @@
 
-import { CharacterPane } from "./CharacterPane";
+import { CharacterPane } from "./characters/CharacterPane";
 import { AnimatedHeader } from "./shared/AnimatedHeader";
 import { SettingsPopout } from "./shared/SettingsPopout";
 import { ContentPane } from "./ContentPane";
