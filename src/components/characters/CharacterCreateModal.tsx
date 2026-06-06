@@ -1,8 +1,9 @@
 import {Dialog} from "radix-ui";
 import { useGame } from "../../context/GameContext";
 import { useState } from "react";
-import { PlayerRole } from "../../context/types";
-import {useForm } from "react-hook-form";
+import { PlayerRole, type GameState, } from "../../context/types";
+import {useForm, type UseFormRegister, type UseFormSetValue } from "react-hook-form";
+import { lookOptions, takesYouBackOptions } from "./characterContent";
 
 type CharacterCreateInputs = {
     name: string;
@@ -21,7 +22,7 @@ type CharacterCreateInputs = {
 
 export function CharacterCreateModal() {
     const {gameState, updateGameState, user} = useGame();
-    const {register, handleSubmit} = useForm({defaultValues: {
+    const {register, handleSubmit, setValue} = useForm({defaultValues: {
         name: "",
         pronouns: "",
         look: "",
@@ -68,7 +69,7 @@ export function CharacterCreateModal() {
             name,
             pronouns,
             look,
-            image: imageURL ? {type: "custom" as const, url: imageURL} : {type: "default" as const, icon: "arcade"},
+            image: imageURL ? {type: "custom" as const, url: imageURL} : getUnusedFallback(gameState),
             abilities,
             takesYouBack,
             moves: [], //TODO
@@ -134,17 +135,9 @@ export function CharacterCreateModal() {
                 </div>
                 <p className="w-full text-xs text-theme-text-muted/80 text-left"><strong>Pick one, or make up your own:</strong> thing, thing, thing</p>
                 <Seperator/>
-                <div className="w-full flex flex-col">  
-                <label htmlFor="look" className="text-xs text-theme-text-muted/80 text-left italic">Look</label>
-                <input type="text" {...register("look")} className="w-full"/>
-                <p className="text-xs text-theme-text-muted/80 text-left"><strong>Pick one, or make up your own:</strong> thing, thing, thing</p>
-                </div>
+                <InputWithWordCloud options={lookOptions} setValue={setValue} register={register} title="Look" pickNum={1} fieldName="look" />
                 <Seperator/>
-                <div className="w-full flex flex-col">
-                <label htmlFor="takesYouBack" className="text-xs text-theme-text-muted/80 text-left italic">What Takes You Back?</label>
-                <input type="text" {...register("takesYouBack")} className="w-full"/>
-                <p className="text-xs text-theme-text-muted/80 text-left"><strong>Pick three, or make up your own:</strong> thing, thing, thing thing, thing, thing, thing</p>
-                </div>
+                <InputWithWordCloud options={takesYouBackOptions} setValue={setValue} register={register} title="What Takes You Back?" pickNum={3} fieldName="takesYouBack" />
                 <Seperator/>
                 <div className="w-full flex flex-col">
                 <label htmlFor="image" className="text-xs text-theme-text-muted/80 text-left italic">Character Image (optional)</label>
@@ -185,8 +178,45 @@ export function CharacterCreateModal() {
 	);
 }
 
+function InputWithWordCloud({options, setValue, register, title, pickNum, fieldName}: {options: string[], setValue: UseFormSetValue<CharacterCreateInputs>, register: UseFormRegister<CharacterCreateInputs>, title: string, pickNum: number, fieldName: keyof CharacterCreateInputs}) {
+    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+
+    const handleClickCloud = (opt: string) => {
+        let newValues = [...selectedOptions];
+        if (selectedOptions.includes(opt)) {
+            newValues = newValues.filter((o) => o !== opt);
+        } else if (selectedOptions.length >= pickNum) {
+            newValues = [...selectedOptions.slice(1), opt];
+        } else {
+            newValues = [...selectedOptions, opt];
+        }
+        setSelectedOptions(newValues);
+        setValue(fieldName,newValues.join(", "));
+    }
+
+    return (
+        <div className="w-full flex flex-col">
+        <label htmlFor={fieldName} className="text-xs text-theme-text-muted/80 text-left italic">{title}</label>
+        <input type="text" {...register(fieldName)} className="w-full"/>
+        <p className="text-xs text-theme-text-muted/80 text-left"><strong>Pick {pickNum} or make up your own:</strong></p>
+        <div className="flex flex-wrap gap-1 text-xs">{options.map((opt) => <button type="button" key={opt} className={`wordCloudButton ${selectedOptions.includes(opt) ? "border border-theme-border" : ""}`} onClick={() => handleClickCloud(opt)}>{opt}</button>)}</div>
+        </div>
+    )
+
+}
+
 function Seperator() {
     return (
         <div className="w-full h-px bg-theme-border-accent my-2"/>
     );
+}
+
+function getUnusedFallback(gameState: GameState) {
+    const charactersWithIcons = gameState.players.flatMap((player) =>
+        player.character?.image.type === "default" ? [player.character] : []
+      );
+    const usedIcons = charactersWithIcons.map((character) => character.image.type === "default" ? character.image.icon : undefined).filter((icon) => icon !== undefined);
+    const fallbackIcons = ["pizza", "casette", "arcade", "cactus"];
+    const unusedIcons = fallbackIcons.filter((icon) => !usedIcons.includes(icon));
+    return {type: "default" as const, icon: unusedIcons[0]};
 }

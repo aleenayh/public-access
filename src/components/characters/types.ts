@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const providedImageSchema = z.object({
     type: z.literal("custom"),
-    url: z.string().optional().catch(undefined),
+    url: z.string(),
 });
 const defaultImageSchema = z.object({
     type: z.literal("default"),
