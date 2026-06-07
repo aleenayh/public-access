@@ -964,6 +964,17 @@ input[type="textarea"]:hover {
   }
 }
 
+.fadeInEachChild :nth-child(n) {
+  animation: fadeInEachChild 0.5s calc(sibling-index() * 0.2s) both;
+}
+
+@keyframes fadeInEachChild {
+  from {
+    translate: 0 10px;
+    opacity: 0;
+  }
+}
+
 /* ===== MISC ANIMATION STYLES ===== */
 
 .blinking {
