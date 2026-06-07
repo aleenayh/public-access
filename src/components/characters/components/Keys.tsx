@@ -24,7 +24,7 @@ export function Keys({character}: {character: Character}) {
 
     const markKey = (type: "child" | "desolation", index: number, marked: boolean) => {
         const keysOfTheChild = type === "child" ? character.keysOfTheChild.map((key, i) => i === index ? marked : key) : character.keysOfTheChild;
-        const keysOfDesolation = type === "desolation" ? character.keyOfDesolation.map((key, i) => i === index ? marked : key) : character.keyOfDesolation;
+        const keysOfDesolation = type === "desolation" ? character.keysOfDesolation.map((key, i) => i === index ? marked : key) : character.keysOfDesolation;
         updateGameState({
             ...gameState,
             players: gameState.players.map((player) => player.character && player.id === id ? { ...player, character: { ...player.character, keysOfTheChild, keysOfDesolation}} : player),
@@ -37,11 +37,11 @@ export function Keys({character}: {character: Character}) {
         {keysOfChild.map((text, index) => {
             const isMarked = character.keysOfTheChild[index];
             return (
-                <div key={`keyChild-${index}`} className="flex gap-1 text-xs text-left items-baseline my-1">
+                <div key={`key-child-${index}`} className="flex gap-1 text-xs text-left items-baseline my-1">
                     <input type="checkbox" className="relative top-1" checked={isMarked} onChange={() => {
                         markKey("child", index, !isMarked);
                     }} disabled={!editable}/>
-                    <p>{parseMarkupFromString(text)}</p>
+                    <p className={`${isMarked ? "text-theme-text-muted/70" : ""}`}>{parseMarkupFromString(text)}</p>
                 </div>
             )
         })}
@@ -49,14 +49,13 @@ export function Keys({character}: {character: Character}) {
         <div className="flex-1 border border-theme-border rounded-md flex flex-col px-2"><p>Key of Desolation</p>
         <p className="text-xs text-theme-text-muted/80 text-left italic">When you turn this Key, mark the first empty box.</p>
         {keysOfDesolation.map((text, index) => {
-            const isMarked = character.keyOfDesolation[index];
+            const isMarked = character.keysOfDesolation[index];
             return (
-                <div key={`keyDesolation-${index}`} className="flex gap-1 text-xs text-left items-baseline my-1">
+                    <div key={`keyDesolation-${index}`} className="flex gap-1 text-xs text-left items-baseline my-1">
                     <input type="checkbox" className="relative top-1" checked={isMarked} onChange={() => {
                         markKey("desolation", index, !isMarked);
                     }} disabled={!editable}/>
                     <p>{parseMarkupFromString(text)}</p>
-
                 </div>
             )
         })}
