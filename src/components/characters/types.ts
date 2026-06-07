@@ -21,14 +21,17 @@ const abilitiySchema = z.object({
 export const characterSchema = z.object({
 	name: z.string().catch(""),
     pronouns: z.string().optional().catch(undefined),
+    conditions: z.array(z.string().catch("")).catch(["","",""]),
+    cornerOfTheHouse: z.array(z.object({marked: z.boolean().catch(false), item: z.string().catch("")})).catch([{marked: false, item: ""}, {marked: false, item: ""}]),
+    xp: z.array(z.boolean().catch(false)).catch([false, false, false, false, false, false]),
 	look: z.string().catch(""),
     takesYouBack: z.string().catch(""),
 	image: providedImageSchema.or(defaultImageSchema).catch({type: "default", icon: "arcade"}),
 	abilities: abilitiySchema,
     moves: z.array(z.object({name: z.string().catch("Move"), description: z.string().catch("description")})).catch([]),
-	questions: z.array(z.boolean()).catch([false, false, false, false, false]),
+	questions: z.array(z.boolean()).catch([true, false, false, false, false, false, false]),
     keysOfTheChild: z.array(z.boolean()).catch([false, false, false, false, false]),
-    keyOfDesolation: z.array(z.boolean()).catch([false, false, false, false, false]),
+    keysOfDesolation: z.array(z.boolean()).catch([false, false, false, false, false]),
 });
 
 export type Character = z.infer<typeof characterSchema>;
