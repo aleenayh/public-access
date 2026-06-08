@@ -4,11 +4,9 @@ import { usePreferences } from "../../context/PreferencesContext";
 
 export function AnimatedHeader({text} : {text: string}) {
     const {theme} = usePreferences();
-    	// biome-ignore lint/correctness/useExhaustiveDependencies: force entry animations on theme change
 	const title = useMemo(() => {
 		return 		text.split("").map((letter, index) => (
-			// biome-ignore lint/suspicious/noArrayIndexKey: ahhhh
-<span className="animatedHeaderLetter" key={index}>{letter}</span>
+ <span data-letter={letter} className="animatedHeaderLetter" key={index}>{letter}</span>
 		));
 		//force entry animations on theme change
 	// eslint-disable-next-line react-hooks/exhaustive-deps

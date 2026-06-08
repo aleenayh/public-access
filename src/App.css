@@ -487,64 +487,189 @@ h2 {
   white-space: pre;
 }
 
-@keyframes glitch {
-  2%,
-  64% {
-    transform: translate(2px, 0) skew(0deg);
-  }
-  4%,
-  60% {
-    transform: translate(-2px, 0) skew(0deg);
-  }
-  62% {
-    transform: translate(0, 0) skew(5deg);
-  }
+[data-theme="analog"] .animatedHeaderLetter {
+  text-align: center;
+  color: #fff;
+  animation: glitch1 3.5s infinite;
 }
 
-[data-theme="analog"] h1:before,
-h1:after {
-  content: attr(title);
+[data-theme="analog"] .animatedHeaderLetter:before {
+  content: attr(data-letter);
   position: absolute;
-  left: 0;
+  color: #67f3da;
+  animation: glitch2 3.5s infinite;
 }
 
-/* [data-theme="analog"] h1:before {
-  animation: glitchTop 1s linear infinite;
-  clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
-  -webkit-clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
-} */
+[data-theme="analog"] .animatedHeaderLetter:after {
+  content: attr(data-letter);
+  position: absolute;
+  color: #f16f6f;
+  left: -5px;
+  animation: glitch3 3.5s infinite;
+}
 
-@keyframes glitchTop {
-  2%,
-  64% {
-    transform: translate(2px, -2px);
+@keyframes glitch1 {
+  0% {
+    transform: none;
+    opacity: 1;
   }
-  4%,
-  60% {
-    transform: translate(-2px, 2px);
+  7% {
+    transform: skew(-0.5deg, -0.9deg);
+    opacity: 0.75;
   }
-  62% {
-    transform: translate(13px, -1px) skew(-13deg);
+  10% {
+    transform: none;
+    opacity: 1;
+  }
+  27% {
+    transform: none;
+    opacity: 1;
+  }
+  30% {
+    transform: skew(0.8deg, -0.1deg);
+    opacity: 0.75;
+  }
+  35% {
+    transform: none;
+    opacity: 1;
+  }
+  52% {
+    transform: none;
+    opacity: 1;
+  }
+  55% {
+    transform: skew(-1deg, 0.2deg);
+    opacity: 0.75;
+  }
+  50% {
+    transform: none;
+    opacity: 1;
+  }
+  72% {
+    transform: none;
+    opacity: 1;
+  }
+  75% {
+    transform: skew(0.4deg, 1deg);
+    opacity: 0.75;
+  }
+  80% {
+    transform: none;
+    opacity: 1;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
   }
 }
 
-/* [data-theme="analog"] h1:after {
-  animation: glitchBotom 1.5s linear infinite;
-  clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
-  -webkit-clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
-} */
+@keyframes glitch2 {
+  0% {
+    transform: none;
+    opacity: 0.25;
+  }
+  7% {
+    transform: translate(-2px, -3px);
+    opacity: 0.5;
+  }
+  10% {
+    transform: none;
+    opacity: 0.25;
+  }
+  27% {
+    transform: none;
+    opacity: 0.25;
+  }
+  30% {
+    transform: translate(-5px, -2px);
+    opacity: 0.5;
+  }
+  35% {
+    transform: none;
+    opacity: 0.25;
+  }
+  52% {
+    transform: none;
+    opacity: 0.25;
+  }
+  55% {
+    transform: translate(-5px, -1px);
+    opacity: 0.5;
+  }
+  50% {
+    transform: none;
+    opacity: 0.25;
+  }
+  72% {
+    transform: none;
+    opacity: 0.25;
+  }
+  75% {
+    transform: translate(-2px, -6px);
+    opacity: 0.5;
+  }
+  80% {
+    transform: none;
+    opacity: 0.25;
+  }
+  100% {
+    transform: none;
+    opacity: 0.25;
+  }
+}
 
-@keyframes glitchBotom {
-  2%,
-  64% {
-    transform: translate(-2px, 0);
+@keyframes glitch3 {
+  0% {
+    transform: none;
+    opacity: 0.25;
   }
-  4%,
-  60% {
-    transform: translate(-2px, 0);
+  7% {
+    transform: translate(2px, 3px);
+    opacity: 0.5;
   }
-  62% {
-    transform: translate(-22px, 5px) skew(21deg);
+  10% {
+    transform: none;
+    opacity: 0.25;
+  }
+  27% {
+    transform: none;
+    opacity: 0.25;
+  }
+  30% {
+    transform: translate(5px, 2px);
+    opacity: 0.5;
+  }
+  35% {
+    transform: none;
+    opacity: 0.25;
+  }
+  52% {
+    transform: none;
+    opacity: 0.25;
+  }
+  55% {
+    transform: translate(5px, 1px);
+    opacity: 0.5;
+  }
+  50% {
+    transform: none;
+    opacity: 0.25;
+  }
+  72% {
+    transform: none;
+    opacity: 0.25;
+  }
+  75% {
+    transform: translate(2px, 6px);
+    opacity: 0.5;
+  }
+  80% {
+    transform: none;
+    opacity: 0.25;
+  }
+  100% {
+    transform: none;
+    opacity: 0.25;
   }
 }
 
