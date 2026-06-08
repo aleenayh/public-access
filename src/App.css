@@ -1,68 +1,233 @@
 @import "tailwindcss";
 
+/* ===== FONTS ===== */
+/* latin-ext */
 @font-face {
-  font-family: "Narly";
-  src: url("/src/assets/fonts/Narly.otf") format("opentype");
+  font-family: "Atomic Age";
+  font-style: normal;
   font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Atomic-Age-ext.woff2) format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
-
+/* latin */
 @font-face {
-  font-family: "Rubik";
-  src: url("/src/assets/fonts/Rubik80sFade-Regular.ttf") format("truetype");
+  font-family: "Atomic Age";
+  font-style: normal;
   font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-  font-size: 2rem;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Atomic-Age.woff2) format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
 }
-
+/* latin-ext */
 @font-face {
-  font-family: "Silkscreen-Regular";
-  src: url("/src/assets/fonts/Silkscreen-Regular.ttf") format("truetype");
-  font-weight: 400;
+  font-family: "Bitcount";
   font-style: normal;
-  font-display: swap;
+  font-weight: 100 900;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Bitcount-ext.woff2) format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
-
+/* latin */
 @font-face {
-  font-family: "Silkscreen-Bold";
-  src: url("/src/assets/fonts/Silkscreen-Bold.ttf") format("truetype");
-  font-weight: 900;
+  font-family: "Bitcount";
   font-style: normal;
-  font-display: swap;
+  font-weight: 100 900;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Bitcount.woff2) format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
 }
-
-@font-face {
-  font-family: "Verve";
-  src: url("/src/assets/fonts/Verve.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Verve-Shadow";
-  src: url("/src/assets/fonts/VerveShadow.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "ComputerFont";
-  src: url("/src/assets/fonts/ComputerFont.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
+/* latin */
 @font-face {
   font-family: "Electrolize";
-  src: url("/src/assets/fonts/Electrolize-Regular.ttf") format("truetype");
-  font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Electrolize.woff2) format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: "Megrim";
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Megrim-ext.woff2) format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: "Megrim";
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Megrim.woff2) format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: "Modak";
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Modak-ext.woff2) format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: "Modak";
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Modak.woff2) format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: "Monoton";
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Monoton-ext.woff2) format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: "Monoton";
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Monoton.woff2) format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Rubik-80s-Fade-ext.woff2) format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: "Rubik";
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Rubik-80s-Fade.woff2) format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: "Silkscreen";
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Silkscreen-ext.woff2) format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: "Silkscreen";
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Silkscreen.woff2) format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: "Silkscreen";
+  font-style: normal;
+  font-weight: 700;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Silkscreen-Bold-ext.woff2) format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: "Silkscreen";
+  font-style: normal;
+  font-weight: 700;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Silkscreen-Bold.woff2) format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
+}
+/* latin-ext */
+@font-face {
+  font-family: "Stalinist One";
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Stalinist-One-ext.woff2) format("woff2");
+  unicode-range:
+    U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304,
+    U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB,
+    U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: "Stalinist One";
+  font-style: normal;
+  font-weight: 400;
+  font-display: fallback;
+  src: url(/src/assets/fonts/Stalinist-One.woff2) format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
 }
 
 /* ===== THEME VARIABLES ===== */
@@ -81,9 +246,9 @@
 
   --background-image: url("../public/images/fancy-wallpaper.svg");
   --background-size: 100px 100px;
-  --header-font: "Verve-Shadow", monospace;
-  --font-scale: 2rem;
-  --second-header-font: "Verve", monospace;
+  --header-font: "Monoton", cursive;
+  --font-scale: 1.5rem;
+  --second-header-font: "Atomic Age", monospace;
 
   --overlay-color: rgba(0, 0, 0, 0.3);
 
@@ -107,9 +272,9 @@
   --color-text-muted: hsl(230, 30%, 50%);
   --color-text-accent: hsl(290, 40%, 60%);
 
-  --header-font: "Narly", monospace;
+  --header-font: "Megrim", monospace;
   --font-scale: 1.5rem;
-  --second-header-font: "Silkscreen-Regular", monospace;
+  --second-header-font: "Stalinist One", monospace;
 
   --overlay-color: rgba(0, 0, 0, 0.3);
 }
@@ -127,9 +292,9 @@
   --color-border-accent: hsl(90, 35%, 40%);
   --color-accent-primary: hsl(110, 50%, 50%);
 
-  --header-font: "ComputerFont", monospace;
-  --font-scale: 2rem;
-  --second-header-font: "Silkscreen-Regular", monospace;
+  --header-font: "Bitcount", monospace;
+  --font-scale: 1.5rem;
+  --second-header-font: "Silkscreen", monospace;
 
   --overlay-color: rgba(0, 0, 0, 0.3);
   --gradient: linear-gradient(
@@ -159,7 +324,7 @@
   --background-image: none;
   --header-font: "Rubik", monospace;
   --font-scale: 1rem;
-  --second-header-font: "Silkscreen-Regular", sans-serif;
+  --second-header-font: "Silkscreen", sans-serif;
 
   --overlay-color: rgba(0, 0, 0, 0.7);
   --gradient: linear-gradient(
@@ -185,7 +350,7 @@
   --background-image: none;
   --header-font: "Rubik", monospace;
   --font-scale: 1rem;
-  --second-header-font: "Silkscreen-Regular", sans-serif;
+  --second-header-font: "Silkscreen", sans-serif;
 
   --overlay-color: rgba(255, 255, 255, 0.7);
   --gradient: linear-gradient(to top, whitesmoke, var(--color-text-accent));
@@ -354,14 +519,6 @@ body {
     transform: translate(5px, -5px);
   }
 }
-@keyframes wavy {
-  0% {
-    border-style: solid;
-  }
-  100% {
-    border-style: dashed;
-  }
-}
 
 .Triangle {
   clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
@@ -429,19 +586,22 @@ h2 {
   text-wrap: balance;
   font-size: calc(var(--font-scale) * 2);
 }
+[data-theme="forum"] h1 {
+  font-weight: 200;
+}
 /* [data-theme="analog"] h1 {
   animation: glitch 1s linear infinite;
 } */
 @keyframes bumpY {
   25% {
-    rotate: -5deg;
+    rotate: -1deg;
   }
   50% {
-    transform: translateY(-25px) scale(0.9);
-    rotate: 5deg;
+    transform: translateY(-10px) scale(0.9);
+    rotate: 1deg;
   }
   75% {
-    rotate: -5deg;
+    rotate: -1deg;
   }
 }
 [data-theme="light"] h1,
@@ -465,7 +625,7 @@ h2 {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   color: transparent;
-  animation: bumpY 2.5s calc(sibling-index() * 0.8s) linear forwards;
+  animation: bumpY 1.5s calc(sibling-index() * 0.4s) linear forwards;
   display: inline-block;
   white-space: pre;
 }

@@ -5,7 +5,7 @@ import { MysteryPane } from "./MysteryPane";
     export function ContentPane() {
 	return (
 		<StyledPane variant="vertical">
-			Content Pane 
+			<h3>Content Pane</h3>
             <MysteryPane/>
 			<FooterNav/>
 		</StyledPane>

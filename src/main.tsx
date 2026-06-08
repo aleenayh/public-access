@@ -1,9 +1,5 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-//fonts
-import './assets/fonts/Rubik80sFade-Regular.ttf'
-import './assets/fonts/Silkscreen-Regular.ttf'
-import './assets/fonts/Silkscreen-Bold.ttf'
 //bg
 import './assets/bg/static.jpg'
 
