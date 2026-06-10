@@ -234,7 +234,7 @@
 [data-theme="eighties"] {
   --color-bg-primary: hsl(330, 30%, 20%);
   --color-bg-secondary: hsl(270, 80%, 34%);
-  --color-bg-accent: hsl(345, 63%, 71%);
+  --color-bg-accent: hsl(177, 64%, 31%);
 
   --color-text-primary: hsl(330, 30%, 95%);
   --color-text-muted: hsl(330, 30%, 80%);
@@ -272,6 +272,10 @@
   --color-text-muted: hsl(230, 30%, 50%);
   --color-text-accent: hsl(290, 40%, 60%);
 
+  --color-border: hsl(200, 85%, 20%);
+  --color-border-accent: hsl(260, 65%, 40%);
+  --color-accent-primary: hsl(290, 20%, 60%);
+
   --header-font: "Megrim", monospace;
   --font-scale: 1.5rem;
   --second-header-font: "Stalinist One", monospace;
@@ -280,8 +284,8 @@
 }
 
 [data-theme="forum"] {
-  --color-bg-primary: hsl(90, 5%, 20%);
-  --color-bg-secondary: hsl(90, 10%, 30%);
+  --color-bg-primary: hsl(90, 1%, 20%);
+  --color-bg-secondary: hsl(90, 6%, 30%);
   --color-bg-accent: hsl(90, 15%, 40%);
 
   --color-text-primary: hsl(70, 30%, 80%);
@@ -385,6 +389,11 @@ body {
   transition:
     background-color 0.5s ease,
     color 0.5s ease;
+}
+
+::selection {
+  background-color: var(--color-accent-primary);
+  color: var(--color-bg-primary);
 }
 
 body {
@@ -888,6 +897,7 @@ input[type="checkbox"] {
   transition:
     background-color 0.15s ease,
     border-color 0.15s ease;
+  accent-color: var(--color-accent-primary);
 }
 
 input[type="checkbox"]:hover:not(:disabled) {
@@ -912,6 +922,7 @@ input[type="number"] {
   padding: 0.25rem 0.5rem;
   font-size: 1rem;
   line-height: 1.5;
+  accent-color: var(--color-accent-primary);
 }
 input[type="number"]:focus,
 input[type="number"]:hover {
@@ -993,6 +1004,7 @@ input[type="radio"] {
   transition:
     background-color 0.15s ease,
     border-color 0.15s ease;
+  accent-color: var(--color-accent-primary);
 }
 
 input[type="radio"]:checked {
@@ -1015,6 +1027,7 @@ textarea {
   transition:
     background-color 0.15s ease,
     border-color 0.15s ease;
+  accent-color: var(--color-accent-primary);
 }
 input[type="text"]::placeholder,
 input[type="textarea"]::placeholder {
@@ -1156,6 +1169,23 @@ input[type="textarea"]:hover {
   outline: none;
 }
 
+.gridButton {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-accent);
+  border-radius: 0.125rem;
+  padding: 0.25rem 0rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+.gridButton:hover,
+.gridButton.active {
+  background-color: var(--color-bg-accent);
+  border-color: var(--color-border-accent);
+}
 @keyframes overlayShow {
   from {
     opacity: 0;
