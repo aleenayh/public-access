@@ -389,6 +389,7 @@ body {
   transition:
     background-color 0.5s ease,
     color 0.5s ease;
+  scrollbar-gutter: stable;
 }
 
 ::selection {
@@ -1043,45 +1044,45 @@ input[type="textarea"]:hover {
 }
 
 /* ===== SCROLLBAR STYLES ===== */
-/* Hide scrollbars by default, show on hover/scroll, zero width overlay */
 
 /* Firefox */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent;
-}
+@media (pointer: fine) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+  }
 
-*:hover,
-*:focus-within {
-  scrollbar-color: var(--color-border-accent) transparent;
-}
+  *:hover,
+  *:focus-within {
+    scrollbar-color: var(--color-border-accent) transparent;
+  }
 
-/* Chrome, Safari, Edge */
-*::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-  background: transparent;
-}
+  /* Chrome, Safari, Edge */
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background: transparent;
+  }
 
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
 
-*::-webkit-scrollbar-thumb {
-  background: transparent;
-  border-radius: 3px;
-  transition: background 0.2s ease;
-}
+  *::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 5000px;
+    transition: background 0.2s ease;
+  }
 
-*:hover::-webkit-scrollbar-thumb,
-*:focus-within::-webkit-scrollbar-thumb {
-  background: var(--color-border-accent);
-}
+  *:hover::-webkit-scrollbar-thumb,
+  *:focus-within::-webkit-scrollbar-thumb {
+    background: var(--color-border-accent);
+  }
 
-*::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent-primary);
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent-primary);
+  }
 }
-
 /* ===== DIALOG STYLES ===== */
 .DialogOverlay {
   background-color: var(--overlay-color);
@@ -1124,9 +1125,6 @@ input[type="textarea"]:hover {
   z-index: 25;
   overflow-y: auto;
 }
-.DialogContent:focus {
-  outline: none;
-}
 
 .DialogTitle {
   margin: 0;
@@ -1164,9 +1162,6 @@ input[type="textarea"]:hover {
   background-color: var(--color-bg-accent);
   color: var(--color-text-accent);
   border: 2px solid var(--color-border-accent);
-}
-.DialogTrigger:focus {
-  outline: none;
 }
 
 .gridButton {
