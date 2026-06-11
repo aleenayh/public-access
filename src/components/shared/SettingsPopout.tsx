@@ -12,18 +12,16 @@ export function SettingsPopout() {
 			</button>
 			<div className={`bg-theme-bg-secondary rounded-br-lg p-3 w-[250px] text-sm flex flex-col px-6 text-left`}>
 				<h4>Change Visual Theme</h4>
-				<div><input type="radio" name="theme" value="eighties" checked={theme === "eighties"} onChange={() => saveTheme("eighties")} />
-				<label htmlFor="eighties" className={`${theme === "eighties" ? "text-theme-text-accent font-bold" : "text-theme-text-muted"}`}>Eighties</label></div>
-				<div><input type="radio" name="theme" value="light" checked={theme === "light"} onChange={() => saveTheme("light")} />
-				<label htmlFor="light" className={`${theme === "light" ? "text-theme-text-accent font-bold" : "text-theme-text-muted"}`}>Light</label></div>
-				<div><input type="radio" name="theme" value="analog" checked={theme === "analog"} onChange={() => saveTheme("analog")} />
-				<label htmlFor="analog" className={`${theme === "analog" ? "text-theme-text-accent font-bold" : "text-theme-text-muted"}`}>Analog</label></div>
-				<div><input type="radio" name="theme" value="forum" checked={theme === "forum"} onChange={() => saveTheme("forum")} />
-				<label htmlFor="forum" className={`${theme === "forum" ? "text-theme-text-accent font-bold" : "text-theme-text-muted"}`}>Forum</label></div>
-				<div><input type="radio" name="theme" value="dark" checked={theme === "dark"} onChange={() => saveTheme("dark")} />
-				<label htmlFor="dark" className={`${theme === "dark" ? "text-theme-text-accent font-bold" : "text-theme-text-muted"}`}>Dark</label></div>
-
-
+				<label htmlFor="eighties" className={`${theme === "eighties" ? "text-theme-text-accent font-bold" : "text-theme-text-muted"}`}><input id="eighties" type="radio" name="theme" value="eighties" checked={theme === "eighties"} onChange={() => saveTheme("eighties")} />
+				Eighties</label>
+				<label htmlFor="light" className={`${theme === "light" ? "text-theme-text-accent font-bold" : "text-theme-text-muted"}`}><input id="light" type="radio" name="theme" value="light" checked={theme === "light"} onChange={() => saveTheme("light")} />
+				Light</label>
+				<label htmlFor="analog" className={`${theme === "analog" ? "text-theme-text-accent font-bold" : "text-theme-text-muted"}`}><input id="analog" type="radio" name="theme" value="analog" checked={theme === "analog"} onChange={() => saveTheme("analog")} />
+				Analog</label>
+				<label htmlFor="forum" className={`${theme === "forum" ? "text-theme-text-accent font-bold" : "text-theme-text-muted"}`}><input id="forum" type="radio" name="theme" value="forum" checked={theme === "forum"} onChange={() => saveTheme("forum")} />
+				Forum</label>
+				<label htmlFor="dark" className={`${theme === "dark" ? "text-theme-text-accent font-bold" : "text-theme-text-muted"}`}><input id="dark" type="radio" name="theme" value="dark" checked={theme === "dark"} onChange={() => saveTheme("dark")} />
+				Dark</label>
 			</div>
 		</div>
 	);
