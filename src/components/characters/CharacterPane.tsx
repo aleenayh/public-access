@@ -6,6 +6,7 @@ import { useState } from "react";
 import { PlayerRole } from "../../context/types";
 import { CharacterSheet } from "./CharacterSheet";
 import { KeeperCharacterOverview } from "./KeeperCharacterOverview";
+import { Divider } from "../shared/Divider";
 
 export function CharacterPane() {
 	const {gameState, user: {id, role}} = useGame();
@@ -16,12 +17,8 @@ export function CharacterPane() {
 		<StyledPane variant="vertical">
 			<CharacterCreateModal/>
 			<HeaderNav activeCharacter={activeCharacterRaw} setActiveCharacter={setActiveCharacter}/>
-			<Seperator/>
+			<Divider/>
             {activeCharacter ? <CharacterSheet character={activeCharacter}/> : <KeeperCharacterOverview/>}
 		</StyledPane>
 	);
 }
-
-function Seperator() {
-	return <div className="w-full h-px my-2 bg-theme-border-accent"/>
-}		
