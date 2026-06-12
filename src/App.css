@@ -596,7 +596,8 @@ h2 {
   text-wrap: balance;
   font-size: calc(var(--font-scale) * 2);
 }
-[data-theme="forum"] h1 {
+[data-theme="forum"] h1,
+h2 {
   font-weight: 200;
 }
 /* [data-theme="analog"] h1 {
@@ -1128,9 +1129,7 @@ input[type="textarea"]:hover {
 
 .DialogTitle {
   margin: 0;
-  font-weight: bold;
   color: var(--color-text-accent);
-  font-size: 2rem;
   text-align: center;
 }
 
