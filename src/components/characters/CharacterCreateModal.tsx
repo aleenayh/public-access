@@ -3,7 +3,8 @@ import { useGame } from "../../context/GameContext";
 import { useState } from "react";
 import { PlayerRole, type GameState, } from "../../context/types";
 import {useForm, type UseFormRegister, type UseFormSetValue } from "react-hook-form";
-import { lookOptions, takesYouBackOptions } from "./characterContent";
+import { lookOptions, nameOptions, surnameOptions, takesYouBackOptions } from "./characterContent";
+import { CloseButton } from "../shared/CloseButton";
 
 type CharacterCreateInputs = {
     name: string;
@@ -75,7 +76,10 @@ export function CharacterCreateModal() {
             moves: [], //TODO
             questions: [false, false, false, false, false],
             keysOfTheChild: [false, false, false, false, false],
-            keyOfDesolation: [false, false, false, false, false],
+            keysOfDesolation: [false, false, false, false, false],
+            xp: [false, false, false, false, false, false],
+            conditions: ["", "", ""],
+            cornerOfTheHouse: [{marked: false, item: ""}, {marked: false, item: ""}],
         }
         updateGameState({
             ...gameState,
@@ -94,8 +98,8 @@ export function CharacterCreateModal() {
 				<button type="button">Create Character</button>
 			</Dialog.Trigger>
 			<Dialog.Content className="DialogContent">
-                <Dialog.Close className="DialogClose">
-                    X
+                <Dialog.Close asChild>
+                    <CloseButton/>
                 </Dialog.Close>
 				<Dialog.Title className="DialogTitle">Create Character</Dialog.Title>
 				<Dialog.Description className="sr-only">
@@ -119,21 +123,13 @@ export function CharacterCreateModal() {
 				)}
 				<p className="text-xs text-theme-text-muted">
 					Think this is a mistake? If you joined the game previously, make sure
-					you joined with the same player name as before.
+					you joined with the same player name as before. Your current player name is {user.name}.
 				</p>
 			</div>
 		)}
         {step !== "initial" && (
             <form onSubmit={handleSubmit(confirmCharacter)} className="flex flex-wrap text-center w-full">
-                <div className="flex-3 flex flex-col mr-2">
-                <label htmlFor="name" className="text-xs text-theme-text-muted/80 text-left italic">Character Name</label>
-                <input type="text" {...register("name")} />
-                </div>
-                <div className="flex-1 flex flex-col">
-                <label htmlFor="pronouns" className="text-xs text-theme-text-muted/80 text-left italic">Pronouns</label>
-                <input type="text" placeholder="" {...register("pronouns")} />
-                </div>
-                <p className="w-full text-xs text-theme-text-muted/80 text-left"><strong>Pick one, or make up your own:</strong> thing, thing, thing</p>
+                                <BlendedInputWithWordCloud optionSets={[nameOptions, surnameOptions]} setValue={setValue} register={register} title="Name" fieldName="name" />
                 <Seperator/>
                 <InputWithWordCloud options={lookOptions} setValue={setValue} register={register} title="Look" pickNum={1} fieldName="look" />
                 <Seperator/>
@@ -176,6 +172,51 @@ export function CharacterCreateModal() {
 		</Dialog.Root>
 
 	);
+}
+
+function BlendedInputWithWordCloud({optionSets, setValue, register, title, fieldName}: {optionSets: string[][], setValue: UseFormSetValue<CharacterCreateInputs>, register: UseFormRegister<CharacterCreateInputs>, title: string, fieldName: keyof CharacterCreateInputs}) {
+    const [selectedFirstName, setSelectedFirstName] = useState<string>("");
+    const [selectedLastName, setSelectedLastName] = useState<string>("");
+
+    const handleClickCloud = (setIndex: number, opt: string) => {
+        const newValues = [selectedFirstName, selectedLastName];
+        if (setIndex === 0) {
+            setSelectedFirstName(opt);
+            newValues[0] = opt;
+        } else {
+            setSelectedLastName(opt);
+            newValues[1] = opt;
+        }
+        setValue(fieldName, newValues.join(" "));
+    }
+
+    return (
+        <div className="flex flex-col gap-2 w-full">
+            <div className="flex gap-2 w-full">
+        <div className="flex-3 flex flex-col mr-2 w-full">
+        <label htmlFor={fieldName} className="text-xs text-theme-text-muted/80 text-left italic">{title}</label>
+        <input type="text" {...register(fieldName)} className="w-full"/>
+        </div>
+        <div className="flex-1 flex flex-col">
+            <label htmlFor="pronouns" className="text-xs text-theme-text-muted/80 text-left italic">Pronouns</label>
+            <input type="text" placeholder="" {...register("pronouns")} />
+                </div>
+                </div>
+            <div className="w-full">
+                <p className="text-xs text-theme-text-muted/80 text-left"><strong>Pick one of each, or make up your own:</strong></p>
+                <div className="flex gap-2">
+            {optionSets.map((options, setIndex) => {
+                const selectedOpt = setIndex === 0 ? selectedFirstName : selectedLastName;
+                const label = setIndex === 0 ? "FIRST NAME" : "LAST NAME";
+                return (<div key={`optionSet-${setIndex}`} className="flex flex-wrap gap-1 text-xs relative pl-4">
+                    <h3 className="absolute -left-17 top-1/2 tracking-widest text-lg leading-0 text-right -rotate-90 text-theme-text-accent">{label}</h3>
+                    {options.map((opt) => <button type="button" key={opt} className={`wordCloudButton ${selectedOpt === opt ? "border border-theme-border" : ""}`} onClick={() => handleClickCloud(setIndex, opt)}>{opt}</button>)}</div>);
+            })}
+                    </div>
+            </div>
+        </div>
+    )
+
 }
 
 function InputWithWordCloud({options, setValue, register, title, pickNum, fieldName}: {options: string[], setValue: UseFormSetValue<CharacterCreateInputs>, register: UseFormRegister<CharacterCreateInputs>, title: string, pickNum: number, fieldName: keyof CharacterCreateInputs}) {
