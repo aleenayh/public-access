@@ -25,7 +25,7 @@ export function CornerOfTheHouse({character}: {character: Character}) {
     const cornerOfTheHouse = character.cornerOfTheHouse
     
     return (
-        <div className="flex-1 flex flex-col gap-2 w-full border border-theme-border rounded-md px-2">
+        <div className="flex-1 flex flex-col gap-2 w-full border border-theme-border rounded-md px-2 pb-2">
             <p>Your Corner of the House</p>
             {Array.from({length: Math.max(2, cornerOfTheHouse.length +1)}
         ).map((_, index) => {

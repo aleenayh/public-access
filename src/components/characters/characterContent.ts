@@ -1,3 +1,5 @@
+import type { Character } from "./types"
+
 export const nameOptions = [
     "Christopher", "Jason", "Joseph", "Bryan", "Matthew", "Shane", "Zachary", "Nathan", "Juan", "Michael", "Jessica", "Jennifer", "Katie", "Erica", "Meghan", "Crystal", "Amber", "Nicole", "Ashley", "Stephanie"
 ]
@@ -8,7 +10,7 @@ export const lookOptions = [
     "TJ Maxximalist", "Cargo shorts and Triforce t-shirt", "None More Goth", "Popped Collar Princeling", "All the Scarves", "I’m Too Emo for My Face", "Livestrong", "Bootcut & Boogie", "Hoodie Under Blazer", "Matching Sneakers", "Jock Jams", "Skinny Jeans & Summer Dreams"
 ]
 export const takesYouBackOptions = [
-    "Girl Talk: A Game of Truth or Dare", "The Konami Code", "The Oregon Trail", "BOOK IT!", "Double Dare", "prank phone calls", "Garbage Pail Kids", "M.U.S.C.L.E.", "Rogue", "The Baby-Sitters Club", "My Buddy/Kid Sister", "Jean-Claude Van Damme", "Duck Tales (“oo-oo!”)", "reading sleepovers", "You Can’t Do That On Television", "Huffy 10-speed", "heading home when the streetlights flickered on", "Friday the 13th: The Series", "proton packs", "Artax in the Swamp of Sadness", "Waco", "A very special episode, Fangoria", "mixtapes", "Starlog", "Lisa Frank", "Yo! MTV Raps", "Tiger Beat", "Easy Bake Oven", "The Day After", "Who Killed Laura Palmer?", "Choose Your Own Adventure", "Fighting Fantasy", "wood paneling", "the L.A. riots", "the Cabbage Patch riots", "the Care Bear stare", "the Walkman", "TV show theme songs", "mall concerts", "horse girls", "Dungeon!", "Headbangers Ball", "Baby Jessica", "Space Shuttle Challenger", "Memphis Group design", "Brookstone", "record stores", "The Joy of Painting", "passing notes in class"
+    "Girl Talk: A Game of Truth or Dare", "The Konami Code", "The Oregon Trail", "BOOK IT!", "Double Dare", "prank phone calls", "Garbage Pail Kids", "M.U.S.C.L.E.", "Rogue", "The Baby-Sitters Club", "My Buddy/Kid Sister", "Jean-Claude Van Damme", "Duck Tales (“oo-oo!”)", "reading sleepovers", "You Can’t Do That On Television", "Huffy 10-speed", "heading home when the streetlights flickered on", "Friday the 13th: The Series", "proton packs", "Artax in the Swamp of Sadness", "Waco", "A very special episode", "Fangoria", "mixtapes", "Starlog", "Lisa Frank", "Yo! MTV Raps", "Tiger Beat", "Easy Bake Oven", "The Day After", "Who Killed Laura Palmer?", "Choose Your Own Adventure", "Fighting Fantasy", "wood paneling", "the L.A. riots", "the Cabbage Patch riots", "the Care Bear stare", "the Walkman", "TV show theme songs", "mall concerts", "horse girls", "Dungeon!", "Headbangers Ball", "Baby Jessica", "Space Shuttle Challenger", "Memphis Group design", "Brookstone", "record stores", "The Joy of Painting", "passing notes in class"
 ]
 
 export const moves: Record<string, string[]> = {
@@ -35,3 +37,51 @@ export const moves: Record<string, string[]> = {
     "Next Sunday A.D.": ["Once per Day Phase, you and at least one other player can do an out-of-character narration of an upcoming scene, as if you were doing running commentary during a movie. At least one thing from your shared narration will be true about the upcoming scene; tell the Keeper what it is. The Keeper can decide that other elements from your narration are also true."]
 }
 
+export function adjustForMove(move: string): Partial<Character> | null {
+    switch (move) {
+        case "Where's the Beef?":
+            return {
+                abilities: {
+                    vitality: 1,
+                    composure: 0,
+                    reason: 0,
+                    presence: 0,
+                    sensitivity: 0,
+                },
+            }
+        case "This is Your Brain":
+            return {
+                abilities: {
+                    reason: 1,
+                    composure: 0,
+                    presence: 0,
+                    sensitivity: 0,
+                    vitality: 0,
+                },
+            }
+        case "Who Ya Gonna Call?":
+            return {
+                cornerOfTheHouse: [{marked: false, item: "The Ghost Bro Forums"}],
+            }
+        case "Robot in Disguise":
+            return {
+                cornerOfTheHouse: [{marked: false, item: "Laptop"}, {marked: false, item: "Walkie Talkies"}, {marked: false, item: "GPS"}, {marked: false, item: "Camcorder"}, {marked: false, item: "Voice-Activated Audio Recorder"}],
+            }
+        case "A Winner is You":
+            return {
+                abilities: {
+                    presence: 1,
+                    composure: 0,
+                    reason: 0,
+                    sensitivity: 0,
+                    vitality: 0,
+                },
+            }
+        case "Have You Ever Danced with the Devil":
+            return {
+                cornerOfTheHouse: [{marked: false, item: "Candles"}, {marked: false, item: "Grimoire"}, {marked: false, item: "Small Brazier"}, {marked: false, item: "Athame"}, {marked: false, item: "Poppet"}],
+            }
+        default:
+            return null;
+    }
+}
