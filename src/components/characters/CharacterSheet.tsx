@@ -4,6 +4,7 @@ import { Conditions } from "./components/Conditions";
 import { CornerOfTheHouse } from "./components/CornerOfTheHouse";
 import { Keys } from "./components/Keys";
 import { Questions } from "./components/Questions";
+import { LatchkeyMoves } from "./components/LatchkeyMoves";
 import type { Character } from "./types";
 
 export function CharacterSheet({character}: {character: Character}) {
@@ -17,10 +18,10 @@ export function CharacterSheet({character}: {character: Character}) {
         <Conditions character={character}/>
 
         <AbilityBoxes character={character}/>
-        <div className="flex gap-2 h-36">
+        <div className="flex gap-2">
         <CornerOfTheHouse character={character}/>
-        <div className="flex-1 border border-theme-border rounded-md"><p>Latchkey Moves</p></div>
-        </div>
+            <LatchkeyMoves character={character}/>
+            </div>
         <Questions character={character}/>
         <Keys character={character}/>
 

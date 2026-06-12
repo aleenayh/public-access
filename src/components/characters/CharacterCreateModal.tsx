@@ -3,8 +3,10 @@ import { useGame } from "../../context/GameContext";
 import { useState } from "react";
 import { PlayerRole, type GameState, } from "../../context/types";
 import {useForm, type UseFormRegister, type UseFormSetValue } from "react-hook-form";
-import { lookOptions, nameOptions, surnameOptions, takesYouBackOptions } from "./characterContent";
+import { lookOptions, moves, nameOptions, surnameOptions, takesYouBackOptions, adjustForMove } from "./characterContent";
 import { CloseButton } from "../shared/CloseButton";
+import { Divider } from "../shared/Divider";
+import { parseMarkupFromString } from "../../utils/parseMarkupFromString";
 
 type CharacterCreateInputs = {
     name: string;
@@ -18,16 +20,18 @@ type CharacterCreateInputs = {
         reason: number;
         presence: number;
     };
+    moves: { name: string, description: string };
     takesYouBack: string;
 }
 
 export function CharacterCreateModal() {
     const {gameState, updateGameState, user} = useGame();
-    const {register, handleSubmit, setValue} = useForm({defaultValues: {
+    const {register, handleSubmit, setValue, getValues} = useForm({defaultValues: {
         name: "",
         pronouns: "",
         look: "",
         image: "",
+        moves: { name: "", description: "" },
         abilities: {
             vitality: 0,
             composure: 1,
@@ -55,17 +59,34 @@ export function CharacterCreateModal() {
         setStep("create");
     };
 
-    // const createCharacter = () => {
-    //     setStep("moves");
-    // };
+    const createCharacter = () => {
+        setStep("moves");
+    };
 
-    // const addMove = () => {
-    //     setStep("confirm");
-    // };
+    const addMove = (selectedMove: string) => {
+        const description = moves[selectedMove].map((d) => d.trim()).join("\n");
+        setValue("moves", { name: selectedMove, description });
+        const data = adjustForMove(selectedMove);
+        if (data && data.abilities) {
+            const currentValues = getValues("abilities");
+            const newValues = {
+                vitality: currentValues.vitality + data.abilities.vitality,
+                composure: currentValues.composure + data.abilities.composure,
+                reason: currentValues.reason + data.abilities.reason,
+                presence: currentValues.presence + data.abilities.presence,
+                sensitivity: currentValues.sensitivity + data.abilities.sensitivity,
+            }
+            setValue("abilities", newValues);
+        }
+        setStep("confirm");
+    };
 
 
     const confirmCharacter = (data: CharacterCreateInputs) => {
-        const {name, pronouns, look, image: imageURL, abilities, takesYouBack} = data;
+        console.log('creating character...', data);
+        const { name, pronouns, look, image: imageURL, abilities, takesYouBack, moves } = data;
+        //abilities already added into preview, only need to add corner of the house here
+        const moveAdjustments = adjustForMove(moves.name);
         const character= {
             name,
             pronouns,
@@ -73,13 +94,13 @@ export function CharacterCreateModal() {
             image: imageURL ? {type: "custom" as const, url: imageURL} : getUnusedFallback(gameState),
             abilities,
             takesYouBack,
-            moves: [], //TODO
+            moves: [moves],
             questions: [false, false, false, false, false],
             keysOfTheChild: [false, false, false, false, false],
             keysOfDesolation: [false, false, false, false, false],
             xp: [false, false, false, false, false, false],
             conditions: ["", "", ""],
-            cornerOfTheHouse: [{marked: false, item: ""}, {marked: false, item: ""}],
+            cornerOfTheHouse: [...(moveAdjustments?.cornerOfTheHouse || []), {marked: false, item: ""}, {marked: false, item: ""}],
         }
         updateGameState({
             ...gameState,
@@ -126,47 +147,61 @@ export function CharacterCreateModal() {
 					you joined with the same player name as before. Your current player name is {user.name}.
 				</p>
 			</div>
-		)}
-        {step !== "initial" && (
-            <form onSubmit={handleSubmit(confirmCharacter)} className="flex flex-wrap text-center w-full">
+                    )}
+                    {step !== "initial" && <form onSubmit={handleSubmit(confirmCharacter)}>
+                        {step === "create" && (
+                            <div className="flex flex-wrap text-center w-full">
                                 <BlendedInputWithWordCloud optionSets={[nameOptions, surnameOptions]} setValue={setValue} register={register} title="Name" fieldName="name" />
-                <Seperator/>
-                <InputWithWordCloud options={lookOptions} setValue={setValue} register={register} title="Look" pickNum={1} fieldName="look" />
-                <Seperator/>
-                <InputWithWordCloud options={takesYouBackOptions} setValue={setValue} register={register} title="What Takes You Back?" pickNum={3} fieldName="takesYouBack" />
-                <Seperator/>
-                <div className="w-full flex flex-col">
-                <label htmlFor="image" className="text-xs text-theme-text-muted/80 text-left italic">Character Image (optional)</label>
-                <input type="text" {...register("image")} className="w-full"/>
-                <p className="text-xs text-theme-text-muted/80 text-left">paste image url. png, jpeg, webp accepted. displays in square aspect ratio.</p>
-                </div>
-                <Seperator/>
-                <p className="text-sm text-center w-full">Add +1 to any Ability </p>
-                <div className="flex gap-2 justify-center">
-                    <div className="flex flex-col">
-                    <label htmlFor="abilities.vitality" className="text-xs text-theme-text-muted/80 text-center">Vitality</label>
-                    <input type="number" {...register("abilities.vitality")} className="w-1/2 mx-auto text-center"/>
-                        </div>
-                    <div className="flex flex-col">
-                    <label htmlFor="abilities.composure" className="text-xs text-theme-text-muted/80 text-center">Composure</label>
-                    <input type="number" {...register("abilities.composure")} className="w-1/2 mx-auto text-center"/>
-                    </div>
-                    <div className="flex flex-col">
-                    <label htmlFor="abilities.reason" className="text-xs text-theme-text-muted/80 text-center">Reason</label>
-                    <input type="number" {...register("abilities.reason")} className="w-1/2 mx-auto text-center"/>
-                    </div>
-                    <div className="flex flex-col">
-                    <label htmlFor="abilities.sensitivity" className="text-xs text-theme-text-muted/80 text-center">Sensitivity</label>
-                    <input type="number" {...register("abilities.sensitivity")} className="w-1/2 mx-auto text-center"/>
-                    </div>
-                    <div className="flex flex-col">
-                    <label htmlFor="abilities.presence" className="text-xs text-theme-text-muted/80 text-center">Presence</label>
-                    <input type="number" {...register("abilities.presence")} className="w-1/2 mx-auto text-center"/>
-                    </div>
-                </div>
-                <button type="submit" className="formButton mx-auto my-6">Choose Latchkey Move</button>
-            </form>
-        )}
+                                <Divider />
+                                <InputWithWordCloud options={lookOptions} setValue={setValue} register={register} title="Look" pickNum={1} fieldName="look" />
+                                <Divider />
+                                <InputWithWordCloud options={takesYouBackOptions} setValue={setValue} register={register} title="What Takes You Back?" pickNum={3} fieldName="takesYouBack" />
+                                <Divider />
+                                <div className="w-full flex flex-col">
+                                    <label htmlFor="image" className="text-xs text-theme-text-muted/80 text-left italic">Character Image (optional)</label>
+                                    <input type="text" {...register("image")} className="w-full" />
+                                    <p className="text-xs text-theme-text-muted/80 text-left">paste image url. png, jpeg, webp accepted. displays in square aspect ratio.</p>
+                                </div>
+                                <Divider />
+                                <p className="text-sm text-center w-full">Add +1 to any Ability </p>
+                                <div className="flex gap-2 justify-center">
+                                    <div className="flex flex-col">
+                                        <label htmlFor="abilities.vitality" className="text-xs text-theme-text-muted/80 text-center">Vitality</label>
+                                        <input type="number" {...register("abilities.vitality")} className="w-1/2 mx-auto text-center" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <label htmlFor="abilities.composure" className="text-xs text-theme-text-muted/80 text-center">Composure</label>
+                                        <input type="number" {...register("abilities.composure")} className="w-1/2 mx-auto text-center" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <label htmlFor="abilities.reason" className="text-xs text-theme-text-muted/80 text-center">Reason</label>
+                                        <input type="number" {...register("abilities.reason")} className="w-1/2 mx-auto text-center" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <label htmlFor="abilities.sensitivity" className="text-xs text-theme-text-muted/80 text-center">Sensitivity</label>
+                                        <input type="number" {...register("abilities.sensitivity")} className="w-1/2 mx-auto text-center" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <label htmlFor="abilities.presence" className="text-xs text-theme-text-muted/80 text-center">Presence</label>
+                                        <input type="number" {...register("abilities.presence")} className="w-1/2 mx-auto text-center" />
+                                    </div>
+                                </div>
+                                <button type="button" onClick={createCharacter} className="formButton mx-auto my-6">Choose Latchkey Move</button>
+                            </div>
+                        )}
+                        {step === "moves" && (
+                            <MovePicker onContinue={addMove} />
+                        )}
+                        {step === "confirm" && (
+                            <>
+                                <div className="flex flex-col gap-2 w-full">
+                                    <h2 className="text-2xl font-bold">Review your character</h2>
+                                    <p className="text-sm text-theme-text-muted">Please review your character and confirm your choices.</p>
+                                </div>
+                                <button type="submit" className="formButton mx-auto my-6">Confirm</button>
+                            </>
+                        )}
+                    </form>}
 			</Dialog.Content>
             </Dialog.Portal>
 		</Dialog.Root>
@@ -174,7 +209,8 @@ export function CharacterCreateModal() {
 	);
 }
 
-function BlendedInputWithWordCloud({optionSets, setValue, register, title, fieldName}: {optionSets: string[][], setValue: UseFormSetValue<CharacterCreateInputs>, register: UseFormRegister<CharacterCreateInputs>, title: string, fieldName: keyof CharacterCreateInputs}) {
+function BlendedInputWithWordCloud({ optionSets, setValue, register, title, fieldName }: { optionSets: string[][], setValue: UseFormSetValue<CharacterCreateInputs>, register: UseFormRegister<CharacterCreateInputs>, title: string, fieldName: keyof CharacterCreateInputs }) {
+    //Hardwired for name and pronouns currently; if we want to make this more reusable, some outstanding TODOs
     const [selectedFirstName, setSelectedFirstName] = useState<string>("");
     const [selectedLastName, setSelectedLastName] = useState<string>("");
 
@@ -246,10 +282,30 @@ function InputWithWordCloud({options, setValue, register, title, pickNum, fieldN
 
 }
 
-function Seperator() {
+function MovePicker({onContinue}: {onContinue: (selectedMove:string) => void}) {
+    const { gameState } = useGame();
+    const movesInPlay = gameState.players.flatMap((player) => player.character?.moves || []).map((move) => move.name);
+    const [selectedMove, setSelectedMove] = useState<string>("");
+
     return (
-        <div className="w-full h-px bg-theme-border-accent my-2"/>
-    );
+        <div className="flex flex-col gap-2 w-full">
+            <h4 className="text-center text-theme-text-accent">Choose One Latchkey Move</h4>
+        <div className="w-full grid grid-cols-2 lg:grid-cols-3 gap-4 align-start">
+            {Object.entries(moves).map(([name, description]) => {
+            if (movesInPlay.includes(name)) {
+                return null;
+            }
+            return (
+                <button type="button" key={`move-${name}`} onClick={() => setSelectedMove(name)} className={`border border-theme-border box-border rounded-md p-2 h-fit bg-theme-bg-primary max-h-64 overflow-y-auto ${selectedMove === name ? "border-theme-border-accent border-2 shadow-lg bg-theme-bg-secondary" : ""}`}>
+                    <h4 className={`text-theme-text-accent ${selectedMove === name ? "brightness-125" : ""}`}>{name}</h4>
+                    <p className="text-xs text-theme-text-secondary text-left">{parseMarkupFromString(description.map((d) => d.trim()).join("\n"))}</p>
+                </button>
+            )
+        })}
+            </div>
+            <button type="button" onClick={() => onContinue(selectedMove)} className="formButton mx-auto my-6">Reivew & Confirm</button>
+            </div>
+    )
 }
 
 function getUnusedFallback(gameState: GameState) {
