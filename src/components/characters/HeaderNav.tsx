@@ -1,7 +1,10 @@
-import PizzaIcon from "../../assets/icons/people/pizza.svg?react"
-import CasetteIcon from "../../assets/icons/people/casette.svg?react"
-import ArcadeIcon from "../../assets/icons/people/arcade.svg?react"
-import CactusIcon from "../../assets/icons/people/cactus.svg?react"
+import { Pizza } from "../svgs/portraitIcons/Pizza"
+import { Casette } from "../svgs/portraitIcons/Casette"
+import { Arcade } from "../svgs/portraitIcons/Arcade"
+import { Cactus } from "../svgs/portraitIcons/Cactus"
+import { Invader } from "../svgs/portraitIcons/Invader"
+import { D20 } from "../svgs/portraitIcons/D20"
+import { Lizard } from "../svgs/portraitIcons/Lizard"
 import type { Character, FallbackImage } from "./types"
 import { useGame } from "../../context/GameContext"
 
@@ -50,14 +53,20 @@ function CharacterPortrait({characterIndex, character, onClick, isActive}: {char
 function getFallbackIcon(image: FallbackImage) {
 		switch (image.icon) {
 			case "pizza":
-				return <PizzaIcon height={96} />;
+				return <Pizza height={96} />;
 			case "casette":
-				return <CasetteIcon height={96} />;
+				return <Casette height={96} />;
 			case "arcade":
-				return <ArcadeIcon height={96} />;
+				return <Arcade height={96} />;
 			case "cactus":
-				return <CactusIcon height={96} />;
+                return <Cactus height={96} />;  
+            case "invader":
+                return <Invader height={96} />;
+            case "d20":
+                return <D20 height={96} />;
+            case "lizard":
+                return <Lizard height={96} />;
 			default:
-				return <PizzaIcon height={96} />;
+				return <Pizza height={96} />;
 		}
 	}

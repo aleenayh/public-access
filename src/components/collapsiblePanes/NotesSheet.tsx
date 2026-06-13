@@ -21,15 +21,12 @@ export function NotesSheet() {
     };
     
     return (
-        <div><h1 className="text-[2rem] font-bold text-theme-text-accent mb-6">
-            Notes
-        </h1>
-            <div className="flex flex-col gap-4 justify-between h-full">
+            <div className="flex flex-col gap-4 justify-stretch h-full">
                 <p className="text-balance">
                     These personal notes are not shared with other players.
                 </p>
                 <textarea
-                    className=" bg-theme-bg-primary text-theme-text-primary border-2 border-theme-border-accent rounded-lg p-2 w-full h-full"
+                    className="flex-1 grow bg-theme-bg-primary text-theme-text-primary border-2 border-theme-border-accent rounded-lg p-2 w-full h-full"
                     defaultValue={notes}
                     onBlur={(e) => setNotes(e.target.value)}
                 />
@@ -38,10 +35,10 @@ export function NotesSheet() {
                 >
                     {buttonText}
                 </button>
-                <p className="text-sm md:text-md w-full md:w-1/2 mx-auto italic">
+                <p className="text-sm md:text-md w-full md:w-1/2 mx-auto italic text-theme-text-muted">
                     Notes are saved locally. They will not persist if you change
                     devices and can be lost if you clear cache.
                 </p>
             </div>
-        </div>)
+        )
 }
