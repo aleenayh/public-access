@@ -1,8 +1,5 @@
-import { StyledPane } from "./shared/StyledPane";
-
-    export function MysteryPane() {
+export function MysteryPane() {
 	return (
-		<StyledPane variant="horizontal">
 			<div className="flex flex-col w-full">
 			<h3 className="text-2xl font-bold text-theme-text-accent">Mystery Pane</h3>
 
@@ -16,6 +13,5 @@ import { StyledPane } from "./shared/StyledPane";
 				<p className="border border-theme-border">Custom Key</p>
 				</div>
 				</div>
-		</StyledPane>
 	);
 }

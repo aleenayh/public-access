@@ -8,10 +8,8 @@ import { CloseButton } from "../shared/CloseButton";
 
 export function SafetySheet() {
     return (
-        <div>
-            <h1 className="text-[2rem] font-bold text-theme-text-accent mb-6">Safety Tools</h1>
             <div className="flex flex-col gap-4 justify-start items-center h-full">
-              <p className="text-balance text-sm">
+              <p className="text-balance text-sm text-left">
                 No game is more important than the people playing it. Your game may use any safety tools you wish, but the Gauntlet typically recommends the Open Door Policy, the X-Card, and Lines and Veils. Each are explained below, and this app includes support to share Lines and Veils between players.
               </p>
 
@@ -21,7 +19,6 @@ export function SafetySheet() {
               <Divider />
               <ExplainerSections />
             </div>
-        </div>
     )
 }
 
@@ -33,20 +30,21 @@ function LinesAndVeils() {
     return (
       <div className="w-full px-8  flex flex-col gap-2 md:grid md:grid-cols-2 md:gap-6 md:justify-between text-left">
         <div className="flex flex-col gap-2">
-          <h2 className="text-lg font-bold text-theme-text-accent">Lines</h2>
+          <h3 className="text-lg font-bold text-theme-text-accent">Lines</h3>
           <ul className=" text-sm">
             {lines ? lines.map((line) => <li key={line}>{line}</li>) : <li>No lines have been added yet.</li>}
           </ul>
         </div>
         <div className="flex flex-col gap-2">
-          <h2 className="text-lg font-bold text-theme-text-accent">Veils</h2>
+          <h3 className="text-lg font-bold text-theme-text-accent">Veils</h3>
           <ul className="text-sm">
             {veils ? veils.map((veil) => <li key={veil}>{veil}</li>) : <li>No veils have been added yet.</li>}
           </ul>
         </div>
         <Dialog.Root>
          <Dialog.Trigger asChild>
-         <div className="md:col-span-2 mx-auto w-2/5"><button
+            <div className="md:col-span-2 mx-auto w-2/5">
+              <button
               type="button"
               className="gridButton"
             >

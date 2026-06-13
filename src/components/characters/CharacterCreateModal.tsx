@@ -313,7 +313,7 @@ function getUnusedFallback(gameState: GameState) {
         player.character?.image.type === "default" ? [player.character] : []
       );
     const usedIcons = charactersWithIcons.map((character) => character.image.type === "default" ? character.image.icon : undefined).filter((icon) => icon !== undefined);
-    const fallbackIcons = ["pizza", "casette", "arcade", "cactus"];
+    const fallbackIcons = ["pizza", "casette", "arcade", "cactus", "invader", "d20", "lizard"];
     const unusedIcons = fallbackIcons.filter((icon) => !usedIcons.includes(icon));
     return {type: "default" as const, icon: unusedIcons[0]};
 }
