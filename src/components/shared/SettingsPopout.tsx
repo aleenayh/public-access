@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { usePreferences } from "../../context/PreferencesContext";
+import { Divider } from "./Divider";
 
 export function SettingsPopout() {
-	const {theme, saveTheme} = usePreferences();
+	const {theme, saveTheme, saveMotionPreference, prefersReducedMotion} = usePreferences();
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
-		<div className={`flex flex-row-reverse absolute top-0 transition-all duration-300 ease-in-out ${isOpen ? "left-0" : "-left-[250px]"}`}>
+		<div className={`isolate z-2 flex flex-row-reverse absolute top-0 transition-all duration-300 ease-in-out ${isOpen ? "left-0" : "-left-[250px]"}`}>
 			<button type="button" className="text-center text-theme-text-muted pointer-cursor text-xl bg-theme-bg-secondary rounded-tr-lg rounded-br-lg px-2 h-8" onClick={() => setIsOpen(!isOpen)}>
 			⚙ <span aria-hidden="false" className="sr-only">Settings Menu</span>
 			</button>
@@ -21,7 +22,11 @@ export function SettingsPopout() {
 				<label htmlFor="forum" className={`${theme === "forum" ? "text-theme-text-accent font-bold" : "text-theme-text-muted"}`}><input id="forum" type="radio" name="theme" value="forum" checked={theme === "forum"} onChange={() => saveTheme("forum")} />
 				Forum</label>
 				<label htmlFor="dark" className={`${theme === "dark" ? "text-theme-text-accent font-bold" : "text-theme-text-muted"}`}><input id="dark" type="radio" name="theme" value="dark" checked={theme === "dark"} onChange={() => saveTheme("dark")} />
-				Dark</label>
+					Dark</label>
+				<Divider/>
+				
+					<label htmlFor="reduced-motion" className={`${prefersReducedMotion ? "text-theme-text-accent font-bold" : "text-theme-text-muted"}`}><input id="reduced-motion" type="checkbox" name="reduced-motion" checked={prefersReducedMotion} onChange={() => saveMotionPreference(!prefersReducedMotion)} />
+					Reduce motion (disables animations)</label>
 			</div>
 		</div>
 	);
