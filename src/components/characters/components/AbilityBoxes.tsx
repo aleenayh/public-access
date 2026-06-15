@@ -2,8 +2,10 @@ import { useGame } from "../../../context/GameContext";
 import type { Character } from "../types";
 
 export function AbilityBoxes({character}: {character: Character}) {
-    const {gameState, updateGameState, user: {id}} = useGame();
-    const canRoll = gameState.players.find((player) => player.character?.name === character.name)?.id === id;
+    const {gameState, user: {id}} = useGame();
+	const canRoll = gameState.players.find((player) => player.character?.name === character.name)?.id === id;
+	console.log(canRoll);
+	//TODO: dice rolling
 
     return (
         <div className="flex gap-2">

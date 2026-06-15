@@ -26,9 +26,9 @@ export function VersionMismatchModal({
 				<Dialog.Content
 					className="DialogContent"
 					style={{ zIndex: 101 }}
-					onEscapeKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => e.preventDefault()}
-					onPointerDownOutside={(e: React.PointerEvent<HTMLDivElement>) => e.preventDefault()}
-					onInteractOutside={(e: React.PointerEvent<HTMLDivElement>) => e.preventDefault()}
+					onEscapeKeyDown={(e: KeyboardEvent) => e.preventDefault()}
+					onPointerDownOutside={(e: CustomEvent<{ originalEvent: PointerEvent }>) => e.preventDefault()}
+					onInteractOutside={(e: CustomEvent<{ originalEvent: PointerEvent | FocusEvent }>) => e.preventDefault()}
 				>
 					<Dialog.Title className="DialogTitle">Refresh Required</Dialog.Title>
 					<Dialog.Description className="DialogDescription">
