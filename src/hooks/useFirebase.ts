@@ -21,12 +21,14 @@ interface UseFirebaseReturn {
 }
 
 export class VersionMismatchError extends Error {
-	constructor(
-		public localVersion: string,
-		public remoteVersion: string,
-	) {
+	public localVersion: string;
+	public remoteVersion: string;
+	constructor(localVersion: string, remoteVersion: string) {
+		super();
+		this.localVersion = localVersion;
+		this.remoteVersion = remoteVersion;
 		super(
-			`Schema version mismatch: local ${localVersion} vs remote ${remoteVersion}`,
+			`Schema version mismatch: local ${this.localVersion} vs remote ${remoteVersion}`,
 		);
 		this.name = "VersionMismatchError";
 	}
@@ -64,8 +66,6 @@ export const useFirebase = ({
 	 */
 	useEffect(() => {
 		const gameRef = ref(db, gameRefPath);
-
-		setStatus("connecting");
 
 		const unsubscribe = onValue(
 			gameRef,
