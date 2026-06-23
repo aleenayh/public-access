@@ -9,11 +9,10 @@ import { ReferenceSheet } from "./collapsiblePanes/ReferenceSheet"
 import { NotesSheet } from "./collapsiblePanes/NotesSheet"
 import { SafetySheet } from "./collapsiblePanes/SafetySheet"
 import { useState } from "react"
-import { MysteryPane } from "./MysteryPane"
+import { MysteryPane, MysteryContent } from "./MysteryPane"
 import { StyledPane } from "./shared/StyledPane"
 import { SettingsSheet } from "./collapsiblePanes/SettingsSheet"
 import { OdysseyTapesSheet } from "./collapsiblePanes/OdysseyTapesSheet"
-import { TVOdysseyMysterySheet } from "./collapsiblePanes/TVOdysseyMysterySheet"
 
 export function ContentPane() {
     const [contentTitle, setContentTitle] = useState<string | null>("Mysteries");
@@ -33,7 +32,7 @@ export function ContentPane() {
             <button type="button" className={`navButton ${contentTitle === "Reference Sheet" ? "activeNav" : ""}`} onClick={() => onClick("Reference Sheet", <ReferenceSheet/>)}>
                 <Book height={24}/> <TextOnHover text="Reference Sheet" expanded={contentTitle === "Reference Sheet"} />
             </button>
-            <button type="button" className={`navButton ${contentTitle === "TV Odyssey Mystery" ? "activeNav" : ""}`} onClick={() => onClick("TV Odyssey Mystery", <TVOdysseyMysterySheet/>)}>
+            <button type="button" className={`navButton ${contentTitle === "TV Odyssey Mystery" ? "activeNav" : ""}`} onClick={() => onClick("TV Odyssey Mystery", <MysteryContent mysteryId="tv-odyssey-mystery"/>)}>
                 <Television height={24}/> <TextOnHover text="TV Odyssey Mystery" expanded={contentTitle === "TV Odyssey Mystery"} />
             </button>
             <button type="button" className={`navButton ${contentTitle === "Odyssey Tapes" ? "activeNav" : ""}`} onClick={() => onClick("Odyssey Tapes", <OdysseyTapesSheet/>)}>

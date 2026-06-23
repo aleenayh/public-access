@@ -6,30 +6,39 @@ import { CloseButton } from "./shared/CloseButton";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { Divider } from "./shared/Divider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pencil } from "./svgs/Pencil";
 
 export function MysteryPane() {
 	const { gameState } = useGame();
-	const regularMysteries = gameState.mysteries.filter((mystery) => mystery.id !== "tv-odyssey");
-	const [displayedMystery, setDisplayedMystery] = useState<Mystery | null>(regularMysteries[0] || null);
+	const regularMysteries = gameState.mysteries.filter((mystery) => mystery.id !== "tv-odyssey-mystery");
+	const [displayedMystery, setDisplayedMystery] = useState<string | null>(regularMysteries[0]?.id || null);
+
+	//reset the displayed mystery if a mystery is added or removed; otherwise can get stuck on a removed mystery
+	useEffect(() => {
+		const filteredMysteries =gameState.mysteries.filter((mystery) => mystery.id !== "tv-odyssey-mystery");
+		// eslint-disable-next-line react-hooks/set-state-in-effect
+		setDisplayedMystery(filteredMysteries[0]?.id || null)
+	}, [gameState.mysteries, setDisplayedMystery])
 	
 	return (
-		<div className="flex flex-col w-full h-full">
-			{regularMysteries.length > 1 && <div className="flex gap-2 justify-center">{regularMysteries.map((mystery) => <button key={mystery.id} onClick={() => setDisplayedMystery(mystery)} className="formButton max-w-1/3 grow text-xs leading-none text-balance">{mystery.name}</button>)}</div>}
-			{displayedMystery && <MysteryContent mystery={displayedMystery} key={displayedMystery.id} />}
+		<div className="flex flex-col w-full h-full justify-start">
+			{regularMysteries.length > 1 && <div className="flex gap-2 justify-center">{regularMysteries.map((mystery) => <button key={mystery.id} onClick={() => setDisplayedMystery(mystery.id)} className="formButton max-w-1/3 grow text-xs leading-none text-balance">{mystery.name}</button>)}</div>}
+			{displayedMystery && <MysteryContent mysteryId={displayedMystery} key={displayedMystery} />}
 			<AddMysteryButton />
 			</div>
 	);
 }
 
-function MysteryContent({ mystery }: { mystery: Mystery }) {
+export function MysteryContent({ mysteryId }: { mysteryId: string }) {
 	const { gameState, updateGameState } = useGame();
 	const {register, handleSubmit, reset} = useForm<{clue:string}>({
 		defaultValues: {
 			clue: "",
 		},
 	});
+	const mystery = gameState.mysteries.find((m) => m.id === mysteryId);
+	if (!mystery) return;
 
 	const addClue = (data: {clue:string}) => {
 		const newClues = [...mystery.clues, {text: data.clue, used: false}];
@@ -43,22 +52,21 @@ function MysteryContent({ mystery }: { mystery: Mystery }) {
 	const turnKey = () => {
 		updateGameState({
 			...gameState,
-			mysteries: gameState.mysteries.map((m) => m.id === mystery.id ? { ...m, customKey: { title: m.customKey?.title || "", text: m.customKey?.text || "", checked: !m.customKey?.checked } } : m),
+			mysteries: gameState.mysteries.map((m) => m.id === mysteryId ? { ...m, customKey: { title: m.customKey?.title || "", text: m.customKey?.text || "", checked: !m.customKey?.checked } } : m),
 		})
 	}
 	const markClue = (text: string) => {
 		updateGameState({
 			...gameState,
-			mysteries: gameState.mysteries.map((m) => m.id === mystery.id ? { ...m, clues: m.clues.map((c) => c.text === text ? { ...c, used: !c.used } : c) } : m),
+			mysteries: gameState.mysteries.map((m) => m.id === mysteryId ? { ...m, clues: m.clues.map((c) => c.text === text ? { ...c, used: !c.used } : c) } : m),
 		})
 	}
-	const gridTemplate = mystery.intro && mystery.customKey ? "grid-rows-[1fr_1fr_3fr_1fr]" : mystery.intro ? "grid-rows-[1fr_1fr_3fr]" : mystery.customKey ? "grid-rows-[1fr_3fr_1fr]" : "grid-rows-[1fr_3fr]";
 	
-	return (
-		<div className={`w-full h-full grid ${gridTemplate} gap-2`}>
+	return ( 
+		<div className={`w-full h-full flex flex-col gap-2`}>
 			<h3 className="text-lg font-bold text-theme-text-accent flex gap-2 items-center"><span className="grow">{mystery.name}</span> <EditMysteryButton mystery={mystery} /></h3> 
 			
-			{mystery.intro && <p className="border border-theme-border">{mystery.intro.map((line) => <p key={line}>{parseMarkupFromString(line)}</p>)}</p>}
+			{mystery.intro && <div className="border border-theme-border">{mystery.intro.map((line) => <p key={line}>{parseMarkupFromString(line)}</p>)}</div>}
 
 			<div className="flex flex-col gap-2 grow">
 			<div className="flex gap-2"><div className="border border-theme-border flex-1 p-2">
@@ -66,16 +74,15 @@ function MysteryContent({ mystery }: { mystery: Mystery }) {
 					<h4 className="text-sm font-bold text-theme-text-accent">{question.text}</h4><span className="text-xs text-theme-text-muted">Complexity: {question.complexity}</span>
 					{question.opportunity && <p className="text-xs text-left">Opportunity: <span className="italic">{question.opportunity}</span></p>}
 					</div>)}
-
-
 				</div>
 
-				<p className="border border-theme-border flex-1"><h4>Clues</h4>
+				<div className="border border-theme-border flex-1"><h4>Clues</h4>
+				<div className="text-xs flex justify-center items-center text-theme-text-muted">earned: {mystery.clues.length} <Diamond/> used: {mystery.clues.filter((c) => c.used).length} <Diamond/> available: {mystery.clues.filter((c) => !c.used).length}</div>
 					<ul className="list-none">
 						{mystery.clues.map((clue) => <li key={clue.text} className={`${clue.used ? "text-theme-text-muted" : ""} text-left`}>
-							<input type="checkbox" checked={clue.used} className="mr-2" onToggle={() => markClue(clue.text)} />
+							<input type="checkbox" defaultChecked={clue.used} className="mr-2" onChange={() => markClue(clue.text)} />
 							{parseMarkupFromString(clue.text)}</li>)}</ul>
-			</p></div>
+			</div></div>
 			
 			<form onSubmit={handleSubmit(addClue)} className="flex gap-2 items-center">
 				<label htmlFor="clue" className="sr-only">Add a clue</label>
@@ -85,9 +92,19 @@ function MysteryContent({ mystery }: { mystery: Mystery }) {
 			</div>
 
 
-			{mystery.customKey && <div className="border border-theme-border p-2"><h4 className="text-md font-bold text-theme-text-accent">{mystery.customKey.title}</h4><p className="text-left"><input type="checkbox" checked={mystery.customKey.checked} className="mr-2" onToggle={turnKey} />{parseMarkupFromString(mystery.customKey.text)}</p></div>}
+			{mystery.customKey && <div className="border border-theme-border p-2">
+				<h4 className="text-md font-bold text-theme-text-accent">{mystery.customKey.title}</h4>
+				<p className="text-left"><input type="checkbox" defaultChecked={mystery.customKey.checked} className="mr-2" onChange={turnKey} />
+				{parseMarkupFromString(mystery.customKey.text)}
+				</p>
+				</div>
+			}
 			</div>
 	)
+}
+
+function Diamond() {
+	return <span className="text-theme-text-accent text-[0.5rem] px-2">◈</span>
 }
 
 type AddMysteryInputs = {
@@ -151,14 +168,15 @@ function MysteryForm({ mystery, closeModal }: {mystery?:Mystery, closeModal: () 
 	
 	const addMystery = (data: AddMysteryInputs) => {
 		const id = mystery?.id || crypto.randomUUID();
-		const customKey = data.customKey ? { checked: mystery?.customKey?.checked || false, title: data.customKey?.title || "", text: data.customKey?.text || "" } : undefined;
+		const omitKey = data.customKey?.text === "" && data.customKey.title === ""
+		const customKey = omitKey ? undefined : { checked: mystery?.customKey?.checked || false, title: data.customKey?.title || "", text: data.customKey?.text || "" };
 		const newMystery: Mystery = {
 			id,
 			name: data.name,
-			intro: data.introduction?.split("\n") || undefined,
+			intro: data.introduction?.split("\n").filter((line) => line !== "") || undefined,
 			questions: data.questions,
 			clues: mystery?.clues || [],
-			customKey,
+			...(!omitKey && {customKey: customKey}),
 		}
 		if (mystery) {
 			updateGameState({
