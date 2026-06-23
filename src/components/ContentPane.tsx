@@ -25,7 +25,7 @@ export function ContentPane() {
     }
 
     return (
-        <StyledPane variant="vertical">
+        <StyledPane>
             <div className="-mt-4 -mx-4 flex align-center justify-stretch gap-1 mb-4 relative overflow-visible h-fit items-start border-b border-theme-border isolate">
             <button type="button" className={`navButton ${contentTitle === "Mysteries" ? "activeNav" : ""}`} onClick={() => onClick("Mysteries", <MysteryPane/>)}>
                 <MagnifyingGlass height={24}/> <TextOnHover text="Mysteries" expanded={contentTitle === "Mysteries"} />

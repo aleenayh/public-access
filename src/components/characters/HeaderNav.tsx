@@ -45,7 +45,7 @@ function CharacterPortrait({characterIndex, character, onClick, isActive}: {char
         <div className={`w-full h-full flex items-center justify-center border-2 ${isActive ? "scale-110 saturate-100" : "saturate-[0.2]"} rounded-sm p-1 aspect-square hover:brightness-110 hover:saturate-100 transition-brightness duration-300 hover:-translate-y-6`} style={{background: gradient, color}}>
             {character.image.type === "custom" ? <img src={character.image.url} alt={character.name} className="w-full h-full object-cover"/> : getFallbackIcon(character.image)}
             </div>
-            <p className="absolute bottom-0 -z-1 text-center text-theme-text-accent text-xs whitespace-nowrap">{character.name}</p>
+            <p className="absolute bottom-0 -z-1 text-center text-theme-text-accent text-xs whitespace-nowrap max-w-24 truncate">{character.name}</p>
     </button>
     )
 }
