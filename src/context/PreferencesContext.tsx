@@ -57,9 +57,19 @@ export const PreferencesProvider: React.FC<PreferencesProviderProps> = ({
 	const [theme, setTheme] = useState<ThemeOptions>(
 		savedPreferences.theme ?? "analog",
 	);
+
 	document.documentElement.setAttribute("data-theme", theme);
+	if (prefersReducedMotion) {
+		document.documentElement.setAttribute("data-reduce-motion", "true");
+	}
+	
 	const saveMotionPreference = (prefersReducedMotion: boolean) => {
 		setPrefersReducedMotion(prefersReducedMotion);
+		if (prefersReducedMotion) {
+		document.documentElement.setAttribute("data-reduce-motion", "true");
+		} else {
+		document.documentElement.removeAttribute("data-reduce-motion")
+		}
 		localStorage.setItem(
 			"public-access-user-preferences",
 			JSON.stringify({

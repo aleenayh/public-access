@@ -474,6 +474,9 @@ body {
   -webkit-mask: var(--mask);
   mask: var(--mask);
 }
+[data-reduce-motion="true"] .StaticBackground, .StaticForeground{
+  animation: none;
+}
 
 @keyframes wobble {
   0% {
@@ -597,6 +600,10 @@ body {
     alternate;
 }
 
+[data-reduce-motion="true"] .Circle:nth-child(3n), .CircleFilled:nth-child(3n), .Circle:nth-child(3n+1), .CircleFilled:nth-child(3n+1), .Circle:nth-child(3n+2), .CircleFilled:nth-child(3n+2), .Rectangle, .Triangle {
+  animation: none;
+}
+
 h1 {
   font-family: var(--header-font);
   color: var(--color-text-accent);
@@ -692,6 +699,14 @@ h2 {
   color: #f16f6f;
   left: -5px;
   animation: glitch3 3.5s infinite;
+}
+[data-reduce-motion="true"] .animatedHeaderLetter {
+  animation:none;
+}
+[data-reduce-motion="true"] .animatedHeaderLetter:before, .animatedHeaderLetter:after {
+  content: "";
+  animation:none;
+  display:none;
 }
 
 @keyframes glitch1 {
@@ -1336,6 +1351,9 @@ input[type="textarea"]:hover {
 
 .fadeInEachChild :nth-child(n) {
   animation: fadeInEachChild 0.5s calc(sibling-index() * 0.2s) both;
+}
+[data-reduce-motion="true"] .fadeInEachChild :nth-child(n) {
+  animation:none;
 }
 
 @keyframes fadeInEachChild {
