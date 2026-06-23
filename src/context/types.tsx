@@ -45,10 +45,41 @@ const safetySchema = z.object({
 	veils: z.array(z.string()).optional().catch(undefined),
 });
 
+const questionSchema = z.object({
+	text: z.string().catch(""),
+	complexity: z.number().min(1).max(16).catch(6),
+	opportunity: z.string().optional().catch(undefined),
+})
+
+const clueSchema = z.object({
+	used: z.boolean().catch(false),
+	text: z.string().catch("")
+});
+
+const mysterySchema = z.object({
+	id: z.string(),
+	name: z.string().catch("Mystery"),
+	intro: z.array(z.string()).optional().catch(undefined),
+	clues: z.array(clueSchema).catch([]),
+	customKey: z.object({checked: z.boolean().catch(false), title: z.string().catch(""), text: z.string().catch("")}).optional().catch(undefined),
+	questions: z.array(questionSchema).catch([]),
+});
+
+export type Mystery = z.infer<typeof mysterySchema>;
+
+const odysseyTapeSchema = z.object({
+	watched: z.boolean().catch(false),
+	intro: z.array(z.string()).catch([""]),
+	prompts: z.array(z.string()).catch([""]),
+});
+
+export type OdysseyTape = z.infer<typeof odysseyTapeSchema>;
+
 export const gameStateSchema = z.object({
 	gameHash: z.string().catch(catchWithWarning("gameHash", "")),
 	//no catchWithWarning for mysteries - empty array is valid, but dropped by firebase
-	mysteries: z.array(z.unknown()).catch([]), //TODO
+	mysteries: z.array(mysterySchema).catch([]),
+	odysseyTapes: z.array(odysseyTapeSchema).catch([]),
 	players: z.array(playerSchema).catch(catchWithWarning("players", [])),
 	timestamp: z.coerce.date().catch(catchWithWarning("timestamp", new Date())),
 	safety: safetySchema.optional().catch(undefined),

@@ -1,17 +1,231 @@
+import { Dialog } from "radix-ui";
+import { useGame } from "../context/GameContext";
+import type { Mystery } from "../context/types";
+import { parseMarkupFromString } from "../utils/parseMarkupFromString";
+import { CloseButton } from "./shared/CloseButton";
+import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
+import { Divider } from "./shared/Divider";
+import { useState } from "react";
+import { Pencil } from "./svgs/Pencil";
+
 export function MysteryPane() {
+	const { gameState } = useGame();
+	const regularMysteries = gameState.mysteries.filter((mystery) => mystery.id !== "tv-odyssey");
+	const [displayedMystery, setDisplayedMystery] = useState<Mystery | null>(regularMysteries[0] || null);
+	
 	return (
-			<div className="flex flex-col w-full">
-			<h3 className="text-2xl font-bold text-theme-text-accent">Mystery Pane</h3>
-
-			<div className="w-full h-full grid grid-rows-[1fr_3fr_1fr] gap-2">
-			<p className="border border-theme-border">Intro</p>
-
-			<div className="flex gap-2"><p className="border border-theme-border">Questions & Opportunities</p>
-
-			<p className="border border-theme-border flex-1">Clues</p></div>
-
-				<p className="border border-theme-border">Custom Key</p>
-				</div>
-				</div>
+		<div className="flex flex-col w-full h-full">
+			{regularMysteries.length > 1 && <div className="flex gap-2 justify-center">{regularMysteries.map((mystery) => <button key={mystery.id} onClick={() => setDisplayedMystery(mystery)} className="formButton max-w-1/3 grow text-xs leading-none text-balance">{mystery.name}</button>)}</div>}
+			{displayedMystery && <MysteryContent mystery={displayedMystery} key={displayedMystery.id} />}
+			<AddMysteryButton />
+			</div>
 	);
+}
+
+function MysteryContent({ mystery }: { mystery: Mystery }) {
+	const { gameState, updateGameState } = useGame();
+	const {register, handleSubmit, reset} = useForm<{clue:string}>({
+		defaultValues: {
+			clue: "",
+		},
+	});
+
+	const addClue = (data: {clue:string}) => {
+		const newClues = [...mystery.clues, {text: data.clue, used: false}];
+		updateGameState({
+			...gameState,
+			mysteries: gameState.mysteries.map((m) => m.id === mystery.id ? { ...m, clues: newClues } : m),
+		});
+		toast.success(`Clue added: ${data.clue}`)
+		reset();
+	}
+	const turnKey = () => {
+		updateGameState({
+			...gameState,
+			mysteries: gameState.mysteries.map((m) => m.id === mystery.id ? { ...m, customKey: { title: m.customKey?.title || "", text: m.customKey?.text || "", checked: !m.customKey?.checked } } : m),
+		})
+	}
+	const markClue = (text: string) => {
+		updateGameState({
+			...gameState,
+			mysteries: gameState.mysteries.map((m) => m.id === mystery.id ? { ...m, clues: m.clues.map((c) => c.text === text ? { ...c, used: !c.used } : c) } : m),
+		})
+	}
+	const gridTemplate = mystery.intro && mystery.customKey ? "grid-rows-[1fr_1fr_3fr_1fr]" : mystery.intro ? "grid-rows-[1fr_1fr_3fr]" : mystery.customKey ? "grid-rows-[1fr_3fr_1fr]" : "grid-rows-[1fr_3fr]";
+	
+	return (
+		<div className={`w-full h-full grid ${gridTemplate} gap-2`}>
+			<h3 className="text-lg font-bold text-theme-text-accent flex gap-2 items-center"><span className="grow">{mystery.name}</span> <EditMysteryButton mystery={mystery} /></h3> 
+			
+			{mystery.intro && <p className="border border-theme-border">{mystery.intro.map((line) => <p key={line}>{parseMarkupFromString(line)}</p>)}</p>}
+
+			<div className="flex flex-col gap-2 grow">
+			<div className="flex gap-2"><div className="border border-theme-border flex-1 p-2">
+				{mystery.questions.map((question) => <div key={question.text}>
+					<h4 className="text-sm font-bold text-theme-text-accent">{question.text}</h4><span className="text-xs text-theme-text-muted">Complexity: {question.complexity}</span>
+					{question.opportunity && <p className="text-xs text-left">Opportunity: <span className="italic">{question.opportunity}</span></p>}
+					</div>)}
+
+
+				</div>
+
+				<p className="border border-theme-border flex-1"><h4>Clues</h4>
+					<ul className="list-none">
+						{mystery.clues.map((clue) => <li key={clue.text} className={`${clue.used ? "text-theme-text-muted" : ""} text-left`}>
+							<input type="checkbox" checked={clue.used} className="mr-2" onToggle={() => markClue(clue.text)} />
+							{parseMarkupFromString(clue.text)}</li>)}</ul>
+			</p></div>
+			
+			<form onSubmit={handleSubmit(addClue)} className="flex gap-2 items-center">
+				<label htmlFor="clue" className="sr-only">Add a clue</label>
+				<input type="text" placeholder="Add clue..." required={true} className="flex-1" {...register("clue")} />
+				<button type="submit" className="formButton">+</button>
+			</form>
+			</div>
+
+
+			{mystery.customKey && <div className="border border-theme-border p-2"><h4 className="text-md font-bold text-theme-text-accent">{mystery.customKey.title}</h4><p className="text-left"><input type="checkbox" checked={mystery.customKey.checked} className="mr-2" onToggle={turnKey} />{parseMarkupFromString(mystery.customKey.text)}</p></div>}
+			</div>
+	)
+}
+
+type AddMysteryInputs = {
+	name: string;
+	introduction: string | undefined;
+	questions: { text: string, complexity: number, opportunity: string }[];
+	customKey: {title: string, text: string} | undefined;
+}
+
+function EditMysteryButton({ mystery }: { mystery: Mystery }) {
+	const [open, setOpen] = useState(false);
+	return (
+		<Dialog.Root open={open} onOpenChange={setOpen}>
+			<Dialog.Trigger>
+				<Pencil />
+			</Dialog.Trigger>
+			<Dialog.Portal>
+				<Dialog.Overlay className="DialogOverlay" />
+				<MysteryForm mystery={mystery} closeModal={() => setOpen(false)} />
+			</Dialog.Portal>
+		</Dialog.Root>
+	)
+}
+
+function AddMysteryButton() {
+	const [open, setOpen] = useState(false);
+	return (
+		<Dialog.Root open={open} onOpenChange={setOpen}>
+			<Dialog.Trigger asChild>
+				<button className="formButton justify-self-end my-4">
+					Add Mystery
+				</button>
+			</Dialog.Trigger>
+			<Dialog.Portal>
+				<Dialog.Overlay className="DialogOverlay" />
+				<MysteryForm closeModal={() => setOpen(false)} />
+			</Dialog.Portal>
+		</Dialog.Root>
+	)
+}
+
+function MysteryForm({ mystery, closeModal }: {mystery?:Mystery, closeModal: () => void}) {
+	const { gameState, updateGameState } = useGame();
+	const {register, handleSubmit, reset, watch, setValue} = useForm<AddMysteryInputs>({
+		defaultValues: {
+			name: mystery?.name || "",
+			introduction: mystery?.intro?.join("\n") || undefined,
+			questions: mystery?.questions || [{text: "", complexity: 6, opportunity: ""}],
+			customKey: mystery?.customKey ? {title: mystery.customKey.title, text: mystery.customKey.text} : undefined,
+		},
+	});
+
+	const addQuestion = () => {
+		const newQuestions = [...watch("questions"), {text: "", complexity: 6, opportunity: ""}];
+		setValue("questions", newQuestions);
+	}
+	const removeQuestion = (index: number) => {
+		const newQuestions = watch("questions").filter((_, i) => i !== index);
+		setValue("questions", newQuestions);
+	}
+	
+	const addMystery = (data: AddMysteryInputs) => {
+		const id = mystery?.id || crypto.randomUUID();
+		const customKey = data.customKey ? { checked: mystery?.customKey?.checked || false, title: data.customKey?.title || "", text: data.customKey?.text || "" } : undefined;
+		const newMystery: Mystery = {
+			id,
+			name: data.name,
+			intro: data.introduction?.split("\n") || undefined,
+			questions: data.questions,
+			clues: mystery?.clues || [],
+			customKey,
+		}
+		if (mystery) {
+			updateGameState({
+				...gameState,
+				mysteries: gameState.mysteries.map((m) => m.id === mystery.id ? newMystery : m)
+			})
+			toast.success(`Mystery updated: ${data.name}`)
+		} else {
+			updateGameState({
+				...gameState,
+				mysteries: [...gameState.mysteries, newMystery],
+			})
+			toast.success(`Mystery added: ${data.name}`)
+		}
+		closeModal();
+		reset();
+	}
+
+	const removeMystery = () => {
+		updateGameState({
+			...gameState,
+			mysteries: gameState.mysteries.filter((m) => m.id !== mystery?.id),
+		})
+		toast.success(`Mystery removed: ${mystery?.name}`)
+		closeModal();
+	}
+	return (
+				<Dialog.Content className="DialogContent">
+					<Dialog.Close asChild>
+						<CloseButton />
+					</Dialog.Close>
+					<Dialog.Title className="DialogTitle">{mystery ? "Edit Mystery" : "Add Mystery"}</Dialog.Title>
+					<Dialog.Description className="DialogDescription hidden">
+						Add a new mystery to the game or edit an existing mystery.
+					</Dialog.Description>
+					<form onSubmit={handleSubmit(addMystery)} className="flex flex-col gap-2">
+						<label htmlFor="name">Mystery Title</label>
+						<input type="text" required={true} {...register("name")} />
+
+						<label htmlFor="introduction">Introduction: <span className="text-xs text-theme-text-muted mx-1 italic">(Optional)</span></label>
+						<textarea {...register("introduction")} />
+						<Divider/>
+
+						{watch("questions")?.map((_, index) => (
+							<div key={`question-${index}`} className="grid grid-cols-[4fr_1fr] gap-2">
+								<label htmlFor={`questions.${index}.text`} className="flex flex-col"><span>Question: 								<button type="button" onClick={() => removeQuestion(index)} className="px-1 text-xs text-theme-text-muted bg-theme-bg-primary rounded-lg hover:bg-theme-bg-secondary border border-theme-border hover:text-theme-text-accent mx-6 my-1">Remove</button></span>
+								<input type="text" {...register(`questions.${index}.text`)} /></label>
+								<label htmlFor={`questions.${index}.complexity`}>Complexity:
+								<input type="number" min={1} max={16} {...register(`questions.${index}.complexity`)} /></label>
+								<label htmlFor={`questions.${index}.opportunity`} className="col-span-2 flex gap-2 items-center">Opportunity:
+								<input type="textarea" className="grow" {...register(`questions.${index}.opportunity`)} /></label>
+							</div>
+						))}
+						<button type="button" className="formButton" onClick={addQuestion}>Add Another Question</button>
+						<Divider/>
+						<label htmlFor="customKey">Custom Key: <span className="text-xs text-theme-text-muted mx-1 italic">(Optional)</span></label>
+						
+							<input type="text" className="flex-1" placeholder="Title..."{...register("customKey.title")} />
+						<input type="textarea" placeholder="Key Prompt..." {...register("customKey.text")} />
+						<Divider/>
+
+						<div className="flex gap-2 justify-between"><button type="submit" className="formButton grow">
+							{mystery ? "Save Changes" : "Add Mystery"}
+				</button>
+				{mystery && <button type="button" className="formButton grow" onClick={removeMystery}>Remove Mystery</button>}
+				</div>
+					</form>
+				</Dialog.Content>
+	)
 }
