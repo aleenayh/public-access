@@ -61,7 +61,6 @@ function App() {
 				>
 					<Tooltip.Provider>
 						<Toaster />
-
 						<Game />
 					</Tooltip.Provider>
 				</GameProvider>

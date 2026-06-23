@@ -6,11 +6,10 @@ import { ContentPane } from "./ContentPane";
 
 	export function Game() {
 	return (
-		<div className="isolate h-full w-full flex flex-col">
+		<div className="isolate h-full w-full flex flex-col justify-stretch items-stretch">
 			<SettingsPopout/>
-			<AnimatedHeader text="Public Access"/>
-
-<div className="flex gap-4 flex-1 px-4 overflow-auto">
+			<AnimatedHeader text="Public Access" />
+			<div className="GameContainer">
 			<ContentPane />
 			<CharacterPane />
 			</div>

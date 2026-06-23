@@ -14,7 +14,7 @@ export function CharacterPane() {
 	const [activeCharacterRaw, setActiveCharacter] = useState<string | null>(role === PlayerRole.KEEPER ? "overview" : myChar?.name || null);
 	const activeCharacter = gameState.players.find((player) => player.character?.name === activeCharacterRaw)?.character ?? null;
 	return (
-		<StyledPane variant="vertical">
+		<StyledPane>
 			<CharacterCreateModal/>
 			<HeaderNav activeCharacter={activeCharacterRaw} setActiveCharacter={setActiveCharacter}/>
 			<Divider/>
