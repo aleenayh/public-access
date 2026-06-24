@@ -69,6 +69,7 @@ export type Mystery = z.infer<typeof mysterySchema>;
 
 const odysseyTapeSchema = z.object({
 	watched: z.boolean().catch(false),
+	title: z.string(),
 	intro: z.array(z.string()).catch([""]),
 	prompts: z.array(z.string()).catch([""]),
 });
