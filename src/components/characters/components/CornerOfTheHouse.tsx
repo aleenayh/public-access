@@ -5,12 +5,14 @@ import type { Character } from "../types";
 export function CornerOfTheHouse({character}: {character: Character}) {
     const {gameState, updateGameState, user: {id}} = useGame();
     const editable = gameState.players.find((player) => player.character?.name === character.name)?.id === id;
+    const cornerOfTheHouse = character.cornerOfTheHouse
 
     const handleSave = (index: number, value: string) => {
-        const conditions = character.conditions.map((condition, i) => i === index ? value : condition);
+        const mutatableCorner = [...character.cornerOfTheHouse]
+        mutatableCorner[index] = { item: value, marked: false }
         updateGameState({
             ...gameState,
-            players: gameState.players.map((player) => player.character && player.id === id ? { ...player, character: { ...player.character, conditions } } : player),
+            players: gameState.players.map((player) => player.character && player.id === id ? { ...player, character: { ...player.character, cornerOfTheHouse: mutatableCorner } } : player),
         });
     }
 
@@ -21,25 +23,22 @@ export function CornerOfTheHouse({character}: {character: Character}) {
             players: gameState.players.map((player) => player.character && player.id === id ? { ...player, character: { ...player.character, cornerOfTheHouse } } : player),
         });
     }
-
-    const cornerOfTheHouse = character.cornerOfTheHouse
     
     return (
         <div className="flex-1 flex flex-col gap-2 w-full border border-theme-border rounded-md px-2 pb-2">
             <p>Your Corner of the House</p>
-            {Array.from({length: Math.max(2, cornerOfTheHouse.length +1)}
-        ).map((_, index) => {
-            const data = cornerOfTheHouse[index] || { marked: false, item: "" };
-									return <CheckableEditableLine
-										key={`cornerOfTheHouse-${index}`}
-										text={data.item}
-										editable={editable}
-										onSave={handleSave}
-										onCheck={handleCheck}
-										checked={data.marked}
-										index={index}
-									/>
-								})}
+            {Array.from({ length: cornerOfTheHouse.length + 1 }).map((_, index) => {
+            const data = cornerOfTheHouse[index] ?? { marked: false, item: "" };
+			return <CheckableEditableLine
+						key={`cornerOfTheHouse-${index}`}
+						text={data.item}
+						editable={editable}
+						onSave={handleSave}
+						onCheck={handleCheck}
+	    				checked={data.marked}
+						index={index}
+					/>
+			})}
         </div>
     )
 }
