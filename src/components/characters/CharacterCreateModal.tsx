@@ -1,12 +1,13 @@
 import {Dialog} from "radix-ui";
 import { useGame } from "../../context/GameContext";
 import { useState } from "react";
-import { PlayerRole, type GameState, } from "../../context/types";
+import { PlayerRole } from "../../context/types";
 import {useForm, type UseFormRegister, type UseFormSetValue } from "react-hook-form";
 import { lookOptions, moves, nameOptions, surnameOptions, takesYouBackOptions, adjustForMove } from "./characterContent";
 import { CloseButton } from "../shared/CloseButton";
 import { Divider } from "../shared/Divider";
 import { parseMarkupFromString } from "../../utils/parseMarkupFromString";
+import { getUnusedFallback } from "./utils";
 
 type CharacterCreateInputs = {
     name: string;
@@ -111,7 +112,6 @@ export function CharacterCreateModal() {
 
 
 	return (
-
 		<Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
                     <Dialog.Portal>
                     <Dialog.Overlay className="DialogOverlay" />
@@ -205,7 +205,6 @@ export function CharacterCreateModal() {
 			</Dialog.Content>
             </Dialog.Portal>
 		</Dialog.Root>
-
 	);
 }
 
@@ -308,12 +307,3 @@ function MovePicker({onContinue}: {onContinue: (selectedMove:string) => void}) {
     )
 }
 
-function getUnusedFallback(gameState: GameState) {
-    const charactersWithIcons = gameState.players.flatMap((player) =>
-        player.character?.image.type === "default" ? [player.character] : []
-      );
-    const usedIcons = charactersWithIcons.map((character) => character.image.type === "default" ? character.image.icon : undefined).filter((icon) => icon !== undefined);
-    const fallbackIcons = ["pizza", "casette", "arcade", "cactus", "invader", "d20", "lizard"];
-    const unusedIcons = fallbackIcons.filter((icon) => !usedIcons.includes(icon));
-    return {type: "default" as const, icon: unusedIcons[0]};
-}
