@@ -6,10 +6,12 @@ import { Keys } from "./components/Keys";
 import { Questions } from "./components/Questions";
 import { LatchkeyMoves } from "./components/LatchkeyMoves";
 import type { Character } from "./types";
+import { EditCharacterModal } from "./components/EditModal";
 
 export function CharacterSheet({character}: {character: Character}) {
-    const {gameState} = useGame();
+    const {gameState, user: {id}} = useGame();
     const activePlayer = gameState.players.find((player) => player.character?.name === character.name);
+    const editable = activePlayer?.id === id;
 
     return (
         <div key={character.name} className="flex flex-col gap-2 flex-1 w-full overflow-y-scroll scrollbar-gutter-stable pb-20 fadeInEachChild">
@@ -26,7 +28,8 @@ export function CharacterSheet({character}: {character: Character}) {
         <Keys character={character}/>
 
         <p className="text-left"><strong className="text-theme-text-accent">Look:</strong> {character.look}</p>
-        <p className="text-left"><strong className="text-theme-text-accent">Takes You Back:</strong> {character.takesYouBack}</p>
+            <p className="text-left"><strong className="text-theme-text-accent">Takes You Back:</strong> {character.takesYouBack}</p>
+            {editable && <EditCharacterModal character={character} />}
         </div>
     )
 }

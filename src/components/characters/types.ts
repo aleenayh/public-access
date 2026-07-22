@@ -18,6 +18,10 @@ const abilitiySchema = z.object({
     sensitivity: z.number().catch(-1),
 });
 
+const moveSchema = z.object({ name: z.string().catch("Move"), description: z.string().catch("description") })
+
+export type Moves = z.infer<typeof moveSchema>;
+
 export const characterSchema = z.object({
 	name: z.string().catch(""),
     pronouns: z.string().optional().catch(undefined),
@@ -28,7 +32,7 @@ export const characterSchema = z.object({
     takesYouBack: z.string().catch(""),
 	image: providedImageSchema.or(defaultImageSchema).catch({type: "default", icon: "arcade"}),
 	abilities: abilitiySchema,
-    moves: z.array(z.object({name: z.string().catch("Move"), description: z.string().catch("description")})).catch([]),
+    moves: z.array(moveSchema).catch([]),
 	questions: z.array(z.boolean()).catch([true, false, false, false, false, false, false]),
     keysOfTheChild: z.array(z.boolean()).catch([false, false, false, false, false]),
     keysOfDesolation: z.array(z.boolean()).catch([false, false, false, false, false]),
