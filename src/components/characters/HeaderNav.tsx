@@ -7,9 +7,11 @@ import { D20 } from "../svgs/portraitIcons/D20"
 import { Lizard } from "../svgs/portraitIcons/Lizard"
 import type { Character, FallbackImage } from "./types"
 import { useGame } from "../../context/GameContext"
+import logo from "../../assets/logo.ico"
+import { usePreferences } from "../../context/PreferencesContext"
 
 
-export function HeaderNav({activeCharacter, setActiveCharacter}: {activeCharacter:string | null, setActiveCharacter: (characterName: string) => void}) {
+export function HeaderNav({activeCharacter, setActiveCharacter}: {activeCharacter:string | null, setActiveCharacter: (characterName: string|null) => void}) {
     const {gameState} = useGame();
     const allCharacters = gameState.players.map((player) => player.character).filter((character) => character !== null);
 
@@ -18,7 +20,8 @@ export function HeaderNav({activeCharacter, setActiveCharacter}: {activeCharacte
     }
 
     return (
-        <div className="flex items-center justify-evenly max-h-24">
+        <div className="flex items-center justify-evenly max-h-24 relative">
+            <KeeperOverviewButton onClick={() => setActiveCharacter(null)} />
             {allCharacters.map((character, index) => (
 				<CharacterPortrait 
                 isActive={activeCharacter !== "overview" && activeCharacter === character.name}
@@ -34,19 +37,23 @@ export function HeaderNav({activeCharacter, setActiveCharacter}: {activeCharacte
 }
 
 
-function CharacterPortrait({characterIndex, character, onClick, isActive}: {characterIndex: number, character: Character, onClick: (characterName: string) => void, isActive: boolean}) {
+function CharacterPortrait({ characterIndex, character, onClick, isActive }: { characterIndex: number, character: Character, onClick: (characterName: string) => void, isActive: boolean }) {
+    const { prefersReducedMotion } = usePreferences();
     const gradient = `linear-gradient(to right, hsl(${(characterIndex*50)}deg, 100%, 50%), hsl(${(characterIndex*50 + 100)}deg, 100%, 50%))`
     const color = `hsl(${characterIndex*50 + 180}deg, 100%, 50%)`
 
     //TODO: this is where we add the chromatic desert effect
 
     return (
+        <div className="flex flex-col">
     <button type="button" className="isolate relative flex items-center justify-center max-h-24 aspect-square flex-col" onClick={() => onClick(character.name)}>
-        <div className={`w-full h-full flex items-center justify-center border-2 ${isActive ? "scale-110 saturate-100" : "saturate-[0.2]"} rounded-sm p-1 aspect-square hover:brightness-110 hover:saturate-100 transition-brightness duration-300 hover:-translate-y-6`} style={{background: gradient, color}}>
+        <div className={`w-full h-full flex items-center justify-center border-2 ${isActive ? "scale-110 saturate-100" : "saturate-[0.2]"} rounded-sm p-1 aspect-square hover:brightness-110 hover:saturate-100 transition-brightness duration-300 ${prefersReducedMotion ? "" : "hover:-translate-y-6"} `} style={{background: gradient, color}}>
             {character.image.type === "custom" ? <img src={character.image.url} alt={character.name} className="w-full h-full object-cover"/> : getFallbackIcon(character.image)}
-            </div>
+        </div>
             <p className="absolute bottom-0 -z-1 text-center text-theme-text-accent text-xs whitespace-nowrap max-w-24 truncate">{character.name}</p>
-    </button>
+            </button>
+            {prefersReducedMotion &&             <p className="text-center text-theme-text-accent text-xs whitespace-nowrap max-w-24 truncate">{character.name}</p>}
+            </div>
     )
 }
 
@@ -69,4 +76,14 @@ function getFallbackIcon(image: FallbackImage) {
 			default:
 				return <Pizza height={96} />;
 		}
-	}
+}
+    
+function KeeperOverviewButton({ onClick }: { onClick: () => void; }) {
+    const { prefersReducedMotion } = usePreferences();
+    return <button className="absolute top-0 left-0 group flex flex-col justify-center items-center" type="button" onClick={onClick}>
+        <img src={logo} className="h-8 w-8" />
+        <div className={`overflow-clip origin-top w-full flex justify-center py-2 ${prefersReducedMotion ? "durartion-0 hidden group-hover:flex" : "duration-500 scale-y-0 group-hover:scale-y-100 transition-all "}`}>
+            <p className="leading-none w-2 overflow-visible wrap-break-word text-xs bg-theme-bg-primary">Overview</p>
+        </div>
+        </button>
+}
