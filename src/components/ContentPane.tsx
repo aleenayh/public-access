@@ -13,6 +13,9 @@ import { MysteryPane, MysteryContent } from "./MysteryPane"
 import { StyledPane } from "./shared/StyledPane"
 import { SettingsSheet } from "./collapsiblePanes/SettingsSheet"
 import { OdysseyTapesSheet } from "./collapsiblePanes/OdysseyTapesSheet"
+import { CharacterInterior } from "./characters/CharacterPane"
+import { Latchkey } from "./svgs/Keys"
+import { CharacterCreateModal } from "./characters/CharacterCreateModal"
 
 export function ContentPane() {
     const [contentTitle, setContentTitle] = useState<string | null>("Mysteries");
@@ -25,10 +28,15 @@ export function ContentPane() {
 
     return (
         <StyledPane>
-            <div className="-mt-4 -mx-4 flex align-center justify-stretch gap-1 mb-4 relative overflow-visible h-fit items-start border-b border-theme-border isolate">
+            <CharacterCreateModal showTrigger={false} />
+            <div className="-mt-4 -mx-4 flex align-center justify-stretch gap-1 mb-4 relative overflow-visible h-fit items-start border-b border-theme-border isolate flex-wrap md:flex-nowrap">
             <button type="button" className={`navButton ${contentTitle === "Mysteries" ? "activeNav" : ""}`} onClick={() => onClick("Mysteries", <MysteryPane/>)}>
                 <MagnifyingGlass height={24}/> <TextOnHover text="Mysteries" expanded={contentTitle === "Mysteries"} />
-            </button>
+                </button>
+                <div className="block md:hidden"><button type="button" className={`navButton ${contentTitle === "Latchkeys" ? "activeNav" : ""}`} onClick={() => onClick("Latchkeys", <CharacterInterior/>)}>
+                <Latchkey height={24}/> <TextOnHover text="Latchkeys" expanded={contentTitle === "Latchkeys"} />
+                </button>
+                </div>
             <button type="button" className={`navButton ${contentTitle === "Reference Sheet" ? "activeNav" : ""}`} onClick={() => onClick("Reference Sheet", <ReferenceSheet/>)}>
                 <Book height={24}/> <TextOnHover text="Reference Sheet" expanded={contentTitle === "Reference Sheet"} />
             </button>
@@ -44,12 +52,13 @@ export function ContentPane() {
 
             <button type="button" className={`navButton ${contentTitle === "Safety Tools" ? "activeNav" : ""}`} onClick={() => onClick("Safety Tools", <SafetySheet/>)}>
                 <Heartshield height={24}/> <TextOnHover text="Safety Tools" expanded={contentTitle === "Safety Tools"} />
-				</button>
+                </button>
 				<button type="button" className={`navButton ${contentTitle === "Settings" ? "activeNav" : ""}`} onClick={() => onClick("Settings", <SettingsSheet/>)}>
                 <Cog height={24}/> <TextOnHover text="Settings" expanded={contentTitle === "Settings"} />
-            </button>
+                </button>
             </div>
-			<div className="h-full w-full fadeInEachChild overflow-y-auto">{contents}</div>
+            
+			<div className="h-screen w-full fadeInEachChild overflow-y-auto">{contents}</div>
 		</StyledPane>
     )
 }

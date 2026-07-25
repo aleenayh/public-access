@@ -20,7 +20,7 @@ export function HeaderNav({activeCharacter, setActiveCharacter}: {activeCharacte
     }
 
     return (
-        <div className="flex items-center justify-evenly max-h-24 relative">
+        <div className="flex items-center justify-evenly max-h-24 relative min-h-10">
             <KeeperOverviewButton onClick={() => setActiveCharacter(null)} />
             {allCharacters.map((character, index) => (
 				<CharacterPortrait 
@@ -30,7 +30,8 @@ export function HeaderNav({activeCharacter, setActiveCharacter}: {activeCharacte
                 onClick={() => handleClick(character)}
 				character={character}
 				/>
-			))}
+            ))}
+            {allCharacters.length === 0 && <p className="text-center italic text-sm">Latchkey Sheets will be added here as players join.</p>}
         </div>
     )
 

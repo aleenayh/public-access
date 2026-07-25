@@ -11,7 +11,7 @@ import { ContentPane } from "./ContentPane";
 			<AnimatedHeader text="Public Access" />
 			<div className="GameContainer">
 			<ContentPane />
-			<CharacterPane />
+			<div className="hidden md:block flex-1"><CharacterPane /></div>
 			</div>
 		</div>
 	);
