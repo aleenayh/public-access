@@ -474,7 +474,8 @@ body {
   -webkit-mask: var(--mask);
   mask: var(--mask);
 }
-[data-reduce-motion="true"] .StaticBackground, .StaticForeground{
+[data-reduce-motion="true"] .StaticBackground,
+.StaticForeground {
   animation: none;
 }
 
@@ -600,7 +601,14 @@ body {
     alternate;
 }
 
-[data-reduce-motion="true"] .Circle:nth-child(3n), .CircleFilled:nth-child(3n), .Circle:nth-child(3n+1), .CircleFilled:nth-child(3n+1), .Circle:nth-child(3n+2), .CircleFilled:nth-child(3n+2), .Rectangle, .Triangle {
+[data-reduce-motion="true"] .Circle:nth-child(3n),
+.CircleFilled:nth-child(3n),
+.Circle:nth-child(3n + 1),
+.CircleFilled:nth-child(3n + 1),
+.Circle:nth-child(3n + 2),
+.CircleFilled:nth-child(3n + 2),
+.Rectangle,
+.Triangle {
   animation: none;
 }
 
@@ -701,12 +709,13 @@ h2 {
   animation: glitch3 3.5s infinite;
 }
 [data-reduce-motion="true"] .animatedHeaderLetter {
-  animation:none;
+  animation: none;
 }
-[data-reduce-motion="true"] .animatedHeaderLetter:before, .animatedHeaderLetter:after {
+[data-reduce-motion="true"] .animatedHeaderLetter:before,
+.animatedHeaderLetter:after {
   content: "";
-  animation:none;
-  display:none;
+  animation: none;
+  display: none;
 }
 
 @keyframes glitch1 {
@@ -983,6 +992,14 @@ input[type="number"]:hover {
   color: var(--color-text-accent);
   border-color: var(--color-border-accent);
 }
+.formButton:disabled {
+  opacity: 0.6;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-accent);
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
 
 .wordCloudButton {
   width: fit-content;
@@ -1060,7 +1077,7 @@ textarea {
     background-color 0.15s ease,
     border-color 0.15s ease;
   accent-color: var(--color-accent-primary);
-  white-space: pre-wrap; 
+  white-space: pre-wrap;
 }
 input[type="text"]::placeholder,
 input[type="textarea"]::placeholder {
@@ -1354,7 +1371,7 @@ input[type="textarea"]:hover {
   animation: fadeInEachChild 0.5s calc(sibling-index() * 0.2s) both;
 }
 [data-reduce-motion="true"] .fadeInEachChild :nth-child(n) {
-  animation:none;
+  animation: none;
 }
 
 @keyframes fadeInEachChild {

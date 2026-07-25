@@ -1,5 +1,6 @@
 import { useGame } from "../../../context/GameContext";
 import type { Character } from "../types";
+import { AdvancementModal } from "./AdvancementModal";
 
 export function Questions({character}: {character: Character}) {
     const {gameState, updateGameState, user: {id}} = useGame();
@@ -54,6 +55,8 @@ function XP({character}: {character: Character}) {
         });
     }
 
+    const showAdvanceTrigger = editable && character.xp.filter((Boolean)).length >= 6
+
     return (
         <div className="flex-1 flex flex-col gap-2 justify-start items-center py-2">
             <p>XP</p>
@@ -64,6 +67,7 @@ function XP({character}: {character: Character}) {
                     </div>
                 )
             })}
+            {showAdvanceTrigger && <AdvancementModal/>}
         </div>
     )
 }
