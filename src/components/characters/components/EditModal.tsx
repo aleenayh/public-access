@@ -12,9 +12,8 @@ import { Arcade } from "../../svgs/portraitIcons/Arcade";
 import { D20 } from "../../svgs/portraitIcons/D20";
 import { Lizard } from "../../svgs/portraitIcons/Lizard";
 import { getAllUnusedIcons } from "../utils";
-import { parseMarkupFromString } from "../../../utils/parseMarkupFromString";
-import { adjustForMove, moves } from "../characterContent";
-import type { Character, Moves } from "../types";
+import type { Character} from "../types";
+import { EditMovesSection } from "./MoveSelector";
 
 type Img = {type: "custom", url: string} | {type: "default", icon: string}
 type CharacterCreateInputs = {
@@ -144,26 +143,26 @@ function EditForm({ character, close }: { character: Character, close:()=>void }
             <div className="flex gap-2 justify-center">
                 <div className="flex flex-col">
                     <label htmlFor="abilities.vitality" className="text-xs text-theme-text-muted/80 text-center">Vitality</label>
-                    <input type="number" {...register("abilities.vitality")} className="w-1/2 mx-auto text-center" />
+                    <input type="number" {...register("abilities.vitality")} className="w-1/2 mx-auto text-center" min={-6} />
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="abilities.composure" className="text-xs text-theme-text-muted/80 text-center">Composure</label>
-                    <input type="number" {...register("abilities.composure")} className="w-1/2 mx-auto text-center" />
+                    <input type="number" {...register("abilities.composure")} className="w-1/2 mx-auto text-center" min={-6} />
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="abilities.reason" className="text-xs text-theme-text-muted/80 text-center">Reason</label>
-                    <input type="number" {...register("abilities.reason")} className="w-1/2 mx-auto text-center" />
+                    <input type="number" {...register("abilities.reason")} className="w-1/2 mx-auto text-center" min={-6}/>
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="abilities.presence" className="text-xs text-theme-text-muted/80 text-center">Presence</label>
-                    <input type="number" {...register("abilities.presence")} className="w-1/2 mx-auto text-center" />
+                    <input type="number" {...register("abilities.presence")} className="w-1/2 mx-auto text-center" min={-6} />
             </div>
             <div className="flex flex-col">
                     <label htmlFor="abilities.sensitivity" className="text-xs text-theme-text-muted/80 text-center">Sensitivity</label>
-                    <input type="number" {...register("abilities.sensitivity")} className="w-1/2 mx-auto text-center" />
+                    <input type="number" {...register("abilities.sensitivity")} className="w-1/2 mx-auto text-center" min={-6} />
                 </div>
         </div>
-        <MovesSection myMoves={character.moves}/>
+        <EditMovesSection myMoves={character.moves}/>
             <button type="submit" className="formButton mx-auto my-6">Save Changes</button>
         </div>
 </form>
@@ -208,86 +207,3 @@ function Thumbnail({ imageKey, currentImg, handleImgClick }: { imageKey: string,
     </button>
 }
 
-function MovesSection({ myMoves }: { myMoves: Moves[]}) {
-    const { gameState, updateGameState, user } = useGame();
-    const movesInPlay = gameState.players.flatMap((player) => player.character?.moves || []).map((move) => move.name);
-    const [selectedMove, setSelectedMove] = useState<string>("");
-    const [isAdding, setIsAdding] = useState(false);
-
-    const addMove = () => {
-        const existingCharacter = gameState.players.find((player) => player.id === user.id)?.character
-        if (!existingCharacter) return;
-        const move = { name: selectedMove, description: moves[selectedMove].join("\n") }
-        if (!move) return;
-        const newMoves = [...existingCharacter.moves, move];
-        const data = adjustForMove(selectedMove);
-        let newAbilities = existingCharacter.abilities
-        if (data && data.abilities) {
-            newAbilities = {
-                vitality: newAbilities.vitality + data.abilities.vitality,
-                composure: newAbilities.composure + data.abilities.composure,
-                reason: newAbilities.reason + data.abilities.reason,
-                presence: newAbilities.presence + data.abilities.presence,
-                sensitivity: newAbilities.sensitivity + data.abilities.sensitivity,
-            }
-        }
-            let newCornerOfTheHouse = existingCharacter.cornerOfTheHouse
-            if (data && data.cornerOfTheHouse) {
-                newCornerOfTheHouse = [...newCornerOfTheHouse, ...data.cornerOfTheHouse]
-            }
-            const newCharacter = {
-                ...existingCharacter,
-                moves: newMoves, abilities: newAbilities, cornerOfTheHouse: newCornerOfTheHouse
-            }
-            updateGameState({
-                ...gameState,
-                players: gameState.players.map((player) => player.id === user.id ? { ...player, character: newCharacter } : player),
-            });
-            setIsAdding(false);
-    }
-
-    const removeMove = (moveKey: string) => {
-        const existingCharacter = gameState.players.find((player) => player.id === user.id)?.character
-        if (!existingCharacter) return;
-        const newMoves = existingCharacter.moves.filter((move) => move.name !== moveKey)
-        const newCharacter = {
-                ...existingCharacter,
-                moves: newMoves
-        }
-        updateGameState({
-                ...gameState,
-                players: gameState.players.map((player) => player.id === user.id ? { ...player, character: newCharacter } : player),
-        });
-    }
-
-    return <div className="flex flex-col gap-2 w-full">
-        <h4 className="text-center text-theme-text-accent">Current Latchkey Moves</h4>
-        <div className="w-full grid grid-cols-2 lg:grid-cols-3 gap-4 align-start">
-            {myMoves.map(({ name, description }) => (
-        <div key={`move-${name}`} className={`border border-theme-border box-border rounded-md p-2 h-fit bg-theme-bg-primary max-h-64 overflow-y-auto`}>
-            <h4 className={`text-theme-text-accent`}>{name}</h4>
-                    <p className="text-xs text-theme-text-secondary text-left">{parseMarkupFromString(description)}</p>
-                    <button type="button" onClick={()=> removeMove(name)} className="formButton my-2 text-sm">Remove</button>
-        </div>
-    )
-)}
-        </div>
-        {!isAdding && <button type="button" className="formButton mx-auto my-6" onClick={() => setIsAdding(true)}>Add Move</button>}
-        
-        {isAdding && <><h4 className="text-center text-theme-text-accent">Add A Move</h4>
-            <div className="w-full grid grid-cols-2 lg:grid-cols-3 gap-4 align-start">
-                {Object.entries(moves).map(([name, description]) => {
-                    if (movesInPlay.includes(name)) {
-                        return null;
-                    }
-                    return (
-                        <button type="button" key={`move-${name}`} onClick={() => setSelectedMove(name)} className={`border border-theme-border box-border rounded-md p-2 h-fit bg-theme-bg-primary max-h-64 overflow-y-auto ${selectedMove === name ? "border-theme-border-accent border-2 shadow-lg bg-theme-bg-secondary" : ""}`}>
-                            <h4 className={`text-theme-text-accent ${selectedMove === name ? "brightness-125" : ""}`}>{name}</h4>
-                            <p className="text-xs text-theme-text-secondary text-left">{parseMarkupFromString(description.map((d) => d.trim()).join("\n"))}</p>
-                        </button>
-                    )
-                })}
-            </div>
-            <button type="button" onClick={addMove} className="formButton mx-auto my-6">Confirm Add</button></>}
-    </div>
-}

@@ -18,9 +18,29 @@ const abilitiySchema = z.object({
     sensitivity: z.number().catch(-1),
 });
 
+export type Abilities = z.infer<typeof abilitiySchema>
+
 const moveSchema = z.object({ name: z.string().catch("Move"), description: z.string().catch("description") })
 
 export type Moves = z.infer<typeof moveSchema>;
+
+const emptyAdvancements = {
+    "ability1": false,
+    "ability2": false,
+    "move1": false,
+    "move2": false,
+    "customMove": false,
+    "unmarkItems":false
+}
+const advancementSchema = z.object({
+    "ability1": z.boolean(),
+    "ability2": z.boolean(),
+    "move1": z.boolean(),
+    "move2": z.boolean(),
+    "customMove": z.boolean(),
+    "unmarkItems":z.boolean(),
+})
+export type Advancements = z.infer<typeof advancementSchema>
 
 export const characterSchema = z.object({
 	name: z.string().catch(""),
@@ -36,6 +56,7 @@ export const characterSchema = z.object({
 	questions: z.array(z.boolean()).catch([true, false, false, false, false, false, false]),
     keysOfTheChild: z.array(z.boolean()).catch([false, false, false, false, false]),
     keysOfDesolation: z.array(z.boolean()).catch([false, false, false, false, false]),
+    advancements: advancementSchema.catch(emptyAdvancements)
 });
 
 export type Character = z.infer<typeof characterSchema>;

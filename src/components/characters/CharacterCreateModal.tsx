@@ -84,7 +84,6 @@ export function CharacterCreateModal() {
 
 
     const confirmCharacter = (data: CharacterCreateInputs) => {
-        console.log('creating character...', data);
         const { name, pronouns, look, image: imageURL, abilities, takesYouBack, moves } = data;
         //abilities already added into preview, only need to add corner of the house here
         const moveAdjustments = adjustForMove(moves.name);
@@ -101,7 +100,8 @@ export function CharacterCreateModal() {
             keysOfDesolation: [false, false, false, false, false],
             xp: [false, false, false, false, false, false],
             conditions: ["", "", ""],
-            cornerOfTheHouse: [...(moveAdjustments?.cornerOfTheHouse || []), {marked: false, item: ""}, {marked: false, item: ""}],
+            cornerOfTheHouse: [...(moveAdjustments?.cornerOfTheHouse || []), { marked: false, item: "" }, { marked: false, item: "" }],
+            advancements: {"ability1":false, "ability2":false, "move1":false, "move2":false, "customMove":false, "unmarkItems":false}
         }
         updateGameState({
             ...gameState,
@@ -167,23 +167,23 @@ export function CharacterCreateModal() {
                                 <div className="flex gap-2 justify-center">
                                     <div className="flex flex-col">
                                         <label htmlFor="abilities.vitality" className="text-xs text-theme-text-muted/80 text-center">Vitality</label>
-                                        <input type="number" {...register("abilities.vitality")} className="w-1/2 mx-auto text-center" />
+                                        <input type="number" {...register("abilities.vitality")} className="w-1/2 mx-auto text-center" min={-3} />
                                     </div>
                                     <div className="flex flex-col">
                                         <label htmlFor="abilities.composure" className="text-xs text-theme-text-muted/80 text-center">Composure</label>
-                                        <input type="number" {...register("abilities.composure")} className="w-1/2 mx-auto text-center" />
+                                        <input type="number" {...register("abilities.composure")} className="w-1/2 mx-auto text-center" min={-3} />
                                     </div>
                                     <div className="flex flex-col">
                                         <label htmlFor="abilities.reason" className="text-xs text-theme-text-muted/80 text-center">Reason</label>
-                                        <input type="number" {...register("abilities.reason")} className="w-1/2 mx-auto text-center" />
+                                        <input type="number" {...register("abilities.reason")} className="w-1/2 mx-auto text-center" min={-3}/>
                                     </div>
                                     <div className="flex flex-col">
                                         <label htmlFor="abilities.sensitivity" className="text-xs text-theme-text-muted/80 text-center">Sensitivity</label>
-                                        <input type="number" {...register("abilities.sensitivity")} className="w-1/2 mx-auto text-center" />
+                                        <input type="number" {...register("abilities.sensitivity")} className="w-1/2 mx-auto text-center" min={-3} />
                                     </div>
                                     <div className="flex flex-col">
                                         <label htmlFor="abilities.presence" className="text-xs text-theme-text-muted/80 text-center">Presence</label>
-                                        <input type="number" {...register("abilities.presence")} className="w-1/2 mx-auto text-center" />
+                                        <input type="number" {...register("abilities.presence")} className="w-1/2 mx-auto text-center" min={-3}/>
                                     </div>
                                 </div>
                                 <button type="button" onClick={createCharacter} className="formButton mx-auto my-6">Choose Latchkey Move</button>
