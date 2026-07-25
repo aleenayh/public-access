@@ -66,7 +66,7 @@ export function MysteryContent({ mysteryId }: { mysteryId: string }) {
 		<div className={`w-full h-full flex flex-col gap-2`}>
 			<h3 className="text-lg font-bold text-theme-text-accent flex gap-2 items-center"><span className="grow">{mystery.name}</span> {role === PlayerRole.KEEPER && <EditMysteryButton mystery={mystery} />}</h3> 
 			
-			{mystery.intro && <div className="border border-theme-border">{mystery.intro.map((line) => <p key={line}>{parseMarkupFromString(line)}</p>)}</div>}
+			{mystery.intro && <div className="border border-theme-border text-left text-sm flex flex-col gap-2">{mystery.intro.map((line) => <p key={line}>{parseMarkupFromString(line)}</p>)}</div>}
 
 			<div className="flex flex-col gap-2 grow">
 			<div className="flex gap-2"><div className="border border-theme-border flex-1 p-2">
@@ -170,10 +170,11 @@ function MysteryForm({ mystery, closeModal }: {mystery?:Mystery, closeModal: () 
 		const id = mystery?.id || crypto.randomUUID();
 		const omitKey = data.customKey?.text === "" && data.customKey.title === ""
 		const customKey = omitKey ? undefined : { checked: mystery?.customKey?.checked || false, title: data.customKey?.title || "", text: data.customKey?.text || "" };
+		const intro = data.introduction?.split("\n\n").map((line)=> (line.replace("\n", " ")))
 		const newMystery: Mystery = {
 			id,
 			name: data.name,
-			intro: data.introduction?.split("\n").filter((line) => line !== "") || undefined,
+			intro,
 			questions: data.questions,
 			clues: mystery?.clues || [],
 			...(!omitKey && {customKey: customKey}),
