@@ -1,10 +1,9 @@
 import { useState } from "react"
 
 export function ReferenceSheet() {
-    const [view, setView] = useState<"moves" | "phases">("phases")
+    const [view, setView] = useState<"moves" | "phases">("moves")
     return (
         <div className="flex-1 min-h-0 overflow-y-auto overflow-x-clip isolate">
-            <h3 className="text-[2rem] font-bold text-theme-text-accent sticky top-0 z-1 bg-theme-bg-primary">Reference Sheet</h3>
             <div className="w-full flex flex-col md:grid md:grid-cols-2 gap-2 text-xs">
               <button type="button" className={`gridButton ${view === "moves" ? "active" : ""}`} onClick={() => setView("moves")}>
                 <h3 className="text-sm">Moves</h3>

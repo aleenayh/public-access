@@ -15,7 +15,7 @@ export function CharacterPane() {
 	const activeCharacter = gameState.players.find((player) => player.character?.name === activeCharacterRaw)?.character ?? null;
 	return (
 		<StyledPane>
-			<CharacterCreateModal/>
+			<CharacterCreateModal showTrigger={false} />
 			<HeaderNav activeCharacter={activeCharacterRaw} setActiveCharacter={setActiveCharacter}/>
 			<Divider/>
             {activeCharacter ? <CharacterSheet character={activeCharacter}/> : <KeeperCharacterOverview/>}

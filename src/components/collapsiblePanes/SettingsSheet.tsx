@@ -7,6 +7,7 @@ import { PlayerRole, type Player } from "../../context/types";
 import { Dialog } from "radix-ui"
 import { CloseButton } from "../shared/CloseButton";
 import { Divider } from "../shared/Divider";
+import { CharacterCreateModal } from "../characters/CharacterCreateModal";
 
 export function SettingsSheet() {
     return (
@@ -21,7 +22,8 @@ export function SettingsSheet() {
 }
 
   function GameInfo() {
-	const { gameHash, user, gameState } = useGame();
+      const { gameHash, user, gameState, resetRole } = useGame();
+      const [showRoleWarning, setShowRoleWarning] = useState(false)
 
 	const copyToClipboard = () => {
 		navigator.clipboard.writeText(gameHash);
@@ -34,7 +36,17 @@ export function SettingsSheet() {
 
 	const clickDownload = () => {
 		downloadGameStateJSON(gameState, `PublicAccess-game-${gameHash}.json`);
-	};
+    };
+    
+    const myCharacter = gameState.players.find((p)=> p.id === user.id)?.character
+      const roleText = user.role === PlayerRole.KEEPER ? "You are currently the Keeper" : myCharacter ? `You are the player of ${myCharacter.name}` : "You are currently a player without a Latchkey."
+      const resetText = myCharacter ? `Remove character and reset role` : `Reset role`
+    const showCreateModal = user.role === PlayerRole.PLAYER && !myCharacter
+      
+      const confirmReset = () => {
+          resetRole(user.id);
+          setShowRoleWarning(false)
+    }
 
 	return (
 		<div className="flex flex-col gap-2 pointer-events-auto">
@@ -58,7 +70,17 @@ export function SettingsSheet() {
 				className="text-theme-text-accent underline hover:text-theme-text-muted transition-colors"
 			>
 				Join a different game
-			</button>
+            </button>
+            
+            <p>{roleText}</p>
+            {showCreateModal ? <CharacterCreateModal showTrigger /> : <button
+                type="button"
+                onClick={() => setShowRoleWarning(true)}
+                className="text-theme-text-accent underline hover:text-theme-text-muted transition-colors"
+            >
+                {resetText}
+            </button>}
+
 			<p className="text-theme-text-muted text-sm inline text-left">
 				Games are considered active if they have been used during the last 3
 				months. Inactive games are periodically removed. If you want to take a
@@ -71,8 +93,22 @@ export function SettingsSheet() {
 					download your game file
 				</button>{" "}
 				to use when re-starting your game.
-			</p>
-		</div>
+            </p>
+            <Dialog.Root open={showRoleWarning} onOpenChange={setShowRoleWarning}>
+                <Dialog.Portal>
+                    <Dialog.Overlay className="DialogOverlay"/>
+                    <Dialog.Content className="DialogContent">
+                        <Dialog.Close asChild><CloseButton/></Dialog.Close>
+                        <div className="flex flex-col gap-4 justify-center items-center"><h4>Really reset your role? </h4>
+                        {user.role === PlayerRole.KEEPER && <p>You will be prompted to create a Latchkey. As a player, you cannot edit Mysteries or add Odyssey Tapes.</p>}
+                        {myCharacter && <p>Your character will be REMOVED and all data will be LOST.</p>}
+                            <button type="button" className="formButton" onClick={confirmReset}>I'm sure</button>
+                            </div>
+                    </Dialog.Content>
+                </Dialog.Portal>
+        </Dialog.Root>
+        </div>
+
 	);
 }
   

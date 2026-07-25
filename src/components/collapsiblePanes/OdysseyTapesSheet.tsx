@@ -5,21 +5,73 @@ import { useGame } from "../../context/GameContext";
 import toast from "react-hot-toast";
 import { Divider } from "../shared/Divider";
 import { useState } from "react";
+import { PlayerRole, type OdysseyTape } from "../../context/types";
+import { usePreferences } from "../../context/PreferencesContext";
+import { AnimatePresence, motion } from "framer-motion";
+import { VHS } from "../svgs/VHS";
 
 export function OdysseyTapesSheet() {
-	const {gameState: {odysseyTapes}} = useGame()
+	const { gameState: { odysseyTapes } } = useGame()
+	
 	return (
 			<div className="flex flex-col w-full">
-			<h3 className="text-2xl font-bold text-theme-text-accent">Odyssey Tapes</h3>
+			{odysseyTapes.length === 0 && <p className="py-4">No Odyssey Tapes found yet.</p>}
+			<div className="flex flex-col gap-2">
 
-			<p>TODO! This is only half built.</p>
-
-
-			<p className="border border-theme-border">{odysseyTapes.map((tape) => <span>{tape.title}</span>)}</p>
+				{odysseyTapes.map((tape) => <OdysseyTape tape={tape} />)}
+				</div>
 			<Divider/>
 			<AddOdysseyTapeForm/>
 				</div>
 	);
+}
+
+function OdysseyTape({ tape }: { tape: OdysseyTape }) {
+	const [expanded, setExpanded] = useState(false);
+	const { gameState, updateGameState, user: { role } } = useGame()
+	const { prefersReducedMotion } = usePreferences();
+	
+	const removeTape = () => {
+		updateGameState({
+			...gameState, 
+			odysseyTapes: gameState.odysseyTapes.filter((t) => t.title !== tape.title)
+		})
+	}
+
+	const markWatched = () => {
+		updateGameState({
+			...gameState, 
+			odysseyTapes: gameState.odysseyTapes.map((t) => t.title === tape.title ? {...t, watched: !t.watched} : t)
+		})
+		
+	}
+
+	return <div className={`min-h-0 flex flex-col border border-theme-border-accent w-full text-left p-2 ${expanded ? "scale-y-100": "scale-y-auto overflow-visible"}`}>
+		<button type="button" onClick={(() => setExpanded(!expanded))} className="text-left inline-flex gap-2 group">
+			{tape.watched ? <div className="text-theme-text-muted -rotate-30 opacity-50"><VHS /></div> :<div className={`-rotate-20  transition-all text-theme-text-accent group-hover:text-theme-accent-primary ${prefersReducedMotion ? "duration-0" : "duration-750 group-hover:-rotate-50 group-hover:scale-125"}`}><VHS /></div>}
+			<h4 className={tape.watched ? "text-theme-text-muted italic line-through" : "text-theme-text-accent"}>{tape.title}</h4>
+		</button>
+		<AnimatePresence
+			mode="popLayout"
+		>
+			{expanded && <motion.div
+				initial={{ height: 0 }}
+				animate={{height: "auto"}}
+				exit={{ height: 0 }}
+				layout
+
+				className={`shrink flex flex-col items-center justify-center gap-2 transform-all ${expanded ? "scale-y-100" : "scale-y-0"} ${prefersReducedMotion ? "duration-0" : "duration-500"} overflow-clip origin-top`}><p className="italic text-sm text-left">{tape.intro}</p>
+				<ul className="list-inside list-[upper-roman] text-left text-sm flex flex-col gap-2">
+					{tape.prompts.map((prompt) => <li>
+						{prompt}
+					</li>)}
+				</ul>
+				<div className="flex gap-2"><button type="button" className="formButton" onClick={markWatched}>{tape.watched ? "Mark Unwatched" : "Mark Watched"}</button>
+					{role === PlayerRole.KEEPER && <button type="button" className="formButton" onClick={removeTape}>Remove Tape</button>}</div>
+			</motion.div>}
+		</AnimatePresence>
+	</div>
+	
 }
 
 type OdysseyTapeInputs = {
@@ -35,7 +87,9 @@ function AddOdysseyTapeForm() {
 		intro: "",
 		prompts: ["","","",""],
 	}})
-	const {gameState, updateGameState} = useGame();
+	const { gameState, updateGameState, user: { role } } = useGame();
+
+	if (role !== PlayerRole.KEEPER) return;
 
 	const saveTape = (data:OdysseyTapeInputs) => {
 		const newTape = {
@@ -59,7 +113,6 @@ function AddOdysseyTapeForm() {
 	}
 	const removePrompt = (index:number) => {
 		setValue("prompts", watch("prompts").filter((_, i) => i !== index))
-
 	}
 	return (
 	<Dialog.Root open={open} onOpenChange={setOpen}>

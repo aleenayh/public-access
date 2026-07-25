@@ -1,6 +1,6 @@
 import {Dialog} from "radix-ui";
 import { useGame } from "../../context/GameContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PlayerRole } from "../../context/types";
 import {useForm, type UseFormRegister, type UseFormSetValue } from "react-hook-form";
 import { lookOptions, moves, nameOptions, surnameOptions, takesYouBackOptions, adjustForMove } from "./characterContent";
@@ -8,6 +8,7 @@ import { CloseButton } from "../shared/CloseButton";
 import { Divider } from "../shared/Divider";
 import { parseMarkupFromString } from "../../utils/parseMarkupFromString";
 import { getUnusedFallback } from "./utils";
+import { StyledButton } from "../shared/StyledButton";
 
 type CharacterCreateInputs = {
     name: string;
@@ -25,8 +26,8 @@ type CharacterCreateInputs = {
     takesYouBack: string;
 }
 
-export function CharacterCreateModal() {
-    const {gameState, updateGameState, user} = useGame();
+export function CharacterCreateModal({showTrigger=false}:{showTrigger:boolean}) {
+    const {gameState, updateGameState, user, claimKeeperRole} = useGame();
     const {register, handleSubmit, setValue, getValues} = useForm({defaultValues: {
         name: "",
         pronouns: "",
@@ -41,18 +42,25 @@ export function CharacterCreateModal() {
             sensitivity: -1,
         },
         takesYouBack: "",
-    }});
-
+    }
+    });
+    
     const hasCreatedCharacter = gameState.players.find((player) => player.id === user.id)?.character !== null;
     const existsSomeKeeper = gameState.players.some((player) => player.role === PlayerRole.KEEPER);
     const [isOpen, setIsOpen] = useState(!hasCreatedCharacter && user.role === PlayerRole.PLAYER) ;
     const [step, setStep] = useState<"initial" | "create" | "moves" | "confirm">("initial");
 
+    const character = gameState.players.find((p)=>p.id === user.id)?.character
+    useEffect(() => {
+        if (user.role === PlayerRole.KEEPER) return;
+        if (character) return;
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setStep("initial")
+        setIsOpen(true)
+    }, [user.role, character])
+
     const claimKeeper = () => {
-        updateGameState({
-            ...gameState,
-            players: gameState.players.map((player) => player.id === user.id ? { ...player, role: PlayerRole.KEEPER } : player),
-        });
+        claimKeeperRole(user.id)
         setIsOpen(false);
     };
 
@@ -112,17 +120,17 @@ export function CharacterCreateModal() {
 
 
 	return (
-		<Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
+        <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
+            <Dialog.Trigger asChild>
+                {showTrigger && <StyledButton onClick={() => setIsOpen(true)}>Create a Latchkey Now</StyledButton>}
+            </Dialog.Trigger>
                     <Dialog.Portal>
                     <Dialog.Overlay className="DialogOverlay" />
-			<Dialog.Trigger asChild>
-				<button type="button">Create Character</button>
-			</Dialog.Trigger>
 			<Dialog.Content className="DialogContent">
                 <Dialog.Close asChild>
                     <CloseButton/>
                 </Dialog.Close>
-				<Dialog.Title className="DialogTitle">Create Character</Dialog.Title>
+				<Dialog.Title className="DialogTitle">Create Latchkey</Dialog.Title>
 				<Dialog.Description className="sr-only">
                     Create a new Latchkey 
 				</Dialog.Description>
@@ -137,11 +145,9 @@ export function CharacterCreateModal() {
 				>
 					Create new character
 				</button>
-				{!existsSomeKeeper && (
 					<button type="button" className="formButton" onClick={claimKeeper}>
 						Play as Keeper
 					</button>
-				)}
 				<p className="text-xs text-theme-text-muted">
 					Think this is a mistake? If you joined the game previously, make sure
 					you joined with the same player name as before. Your current player name is {user.name}.
@@ -197,6 +203,7 @@ export function CharacterCreateModal() {
                                 <div className="flex flex-col gap-2 w-full">
                                     <h2 className="text-2xl font-bold">Review your character</h2>
                                     <p className="text-sm text-theme-text-muted">Please review your character and confirm your choices.</p>
+                                    {/* TODO! */}
                                 </div>
                                 <button type="submit" className="formButton mx-auto my-6">Confirm</button>
                             </>

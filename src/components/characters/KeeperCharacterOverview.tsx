@@ -11,7 +11,7 @@ export function KeeperCharacterOverview() {
 
     return (
         <div className="h-full overflow-auto">
-            <h2>Keeper Character Overview</h2>
+            <h2>Keeper Overview</h2>
             <div className="flex gap-6 justify-center">
             <label htmlFor="conditions" className={`flex items-center gap-1 ${view === "conditions" ? "text-theme-text-accent font-bold" : "text-theme-text-primary"}`}><input id="conditions" type="radio" name="view" value="conditions" checked={view === "conditions"} onChange={() => setView("conditions")} />
                     Conditions</label>
