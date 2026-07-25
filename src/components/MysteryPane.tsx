@@ -1,6 +1,6 @@
 import { Dialog } from "radix-ui";
 import { useGame } from "../context/GameContext";
-import type { Mystery } from "../context/types";
+import { PlayerRole, type Mystery } from "../context/types";
 import { parseMarkupFromString } from "../utils/parseMarkupFromString";
 import { CloseButton } from "./shared/CloseButton";
 import { useForm } from "react-hook-form";
@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { Pencil } from "./svgs/Pencil";
 
 export function MysteryPane() {
-	const { gameState } = useGame();
+	const { gameState, user:{role} } = useGame();
 	const regularMysteries = gameState.mysteries.filter((mystery) => mystery.id !== "tv-odyssey-mystery");
 	const [displayedMystery, setDisplayedMystery] = useState<string | null>(regularMysteries[0]?.id || null);
 
@@ -25,13 +25,13 @@ export function MysteryPane() {
 		<div className="flex flex-col w-full h-full justify-start">
 			{regularMysteries.length > 1 && <div className="flex gap-2 justify-center">{regularMysteries.map((mystery) => <button key={mystery.id} onClick={() => setDisplayedMystery(mystery.id)} className="formButton max-w-1/3 grow text-xs leading-none text-balance">{mystery.name}</button>)}</div>}
 			{displayedMystery && <MysteryContent mysteryId={displayedMystery} key={displayedMystery} />}
-			<AddMysteryButton />
+			{role === PlayerRole.KEEPER && <AddMysteryButton />}
 			</div>
 	);
 }
 
 export function MysteryContent({ mysteryId }: { mysteryId: string }) {
-	const { gameState, updateGameState } = useGame();
+	const { gameState, updateGameState, user: {role} } = useGame();
 	const {register, handleSubmit, reset} = useForm<{clue:string}>({
 		defaultValues: {
 			clue: "",
@@ -64,7 +64,7 @@ export function MysteryContent({ mysteryId }: { mysteryId: string }) {
 	
 	return ( 
 		<div className={`w-full h-full flex flex-col gap-2`}>
-			<h3 className="text-lg font-bold text-theme-text-accent flex gap-2 items-center"><span className="grow">{mystery.name}</span> <EditMysteryButton mystery={mystery} /></h3> 
+			<h3 className="text-lg font-bold text-theme-text-accent flex gap-2 items-center"><span className="grow">{mystery.name}</span> {role === PlayerRole.KEEPER && <EditMysteryButton mystery={mystery} />}</h3> 
 			
 			{mystery.intro && <div className="border border-theme-border">{mystery.intro.map((line) => <p key={line}>{parseMarkupFromString(line)}</p>)}</div>}
 

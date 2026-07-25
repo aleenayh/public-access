@@ -12,7 +12,7 @@ import { useFirebase, VersionMismatchError } from "../hooks/useFirebase";
 import { validateGameState } from "../utils/schemaValidation";
 import { getLocalSchemaVersion } from "../utils/versionCheck";
 import { defaultGameState } from "./defaults";
-import type { GameState, UserInfo } from "./types";
+import { PlayerRole, type GameState, type UserInfo } from "./types";
 
 // Context value includes state AND actions
 interface GameContextValue {
@@ -23,6 +23,8 @@ interface GameContextValue {
 
 	// Actions
 	updateGameState: (updates: Partial<GameState>) => void;
+	resetRole: (id: string) => void;
+	claimKeeperRole: (id: string) => void;
 }
 
 // Create context
@@ -252,6 +254,21 @@ const localSchemaVersion = getLocalSchemaVersion();
 		});
 	}, [firebaseInitialized, gameState.players, userInfo, firebaseUpdateState, gameHash]);
 
+	const resetRole = (id: string) => {
+		updateGameState({
+			...gameState,
+			players: gameState.players.map((p) => p.id === id ? { ...p, character: null, role: PlayerRole.PLAYER } : p),
+		})
+		setUserInfo({...userInfo, role: PlayerRole.PLAYER })
+	}
+	const claimKeeperRole = (id: string) => {
+		updateGameState({
+			...gameState,
+			players: gameState.players.map((p) => p.id === id ? { ...p, character: null, role: PlayerRole.KEEPER } : p),
+		})
+		setUserInfo({...userInfo, role: PlayerRole.KEEPER })
+	}
+
 	// Context value
 	const value: GameContextValue = {
 		gameHash,
@@ -259,6 +276,8 @@ const localSchemaVersion = getLocalSchemaVersion();
 		gameState,
 		updateGameState,
 		user: userInfo,
+		resetRole,
+		claimKeeperRole
 	};
 
 	if (!firebaseInitialized) {
