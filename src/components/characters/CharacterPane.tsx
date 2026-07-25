@@ -1,5 +1,4 @@
 import { StyledPane } from "../shared/StyledPane";
-import { CharacterCreateModal } from "./CharacterCreateModal";
 import { HeaderNav } from "./HeaderNav";
 import { useGame } from "../../context/GameContext";
 import { useState } from "react";
@@ -9,16 +8,22 @@ import { KeeperCharacterOverview } from "./KeeperCharacterOverview";
 import { Divider } from "../shared/Divider";
 
 export function CharacterPane() {
+	return (
+		<StyledPane>
+			<CharacterInterior/>
+		</StyledPane>
+	);
+}
+
+export function CharacterInterior() {
 	const {gameState, user: {id, role}} = useGame();
 	const myChar = gameState.players.find((player) => player.id === id)?.character;
 	const [activeCharacterRaw, setActiveCharacter] = useState<string | null>(role === PlayerRole.KEEPER ? "overview" : myChar?.name || null);
 	const activeCharacter = gameState.players.find((player) => player.character?.name === activeCharacterRaw)?.character ?? null;
-	return (
-		<StyledPane>
-			<CharacterCreateModal showTrigger={false} />
-			<HeaderNav activeCharacter={activeCharacterRaw} setActiveCharacter={setActiveCharacter}/>
+	return <div className="w-full">
+				<HeaderNav activeCharacter={activeCharacterRaw} setActiveCharacter={setActiveCharacter}/>
 			<Divider/>
-            {activeCharacter ? <CharacterSheet character={activeCharacter}/> : <KeeperCharacterOverview/>}
-		</StyledPane>
-	);
+		{activeCharacter ? <CharacterSheet character={activeCharacter} /> : <KeeperCharacterOverview />}
+	</div>
+
 }
