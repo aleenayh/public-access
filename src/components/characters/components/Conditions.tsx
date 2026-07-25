@@ -1,10 +1,11 @@
 import { useGame } from "../../../context/GameContext";
+import { PlayerRole } from "../../../context/types";
 import { EditableLine } from "../../shared/EditableLine";
 import type { Character } from "../types";
 
 export function Conditions({character}: {character: Character}) {
-    const {gameState, updateGameState, user: {id}} = useGame();
-    const editable = gameState.players.find((player) => player.character?.name === character.name)?.id === id;
+    const {gameState, updateGameState, user: {id, role}} = useGame();
+    const editable = (gameState.players.find((player) => player.character?.name === character.name)?.id === id )|| role === PlayerRole.KEEPER;
 
     const handleSave = (index: number, value: string) => {
         const conditions = character.conditions.map((condition, i) => i === index ? value : condition);

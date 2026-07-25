@@ -269,11 +269,11 @@
   --color-bg-accent: hsl(270, 20%, 30%);
 
   --color-text-primary: hsl(230, 20%, 80%);
-  --color-text-muted: hsl(230, 30%, 50%);
+  --color-text-muted: hsl(230, 40%, 60%);
   --color-text-accent: hsl(290, 40%, 60%);
 
   --color-border: hsl(200, 85%, 20%);
-  --color-border-accent: hsl(260, 65%, 40%);
+  --color-border-accent: hsl(260, 100%, 60%);
   --color-accent-primary: hsl(290, 20%, 60%);
 
   --header-font: "Megrim", monospace;
@@ -629,6 +629,10 @@ h2 {
 [data-theme="forum"] h1,
 h2 {
   font-weight: 200;
+}
+[data-theme="eighties"] h2,
+[data-theme="forum"] h2 {
+  font-family: var(--secondary-header-font);
 }
 /* [data-theme="analog"] h1 {
   animation: glitch 1s linear infinite;
