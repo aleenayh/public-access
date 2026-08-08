@@ -96,7 +96,8 @@ export function CharacterCreateModal({showTrigger=false}:{showTrigger:boolean}) 
         const { name, pronouns, look, image: imageURL, abilities, takesYouBack, moves } = data;
         //abilities already added into preview, only need to add corner of the house here
         const moveAdjustments = adjustForMove(moves.name);
-        const character= {
+        const character = {
+            id: `${user.id}-${crypto.randomUUID().slice(0,4)}`,
             name,
             pronouns,
             look,
