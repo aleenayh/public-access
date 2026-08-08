@@ -207,3 +207,40 @@ function Thumbnail({ imageKey, currentImg, handleImgClick }: { imageKey: string,
     </button>
 }
 
+export function VisualThumbnailOnly({ imageKey }: { imageKey: string }) {
+    const offsetDeg = 1
+    const gradient = `linear-gradient(to right, hsl(${(offsetDeg * 50)}deg, 100%, 50%), hsl(${(offsetDeg * 50 + 100)}deg, 100%, 50%))`
+        const color = `hsl(${offsetDeg * 50 + 180}deg, 100%, 50%)`
+    let icon;
+
+    switch (imageKey) {
+        case "pizza":
+            icon = <Pizza height={64} />
+            break;
+        case "casette":
+            icon = <Casette height={64} />
+            break;
+        case "arcade":
+            icon = <Arcade height={64} />
+            break;
+        case "cactus":
+            icon = <Cactus height={64} />
+            break;
+        case "invader":
+            icon = <Invader height={64} />
+            break;
+        case "d20":
+            icon = <D20 height={64} />
+            break;
+        case "lizard":
+        default:
+            icon = <Lizard height={64} />
+            break;
+    }
+
+    return <div className={`max-h-24 flex items-center justify-center border-2 rounded-sm p-1 aspect-square hover:brightness-110 hover:saturate-100 transition-brightness duration-300`
+} style = {{ background: gradient, color }}>
+    { icon }
+    </div>
+    
+}

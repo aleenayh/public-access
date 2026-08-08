@@ -20,10 +20,10 @@ export function CharacterInterior() {
 	const myChar = gameState.players.find((player) => player.id === id)?.character;
 	const [activeCharacterRaw, setActiveCharacter] = useState<string | null>(role === PlayerRole.KEEPER ? "overview" : myChar?.name || null);
 	const activeCharacter = gameState.players.find((player) => player.character?.name === activeCharacterRaw)?.character ?? null;
-	return <div className="w-full">
+	return <div className="w-full overflow-y-auto h-full">
 				<HeaderNav activeCharacter={activeCharacterRaw} setActiveCharacter={setActiveCharacter}/>
 			<Divider/>
-		{activeCharacter ? <CharacterSheet character={activeCharacter} /> : <KeeperCharacterOverview />}
+		<div className="max-h-full min-h-0 overflow-y-auto scrollbar-gutter-stable">{activeCharacter ? <CharacterSheet character={activeCharacter} /> : <KeeperCharacterOverview />}</div>
 	</div>
 
 }
