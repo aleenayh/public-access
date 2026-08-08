@@ -20,6 +20,8 @@ const abilitiySchema = z.object({
 
 export type Abilities = z.infer<typeof abilitiySchema>
 
+export type AbilityKey = "vitality" | "composure" | "reason" | "presence" | "sensitivity";
+
 const moveSchema = z.object({ name: z.string().catch("Move"), description: z.string().catch("description") })
 
 export type Moves = z.infer<typeof moveSchema>;
@@ -43,6 +45,7 @@ const advancementSchema = z.object({
 export type Advancements = z.infer<typeof advancementSchema>
 
 export const characterSchema = z.object({
+    id: z.string().catch(crypto.randomUUID()),
 	name: z.string().catch(""),
     pronouns: z.string().optional().catch(undefined),
     conditions: z.array(z.string().catch("")).catch(["","",""]),
@@ -56,7 +59,7 @@ export const characterSchema = z.object({
 	questions: z.array(z.boolean()).catch([true, false, false, false, false, false, false]),
     keysOfTheChild: z.array(z.boolean()).catch([false, false, false, false, false]),
     keysOfDesolation: z.array(z.boolean()).catch([false, false, false, false, false]),
-    advancements: advancementSchema.catch(emptyAdvancements)
+    advancements: advancementSchema.catch(emptyAdvancements),
 });
 
 export type Character = z.infer<typeof characterSchema>;

@@ -1,35 +1,21 @@
 import { useGame } from "../../../context/GameContext";
-import type { Character } from "../types";
+import { AbilityBox } from "../../shared/Dice";
+import type { AbilityKey, Character } from "../types";
 
 export function AbilityBoxes({character}: {character: Character}) {
     const {gameState, user: {id}} = useGame();
 	const canRoll = gameState.players.find((player) => player.character?.name === character.name)?.id === id;
-	console.log(canRoll);
-	//TODO: dice rolling
 
     return (
-        <div className="flex gap-2">
+        <div className="flex gap-2 justify-center">
             {Object.keys(character.abilities).map((ability) => {
-									const score =
-										character.abilities[
-											ability as keyof typeof character.abilities
-										];
-									return (
-										<div
-											key={ability}
-											className="flex-1 border border-theme-border rounded-md"
-										>
-											<p className="font-bold text-xs">
-												<abbr title={ability.toUpperCase()}>
-													{ability.slice(0, 4).toUpperCase()}
-												</abbr>
-											</p>
-											<p className="text-md text-center text-theme-text-accent">
-												{score}
-											</p>
-										</div>
-									);
-								})}
+				const score = character.abilities[ability as AbilityKey]
+				return <AbilityBox 
+							ability={ability as AbilityKey}
+							value={score}
+							editable={canRoll}
+							/>
+			})}
         </div>
     )
 }
