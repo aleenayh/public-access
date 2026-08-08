@@ -69,10 +69,21 @@ export function LandingPage({
 		setStep(gameHashInput.trim() ? "join-from-query" : "choose");
 	};
 
+	const updateSavedName = () => {
+		if (!playerName.trim()) {
+			return;
+		}
+		if (!gameHashInput.trim()) {
+			return;
+		}
+		localStorage.setItem(`playerName_${gameHashInput.trim()}`, playerName.trim());
+	}
+
 	const handleCreateGame = async () => {
 		setIsLoading(true);
 		setError(null);
 		setStep("creating");
+		updateSavedName();
 
 		try {
 			const newHash = generateGameHash();
@@ -98,11 +109,13 @@ export function LandingPage({
 		setIsLoading(true);
 		setError(null);
 		setStep("creating");
+		
 
 		try {
 			const newHash = generateGameHash();
 			setStartingState(gameState);
 			setGameHash(newHash);
+			updateSavedName();
 		} catch (err) {
 			console.error("Failed to create game:", err);
 			setError("Failed to create game. Please try again.");
@@ -120,6 +133,7 @@ export function LandingPage({
 
 		setIsLoading(true);
 		setError(null);
+		updateSavedName();
 
 		try {
 			const result = await checkGameExists(gameHashInput.trim());

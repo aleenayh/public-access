@@ -133,7 +133,7 @@ function AddOdysseyTapeForm() {
 						<textarea className="grow min-h-8" {...register("intro")}/>
 					</label>
 					{watch("prompts").map((_, i) => 
-						<label htmlFor={`prompt-${i}`} key={`prompt-${i}`} className="w-full flex gap-4"> Prompt {i+1}: 
+						<label htmlFor={`prompt-${i}`} key={`prompt-${i}`} className="w-full flex gap-4 flex-col md:flex-row"> Prompt {i+1}: 
 						<textarea className="grow min-h-8" {...register(`prompts.${i}`)}/>
 						<button type="button" onClick={() => removePrompt(i)} className="h-fit px-1 text-xs text-theme-text-muted bg-theme-bg-primary rounded-lg hover:bg-theme-bg-secondary border border-theme-border hover:text-theme-text-accent mx-6 my-1">Remove</button>
 						</label>

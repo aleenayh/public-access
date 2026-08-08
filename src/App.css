@@ -1004,6 +1004,20 @@ input[type="number"]:hover {
   cursor: not-allowed;
   text-decoration: line-through;
 }
+.formButtonActive {
+  background-color: var(--color-bg-accent);
+  color: var(--color-text-accent);
+  border: 1px solid var(--color-border-accent);
+  border-radius: 0.125rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 1.5;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
 
 .wordCloudButton {
   width: fit-content;

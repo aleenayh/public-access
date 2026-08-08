@@ -174,23 +174,23 @@ export function CharacterCreateModal({showTrigger=false}:{showTrigger:boolean}) 
                                 <div className="flex gap-2 justify-center">
                                     <div className="flex flex-col">
                                         <label htmlFor="abilities.vitality" className="text-xs text-theme-text-muted/80 text-center">Vitality</label>
-                                        <input type="number" {...register("abilities.vitality")} className="w-1/2 mx-auto text-center" min={-3} />
+                                        <input type="number" {...register("abilities.vitality")} className="w-full md:w-1/2 mx-auto text-center" min={-3} />
                                     </div>
                                     <div className="flex flex-col">
                                         <label htmlFor="abilities.composure" className="text-xs text-theme-text-muted/80 text-center">Composure</label>
-                                        <input type="number" {...register("abilities.composure")} className="w-1/2 mx-auto text-center" min={-3} />
+                                        <input type="number" {...register("abilities.composure")} className="w-full md:w-1/2 mx-auto text-center" min={-3} />
                                     </div>
                                     <div className="flex flex-col">
                                         <label htmlFor="abilities.reason" className="text-xs text-theme-text-muted/80 text-center">Reason</label>
-                                        <input type="number" {...register("abilities.reason")} className="w-1/2 mx-auto text-center" min={-3}/>
+                                        <input type="number" {...register("abilities.reason")} className="w-full md:w-1/2 mx-auto text-center" min={-3}/>
                                     </div>
                                     <div className="flex flex-col">
                                         <label htmlFor="abilities.sensitivity" className="text-xs text-theme-text-muted/80 text-center">Sensitivity</label>
-                                        <input type="number" {...register("abilities.sensitivity")} className="w-1/2 mx-auto text-center" min={-3} />
+                                        <input type="number" {...register("abilities.sensitivity")} className="w-full md:w-1/2 mx-auto text-center" min={-3} />
                                     </div>
                                     <div className="flex flex-col">
                                         <label htmlFor="abilities.presence" className="text-xs text-theme-text-muted/80 text-center">Presence</label>
-                                        <input type="number" {...register("abilities.presence")} className="w-1/2 mx-auto text-center" min={-3}/>
+                                        <input type="number" {...register("abilities.presence")} className="w-full md:w-1/2 mx-auto text-center" min={-3}/>
                                     </div>
                                 </div>
                                 <button type="button" onClick={createCharacter} className="formButton mx-auto my-6">Choose Latchkey Move</button>
@@ -239,23 +239,23 @@ function ReviewCharacter({ data }: { data: CharacterCreateInputs }) {
             <div className="flex gap-2 justify-center">
                                     <div className="flex flex-col">
                                         <label htmlFor="abilities.vitality" className="text-xs text-theme-text-muted/80 text-center">Vitality</label>
-                                        <input type="number" disabled value={abilities.vitality} className="w-1/2 mx-auto text-center" />
+                                        <input type="number" disabled value={abilities.vitality} className="w-full md:w-1/2 mx-auto text-center" />
                                     </div>
                                     <div className="flex flex-col">
                                         <label htmlFor="abilities.composure" className="text-xs text-theme-text-muted/80 text-center">Composure</label>
-                                        <input type="number" disabled value={abilities.composure} className="w-1/2 mx-auto text-center" />
+                                        <input type="number" disabled value={abilities.composure} className="w-full md:w-1/2 mx-auto text-center" />
                                     </div>
                                     <div className="flex flex-col">
                                         <label htmlFor="abilities.reason" className="text-xs text-theme-text-muted/80 text-center">Reason</label>
-                                        <input type="number" disabled value={abilities.reason} className="w-1/2 mx-auto text-center" />
+                                        <input type="number" disabled value={abilities.reason} className="w-full md:w-1/2 mx-auto text-center" />
                                     </div>
                                     <div className="flex flex-col">
                                         <label htmlFor="abilities.sensitivity" className="text-xs text-theme-text-muted/80 text-center">Presence</label>
-                                        <input type="number" disabled value={abilities.presence} className="w-1/2 mx-auto text-center" />
+                                        <input type="number" disabled value={abilities.presence} className="w-full md:w-1/2 mx-auto text-center" />
                                     </div>
                                     <div className="flex flex-col">
                                         <label htmlFor="abilities.presence" className="text-xs text-theme-text-muted/80 text-center">Presence</label>
-                                        <input type="number" disabled value={abilities.sensitivity} className="w-1/2 mx-auto text-center" />
+                                        <input type="number" disabled value={abilities.sensitivity} className="w-full md:w-1/2 mx-auto text-center" />
                                     </div>
                                 </div>
     </div>
@@ -280,7 +280,7 @@ function BlendedInputWithWordCloud({ optionSets, setValue, register, title, fiel
 
     return (
         <div className="flex flex-col gap-2 w-full">
-            <div className="flex gap-2 w-full">
+            <div className="flex gap-2 w-full flex-col md:flex-row">
         <div className="flex-3 flex flex-col mr-2 w-full">
         <label htmlFor={fieldName} className="text-xs text-theme-text-muted/80 text-left italic">{title}</label>
         <input type="text" {...register(fieldName)} className="w-full"/>
@@ -288,16 +288,16 @@ function BlendedInputWithWordCloud({ optionSets, setValue, register, title, fiel
         <div className="flex-1 flex flex-col">
             <label htmlFor="pronouns" className="text-xs text-theme-text-muted/80 text-left italic">Pronouns</label>
             <input type="text" placeholder="" {...register("pronouns")} />
-                </div>
-                </div>
+        </div>
+    </div>
             <div className="w-full">
                 <p className="text-xs text-theme-text-muted/80 text-left"><strong>Pick one of each, or make up your own:</strong></p>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-col md:flex-row">
             {optionSets.map((options, setIndex) => {
                 const selectedOpt = setIndex === 0 ? selectedFirstName : selectedLastName;
                 const label = setIndex === 0 ? "FIRST NAME" : "LAST NAME";
-                return (<div key={`optionSet-${setIndex}`} className="flex flex-wrap gap-1 text-xs relative pl-4">
-                    <h3 className="absolute -left-17 top-1/2 tracking-widest text-lg leading-0 text-right -rotate-90 text-theme-text-accent">{label}</h3>
+                return (<div key={`optionSet-${setIndex}`} className="flex flex-wrap gap-1 text-xs relative pl-4 border-b-2 border-theme-border md:border-0">
+                    <h3 className="absolute -left-17 top-1/2 tracking-widest text-xs md:text-lg leading-0 text-right -rotate-90 text-theme-text-accent">{label}</h3>
                     {options.map((opt) => <button type="button" key={opt} className={`wordCloudButton ${selectedOpt === opt ? "border border-theme-border" : ""}`} onClick={() => handleClickCloud(setIndex, opt)}>{opt}</button>)}</div>);
             })}
                     </div>
