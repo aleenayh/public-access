@@ -341,10 +341,7 @@ function FlavorTextByTheme() {
 				</p>
 				<p>Set forum display name to continue:</p>
 			</>
-		} else 		if (theme === "eighties") {
-			return (<p>Enter your name, dude</p>);
 		}
-
 
 		return (
 			<>
