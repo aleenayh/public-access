@@ -16,10 +16,11 @@ export function MysteryPane() {
 
 	//reset the displayed mystery if a mystery is added or removed; otherwise can get stuck on a removed mystery
 	useEffect(() => {
-		const filteredMysteries =gameState.mysteries.filter((mystery) => mystery.id !== "tv-odyssey-mystery");
+		const filteredMysteries = gameState.mysteries.filter((mystery) => mystery.id !== "tv-odyssey-mystery");
+		if (filteredMysteries.some((mystery)=> mystery.id === displayedMystery)) return 
 		// eslint-disable-next-line react-hooks/set-state-in-effect
 		setDisplayedMystery(filteredMysteries[0]?.id || null)
-	}, [gameState.mysteries, setDisplayedMystery])
+	}, [gameState.mysteries, setDisplayedMystery, displayedMystery])
 	
 	return (
 		<div className="flex flex-col w-full h-full">
