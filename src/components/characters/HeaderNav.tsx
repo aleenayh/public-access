@@ -20,7 +20,7 @@ export function HeaderNav({activeCharacter, setActiveCharacter}: {activeCharacte
     }
 
     return (
-        <div className="flex items-center justify-evenly max-h-24 relative min-h-10">
+        <div className="flex items-center justify-evenly max-h-20 md:max-h-24 relative min-h-10">
             <KeeperOverviewButton onClick={() => setActiveCharacter(null)} />
             {allCharacters.map((character, index) => (
 				<CharacterPortrait 
@@ -47,13 +47,14 @@ function CharacterPortrait({ characterIndex, character, onClick, isActive }: { c
 
     return (
         <div className="flex flex-col">
-    <button type="button" className="isolate relative flex items-center justify-center max-h-24 aspect-square flex-col" onClick={() => onClick(character.name)}>
-        <div className={`w-full h-full flex items-center justify-center border-2 ${isActive ? "scale-110 saturate-100" : "saturate-[0.2]"} rounded-sm p-1 aspect-square hover:brightness-110 hover:saturate-100 transition-brightness duration-300 ${prefersReducedMotion ? "" : "hover:-translate-y-6"} `} style={{background: gradient, color}}>
+    <button type="button" className="isolate relative flex items-center justify-center max-h-16 md:max-h-24 max-w-16 md:max-w-24 aspect-square flex-col" onClick={() => onClick(character.name)}>
+        <div className={`w-full h-full flex items-center justify-center border-2 ${isActive ? "scale-100 md:scale-110 saturate-100" : "saturate-[0.2]"} rounded-sm p-1 aspect-square hover:brightness-110 hover:saturate-100 transition-brightness duration-300 ${prefersReducedMotion ? "" : "md:hover:-translate-y-6"} `} style={{background: gradient, color}}>
             {character.image.type === "custom" ? <img src={character.image.url} alt={character.name} className="w-full h-full object-cover"/> : getFallbackIcon(character.image)}
         </div>
-            <p className="absolute bottom-0 -z-1 text-center text-theme-text-accent text-xs whitespace-nowrap max-w-24 truncate">{character.name}</p>
+            <p className="hidden md:block absolute bottom-0 -z-1 text-center text-theme-text-accent text-xs whitespace-nowrap max-w-24 truncate">{character.name}</p>
             </button>
-            {prefersReducedMotion &&             <p className="text-center text-theme-text-accent text-xs whitespace-nowrap max-w-24 truncate">{character.name}</p>}
+            {prefersReducedMotion && <p className="text-center text-theme-text-accent text-xs whitespace-nowrap max-w-24 truncate">{character.name}</p>}
+            <p className="md:hidden text-center text-theme-text-accent text-xs whitespace-nowrap max-w-16 truncate">{character.name}</p>
             </div>
     )
 }

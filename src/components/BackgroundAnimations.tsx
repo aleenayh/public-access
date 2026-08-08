@@ -5,7 +5,7 @@ import { usePreferences } from "../context/PreferencesContext"
 
 function StaticBackground() {
     return (
-        <div className="isolate h-full w-full absolute inset-0">
+        <div className="hidden md:block isolate h-full w-full absolute inset-0">
         <div className="BackgroundColor"></div>
         <div className="StaticBackground"></div>
         <div className="StaticForeground"/>

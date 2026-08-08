@@ -13,8 +13,14 @@ export function AnimatedHeader({text} : {text: string}) {
 	}, [theme])
 
     return (
-        <h1 className="flex justify-center w-full text-theme-text-accent gap-1">
+        <div><h1 className="hidden md:flex justify-center w-full text-theme-text-accent gap-1">
             {title}
         </h1>
+            
+            {/*Mobile*/}
+        <h3 className="flex md:hidden justify-center w-full text-theme-text-accent gap-1 text-lg">
+            {title}
+            </h3>
+            </div>
     )
 }

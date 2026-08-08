@@ -127,7 +127,7 @@ function EditForm({ character, close }: { character: Character, close:()=>void }
         <input type="text" {...register("takesYouBack")} className="w-full" />
         <Divider />
         <p>Character Image</p>
-        <div className="flex justify-evenly w-full">
+        <div className="flex justify-evenly w-full flex-col md:flex-row">
             <label htmlFor="customImg"><input type="radio" name="imageType" value="custom" id="customImg" onChange={handleImgTypeChange} checked={imageType === "custom"} /> Provide an image url</label>
             <label htmlFor="providedImg"><input type="radio" name="imageType" value="provided" id="providedImg" onChange={handleImgTypeChange} checked={imageType === "provided"} /> Select an icon</label>
         </div>
@@ -143,23 +143,23 @@ function EditForm({ character, close }: { character: Character, close:()=>void }
             <div className="flex gap-2 justify-center">
                 <div className="flex flex-col">
                     <label htmlFor="abilities.vitality" className="text-xs text-theme-text-muted/80 text-center">Vitality</label>
-                    <input type="number" {...register("abilities.vitality")} className="w-1/2 mx-auto text-center" min={-6} />
+                    <input type="number" {...register("abilities.vitality")} className="w-full md:w-1/2 mx-auto text-center" min={-6} />
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="abilities.composure" className="text-xs text-theme-text-muted/80 text-center">Composure</label>
-                    <input type="number" {...register("abilities.composure")} className="w-1/2 mx-auto text-center" min={-6} />
+                    <input type="number" {...register("abilities.composure")} className="w-full md:w-1/2 mx-auto text-center" min={-6} />
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="abilities.reason" className="text-xs text-theme-text-muted/80 text-center">Reason</label>
-                    <input type="number" {...register("abilities.reason")} className="w-1/2 mx-auto text-center" min={-6}/>
+                    <input type="number" {...register("abilities.reason")} className="w-full md:w-1/2 mx-auto text-center" min={-6}/>
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="abilities.presence" className="text-xs text-theme-text-muted/80 text-center">Presence</label>
-                    <input type="number" {...register("abilities.presence")} className="w-1/2 mx-auto text-center" min={-6} />
+                    <input type="number" {...register("abilities.presence")} className="w-full md:w-1/2 mx-auto text-center" min={-6} />
             </div>
             <div className="flex flex-col">
                     <label htmlFor="abilities.sensitivity" className="text-xs text-theme-text-muted/80 text-center">Sensitivity</label>
-                    <input type="number" {...register("abilities.sensitivity")} className="w-1/2 mx-auto text-center" min={-6} />
+                    <input type="number" {...register("abilities.sensitivity")} className="w-full md:w-1/2 mx-auto text-center" min={-6} />
                 </div>
         </div>
         <EditMovesSection myMoves={character.moves}/>

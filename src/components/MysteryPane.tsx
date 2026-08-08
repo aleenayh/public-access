@@ -22,8 +22,8 @@ export function MysteryPane() {
 	}, [gameState.mysteries, setDisplayedMystery])
 	
 	return (
-		<div className="flex flex-col w-full h-full justify-start">
-			{regularMysteries.length > 1 && <div className="flex gap-2 justify-center">{regularMysteries.map((mystery) => <button key={mystery.id} onClick={() => setDisplayedMystery(mystery.id)} className="formButton max-w-1/3 grow text-xs leading-none text-balance">{mystery.name}</button>)}</div>}
+		<div className="flex flex-col w-full h-full">
+			{regularMysteries.length > 1 && <div className="flex gap-2 justify-center">{regularMysteries.map((mystery) => <button key={mystery.id} onClick={() => setDisplayedMystery(mystery.id)} className={`formButton max-w-1/3 grow text-xs leading-none text-balance ${displayedMystery === mystery.id && "formButtonActive"}`}>{mystery.name}</button>)}</div>}
 			{displayedMystery && <MysteryContent mysteryId={displayedMystery} key={displayedMystery} />}
 			{role === PlayerRole.KEEPER && <AddMysteryButton />}
 			</div>
@@ -37,6 +37,7 @@ export function MysteryContent({ mysteryId }: { mysteryId: string }) {
 			clue: "",
 		},
 	});
+	const [introExpanded, setIntroExpanded] = useState(false);
 	const mystery = gameState.mysteries.find((m) => m.id === mysteryId);
 	if (!mystery) return;
 
@@ -63,10 +64,18 @@ export function MysteryContent({ mysteryId }: { mysteryId: string }) {
 	}
 	
 	return ( 
-		<div className={`w-full h-full flex flex-col gap-2`}>
+		<div className={`flex-1 w-full h-full flex flex-col gap-2 overflow-auto`}>
 			<h3 className="text-lg font-bold text-theme-text-accent flex gap-2 items-center"><span className="grow">{mystery.name}</span> {role === PlayerRole.KEEPER && <EditMysteryButton mystery={mystery} />}</h3> 
 			
-			{mystery.intro && <div className="border border-theme-border text-left text-sm flex flex-col gap-2">{mystery.intro.map((line) => <p key={line}>{parseMarkupFromString(line)}</p>)}</div>}
+			{mystery.intro && <div>
+				{introExpanded ?
+					<div className="border border-theme-border text-left text-sm flex flex-col gap-2">{mystery.intro.map((line) => <p key={line}>{parseMarkupFromString(line)}</p>)}
+					<button type="button" onClick={()=> setIntroExpanded(false)} className="formButton mx-auto">Hide Introduction</button>
+					</div>
+					: 
+					<button type="button" onClick={()=> setIntroExpanded(true)} className="formButton mx-auto">View Introduction</button>
+				}
+				</div>}
 
 			<div className="flex flex-col gap-2 grow">
 			<div className="flex gap-2"><div className="border border-theme-border flex-1 p-2">
@@ -134,7 +143,7 @@ function AddMysteryButton() {
 	return (
 		<Dialog.Root open={open} onOpenChange={setOpen}>
 			<Dialog.Trigger asChild>
-				<button className="formButton justify-self-end my-4">
+				<button className="formButton my-4">
 					Add Mystery
 				</button>
 			</Dialog.Trigger>
