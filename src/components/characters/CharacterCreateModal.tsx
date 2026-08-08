@@ -9,6 +9,7 @@ import { Divider } from "../shared/Divider";
 import { parseMarkupFromString } from "../../utils/parseMarkupFromString";
 import { getUnusedFallback } from "./utils";
 import { StyledButton } from "../shared/StyledButton";
+import { VisualThumbnailOnly } from "./components/EditModal";
 
 type CharacterCreateInputs = {
     name: string;
@@ -218,10 +219,11 @@ export function CharacterCreateModal({showTrigger=false}:{showTrigger:boolean}) 
 
 function ReviewCharacter({ data }: { data: CharacterCreateInputs }) {
     const { name, pronouns, look, image, abilities, moves, takesYouBack } = data;
+    const { gameState } = useGame();
 
     return <div className="flex flex-col gap-2 items-center justify-start">
         <div className="flex gap-2 w-full justify-start">
-            <img src={image} className="max-h-32 aspect-square object-contain flex-1" />
+            {image ? <img src={image} className="max-h-32 aspect-square object-contain flex-1 mx-auto" /> : <div className="flex-1 flex justify-center"><VisualThumbnailOnly imageKey={getUnusedFallback(gameState).icon} /></div>}
             <div className="flex-1 flex flex-col justify-center">
             <p className="bold text-lg">{name}</p>
             <p className="italic text-xs">{pronouns}</p>

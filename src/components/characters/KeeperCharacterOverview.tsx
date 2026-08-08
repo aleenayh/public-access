@@ -10,7 +10,7 @@ export function KeeperCharacterOverview() {
     const [view, setView] = useState<"conditions"|"questions">("conditions")
 
     return (
-        <div className="h-full overflow-auto">
+        <div>
             <h2>Keeper Overview</h2>
             <div className="flex gap-6 justify-center">
             <label htmlFor="conditions" className={`flex items-center gap-1 ${view === "conditions" ? "text-theme-text-accent font-bold" : "text-theme-text-primary"}`}><input id="conditions" type="radio" name="view" value="conditions" checked={view === "conditions"} onChange={() => setView("conditions")} />
@@ -20,7 +20,7 @@ export function KeeperCharacterOverview() {
                    Dawn Questions</label>
             </div>
             
-            <div className="grid grid-cols-2 gap-3 items-stretch">
+            <div className="grid grid-cols-2 gap-3 items-stretch pb-30">
                 {allCharacters.map((character) => (<Overview character={character} view={view} />))}
                 </div>
         </div>

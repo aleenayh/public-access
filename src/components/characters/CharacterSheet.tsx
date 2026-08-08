@@ -14,7 +14,7 @@ export function CharacterSheet({character}: {character: Character}) {
     const editable = activePlayer?.id === id;
 
     return (
-        <div key={character.name} className="flex flex-col gap-2 flex-1 w-full overflow-y-scroll scrollbar-gutter-stable pb-20 fadeInEachChild">
+        <div key={character.name} className="flex flex-col gap-2 flex-1 w-full max-h-full min-h-0 overflow-y-scroll scrollbar-gutter-stable pb-20 fadeInEachChild">
         <h3 className="text-theme-text-primary sticky top-0 bg-theme-bg-primary rounded-bl-md rounded-br-md w-fit mx-auto px-2 text-xl z-2 ">{character.name}</h3>
         <p className="text-xs text-theme-text-muted/80 text-center"><span className="italic">{character.pronouns}</span> | Played by {activePlayer?.name}</p>
         <Conditions character={character}/>
