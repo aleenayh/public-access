@@ -196,16 +196,17 @@ export function CharacterCreateModal({showTrigger=false}:{showTrigger:boolean}) 
                             </div>
                         )}
                         {step === "moves" && (
-                            <MovePicker onContinue={addMove} />
+                            <MovePicker onContinue={addMove} onBack={()=> setStep("create")} />
                         )}
                         {step === "confirm" && (
                             <>
                                 <div className="flex flex-col gap-2 w-full">
-                                    <h2 className="text-2xl font-bold">Review your character</h2>
                                     <p className="text-sm text-theme-text-muted">Please review your character and confirm your choices.</p>
-                                    {/* TODO! */}
+                                    <ReviewCharacter data={getValues()}/>
                                 </div>
-                                <button type="submit" className="formButton mx-auto my-6">Confirm</button>
+                                <div className="flex w-full justify-evenly">
+                                <button type="button" className="formButton mx-auto my-6" onClick={()=>setStep("moves")}>Back</button>
+                                    <button type="submit" className="formButton mx-auto my-6">Confirm</button></div>
                             </>
                         )}
                     </form>}
@@ -213,6 +214,49 @@ export function CharacterCreateModal({showTrigger=false}:{showTrigger:boolean}) 
             </Dialog.Portal>
 		</Dialog.Root>
 	);
+}
+
+function ReviewCharacter({ data }: { data: CharacterCreateInputs }) {
+    const { name, pronouns, look, image, abilities, moves, takesYouBack } = data;
+
+    return <div className="flex flex-col gap-2 items-center justify-start">
+        <div className="flex gap-2 w-full justify-start">
+            <img src={image} className="max-h-32 aspect-square object-contain flex-1" />
+            <div className="flex-1 flex flex-col justify-center">
+            <p className="bold text-lg">{name}</p>
+            <p className="italic text-xs">{pronouns}</p>
+            </div>
+        </div>
+        <div className="flex gap-2">
+        <p className="flex-1"><span className="[font-variant:small-caps] text-theme-text-muted pr-2">Look:</span>{look}</p>
+        <p className="flex-1"><span className="[font-variant:small-caps] text-theme-text-muted pr-2">Takes You Back:</span>{takesYouBack}</p>
+        </div>
+        <p><span className="[font-variant:small-caps] text-theme-text-muted flex w-full">Moves:</span>
+            <span className="bold text-theme-text-accent pr-2">{moves.name}:</span>
+            <span className="text-sm leading-none">{moves.description}</span></p>
+            <div className="flex gap-2 justify-center">
+                                    <div className="flex flex-col">
+                                        <label htmlFor="abilities.vitality" className="text-xs text-theme-text-muted/80 text-center">Vitality</label>
+                                        <input type="number" disabled value={abilities.vitality} className="w-1/2 mx-auto text-center" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <label htmlFor="abilities.composure" className="text-xs text-theme-text-muted/80 text-center">Composure</label>
+                                        <input type="number" disabled value={abilities.composure} className="w-1/2 mx-auto text-center" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <label htmlFor="abilities.reason" className="text-xs text-theme-text-muted/80 text-center">Reason</label>
+                                        <input type="number" disabled value={abilities.reason} className="w-1/2 mx-auto text-center" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <label htmlFor="abilities.sensitivity" className="text-xs text-theme-text-muted/80 text-center">Presence</label>
+                                        <input type="number" disabled value={abilities.presence} className="w-1/2 mx-auto text-center" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <label htmlFor="abilities.presence" className="text-xs text-theme-text-muted/80 text-center">Presence</label>
+                                        <input type="number" disabled value={abilities.sensitivity} className="w-1/2 mx-auto text-center" />
+                                    </div>
+                                </div>
+    </div>
 }
 
 function BlendedInputWithWordCloud({ optionSets, setValue, register, title, fieldName }: { optionSets: string[][], setValue: UseFormSetValue<CharacterCreateInputs>, register: UseFormRegister<CharacterCreateInputs>, title: string, fieldName: keyof CharacterCreateInputs }) {
@@ -288,7 +332,7 @@ function InputWithWordCloud({options, setValue, register, title, pickNum, fieldN
 
 }
 
-function MovePicker({onContinue}: {onContinue: (selectedMove:string) => void}) {
+function MovePicker({onContinue, onBack}: {onContinue: (selectedMove:string) => void, onBack:()=>void}) {
     const { gameState } = useGame();
     const movesInPlay = gameState.players.flatMap((player) => player.character?.moves || []).map((move) => move.name);
     const [selectedMove, setSelectedMove] = useState<string>("");
@@ -309,7 +353,10 @@ function MovePicker({onContinue}: {onContinue: (selectedMove:string) => void}) {
             )
         })}
             </div>
-            <button type="button" onClick={() => onContinue(selectedMove)} className="formButton mx-auto my-6">Reivew & Confirm</button>
+            <div className="flex w-full justify-evenly">
+                                <button type="button" className="formButton mx-auto my-6" onClick={onBack}>Back</button>
+                <button type="button" onClick={() => onContinue(selectedMove)} className="formButton mx-auto my-6">Reivew & Confirm</button>
+            </div>
             </div>
     )
 }
