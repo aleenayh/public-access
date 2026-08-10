@@ -185,7 +185,10 @@ function MysteryForm({ mystery, closeModal }: {mystery?:Mystery, closeModal: () 
 			id,
 			name: data.name,
 			intro,
-			questions: data.questions,
+			questions: data.questions.map((q)=> {return {
+				...q, complexity: Number(q.complexity
+				)
+			}}),
 			clues: mystery?.clues || [],
 			...(!omitKey && {customKey: customKey}),
 		}
