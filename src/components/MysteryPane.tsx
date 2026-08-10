@@ -17,11 +17,11 @@ export function MysteryPane() {
 	//reset the displayed mystery if a mystery is added or removed; otherwise can get stuck on a removed mystery
 	useEffect(() => {
 		const filteredMysteries = gameState.mysteries.filter((mystery) => mystery.id !== "tv-odyssey-mystery");
-		if (filteredMysteries.some((mystery)=> mystery.id === displayedMystery)) return 
+		if (filteredMysteries.some((mystery)=> mystery.id === displayedMystery)) return
 		// eslint-disable-next-line react-hooks/set-state-in-effect
 		setDisplayedMystery(filteredMysteries[0]?.id || null)
 	}, [gameState.mysteries, setDisplayedMystery, displayedMystery])
-	
+
 	return (
 		<div className="flex flex-col w-full h-full">
 			{regularMysteries.length > 1 && <div className="flex gap-2 justify-center">{regularMysteries.map((mystery) => <button key={mystery.id} onClick={() => setDisplayedMystery(mystery.id)} className={`formButton max-w-1/3 grow text-xs leading-none text-balance ${displayedMystery === mystery.id && "formButtonActive"}`}>{mystery.name}</button>)}</div>}
@@ -63,17 +63,17 @@ export function MysteryContent({ mysteryId }: { mysteryId: string }) {
 			mysteries: gameState.mysteries.map((m) => m.id === mysteryId ? { ...m, clues: m.clues.map((c) => c.text === text ? { ...c, used: !c.used } : c) } : m),
 		})
 	}
-	
-	return ( 
+
+	return (
 		<div className={`flex-1 w-full h-full flex flex-col gap-2 overflow-auto`}>
-			<h3 className="text-lg font-bold text-theme-text-accent flex gap-2 items-center"><span className="grow">{mystery.name}</span> {role === PlayerRole.KEEPER && <EditMysteryButton mystery={mystery} />}</h3> 
-			
+			<h3 className="text-lg font-bold text-theme-text-accent flex gap-2 items-center"><span className="grow">{mystery.name}</span> {role === PlayerRole.KEEPER && <EditMysteryButton mystery={mystery} />}</h3>
+
 			{mystery.intro && <div>
 				{introExpanded ?
 					<div className="border border-theme-border text-left text-sm flex flex-col gap-2">{mystery.intro.map((line) => <p key={line}>{parseMarkupFromString(line)}</p>)}
 					<button type="button" onClick={()=> setIntroExpanded(false)} className="formButton mx-auto">Hide Introduction</button>
 					</div>
-					: 
+					:
 					<button type="button" onClick={()=> setIntroExpanded(true)} className="formButton mx-auto">View Introduction</button>
 				}
 				</div>}
@@ -93,7 +93,7 @@ export function MysteryContent({ mysteryId }: { mysteryId: string }) {
 							<input type="checkbox" defaultChecked={clue.used} className="mr-2" onChange={() => markClue(clue.text)} />
 							{parseMarkupFromString(clue.text)}</li>)}</ul>
 			</div></div>
-			
+
 			<form onSubmit={handleSubmit(addClue)} className="flex gap-2 items-center">
 				<label htmlFor="clue" className="sr-only">Add a clue</label>
 				<input type="text" placeholder="Add clue..." required={true} className="flex-1" {...register("clue")} />
@@ -175,7 +175,7 @@ function MysteryForm({ mystery, closeModal }: {mystery?:Mystery, closeModal: () 
 		const newQuestions = watch("questions").filter((_, i) => i !== index);
 		setValue("questions", newQuestions);
 	}
-	
+
 	const addMystery = (data: AddMysteryInputs) => {
 		const id = mystery?.id || crypto.randomUUID();
 		const omitKey = data.customKey?.text === "" && data.customKey.title === ""
@@ -207,6 +207,10 @@ function MysteryForm({ mystery, closeModal }: {mystery?:Mystery, closeModal: () 
 	}
 
 	const removeMystery = () => {
+		if (mystery?.id === "tv-odyssey-mystery") {
+			toast.error("TV Odyssey Mystery cannot be removed")
+			return;
+		}
 		updateGameState({
 			...gameState,
 			mysteries: gameState.mysteries.filter((m) => m.id !== mystery?.id),
@@ -244,7 +248,7 @@ function MysteryForm({ mystery, closeModal }: {mystery?:Mystery, closeModal: () 
 						<button type="button" className="formButton" onClick={addQuestion}>Add Another Question</button>
 						<Divider/>
 						<label htmlFor="customKey">Custom Key: <span className="text-xs text-theme-text-muted mx-1 italic">(Optional)</span></label>
-						
+
 							<input type="text" className="flex-1" placeholder="Title..."{...register("customKey.title")} />
 						<input type="textarea" placeholder="Key Prompt..." {...register("customKey.text")} />
 						<Divider/>
