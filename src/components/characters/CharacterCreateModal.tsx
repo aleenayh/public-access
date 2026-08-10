@@ -564,9 +564,9 @@ function BlendedInputWithWordCloud({
                 key={`optionSet-${setIndex}`}
                 className="flex flex-wrap gap-1 text-xs relative pl-4 border-b-2 border-theme-border md:border-0"
               >
-                <h3 className="absolute -left-17 top-1/2 tracking-widest text-xs md:text-lg leading-0 text-right -rotate-90 text-theme-text-accent">
+                <h4 className="absolute -left-17 top-1/2 tracking-tight md:tracking-widest text-xs leading-0 text-right -rotate-90 text-theme-text-accent">
                   {label}
-                </h3>
+                </h4>
                 {options.map((opt) => (
                   <button
                     type="button"
