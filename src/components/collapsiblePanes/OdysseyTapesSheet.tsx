@@ -9,6 +9,7 @@ import { PlayerRole, type OdysseyTape } from "../../context/types";
 import { usePreferences } from "../../context/PreferencesContext";
 import { AnimatePresence, motion } from "framer-motion";
 import { VHS } from "../svgs/VHS";
+import { Pencil } from "../svgs/Pencil";
 
 export function OdysseyTapesSheet() {
 	const { gameState: { odysseyTapes } } = useGame()
@@ -46,11 +47,14 @@ function OdysseyTape({ tape }: { tape: OdysseyTape }) {
 		
 	}
 
-	return <div className={`min-h-0 flex flex-col border border-theme-border-accent w-full text-left p-2 ${expanded ? "scale-y-100": "scale-y-auto overflow-visible"}`}>
-		<button type="button" onClick={(() => setExpanded(!expanded))} className="text-left inline-flex gap-2 group">
+	return <div className={`min-h-0 flex flex-col border border-theme-border-accent w-full text-left p-2 relative ${expanded ? "scale-y-100" : "scale-y-auto overflow-visible"}`}>
+		<div className="flex w-full">
+		<button type="button" onClick={(() => setExpanded(!expanded))} className="flex-1 text-left inline-flex gap-2 group">
 			{tape.watched ? <div className="text-theme-text-muted -rotate-30 opacity-50"><VHS /></div> :<div className={`-rotate-20  transition-all text-theme-text-accent group-hover:text-theme-accent-primary ${prefersReducedMotion ? "duration-0" : "duration-750 group-hover:-rotate-50 group-hover:scale-125"}`}><VHS /></div>}
 			<h4 className={tape.watched ? "text-theme-text-muted italic line-through" : "text-theme-text-accent"}>{tape.title}</h4>
-		</button>
+			</button>
+			{role === PlayerRole.KEEPER && <AddOdysseyTapeForm title={tape.title} />}
+			</div>
 		<AnimatePresence
 			mode="popLayout"
 		>
@@ -80,18 +84,24 @@ type OdysseyTapeInputs = {
 	prompts: string[];
 }
 
-function AddOdysseyTapeForm() {
+function AddOdysseyTapeForm({title}:{title?:string}) {
 	const [open, setOpen] = useState(false)
-	const {register, handleSubmit, reset, setValue, watch} = useForm<OdysseyTapeInputs>({defaultValues: {
-		title: "",
-		intro: "",
-		prompts: ["","","",""],
-	}})
 	const { gameState, updateGameState, user: { role } } = useGame();
+	const existingTape = gameState.odysseyTapes.find((tape)=> tape.title === title)
+	const {register, handleSubmit, reset, setValue, watch} = useForm<OdysseyTapeInputs>({defaultValues: {
+		title: existingTape?.title ?? "",
+		intro: existingTape?.intro?.join("/n/n") ?? "",
+		prompts: existingTape?.prompts ?? ["","","",""],
+	}})
+
 
 	if (role !== PlayerRole.KEEPER) return;
 
-	const saveTape = (data:OdysseyTapeInputs) => {
+	const saveTape = (data: OdysseyTapeInputs) => {
+		let otherTapes =gameState.odysseyTapes
+		if (existingTape) {
+			otherTapes = otherTapes.filter((tape)=> tape.title !== existingTape.title)
+		}
 		const newTape = {
 			watched: false,
 			title: data.title,
@@ -100,7 +110,7 @@ function AddOdysseyTapeForm() {
 		}
 		updateGameState({
 			...gameState,
-			odysseyTapes: [...gameState.odysseyTapes, newTape]
+			odysseyTapes: [...otherTapes, newTape]
 		}
 		)
 		toast.success('Tape added')
@@ -117,7 +127,7 @@ function AddOdysseyTapeForm() {
 	return (
 	<Dialog.Root open={open} onOpenChange={setOpen}>
 		<Dialog.Trigger asChild>
-			<button className="formButton">Add Odyssey Tape</button>
+				{title ? <div className="flex w-8 justify-end items-center cursor-pointer"><Pencil height={18} /></div> : <button className="formButton">Add Odyssey Tape</button>}
 		</Dialog.Trigger>
 		<Dialog.Portal>
 			<Dialog.Overlay className="DialogOverlay"/>

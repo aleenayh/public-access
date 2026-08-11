@@ -64,7 +64,14 @@ export function MysteryContent({ mysteryId }: { mysteryId: string }) {
 		})
 	}
 
-	return (
+	const removeClue = (text: string) => {
+		updateGameState({
+			...gameState,
+			mysteries: gameState.mysteries.map((m) => m.id === mysteryId ? { ...m, clues: m.clues.filter((c) => c.text !== text) } : m),
+		})
+	}
+	
+	return ( 
 		<div className={`flex-1 w-full h-full flex flex-col gap-2 overflow-auto`}>
 			<h3 className="text-lg font-bold text-theme-text-accent flex gap-2 items-center"><span className="grow">{mystery.name}</span> {role === PlayerRole.KEEPER && <EditMysteryButton mystery={mystery} />}</h3>
 
@@ -88,10 +95,11 @@ export function MysteryContent({ mysteryId }: { mysteryId: string }) {
 
 				<div className="border border-theme-border flex-1"><h4>Clues</h4>
 				<div className="text-xs flex justify-center items-center text-theme-text-muted">earned: {mystery.clues.length} <Diamond/> used: {mystery.clues.filter((c) => c.used).length} <Diamond/> available: {mystery.clues.filter((c) => !c.used).length}</div>
-					<ul className="list-none">
-						{mystery.clues.map((clue) => <li key={clue.text} className={`${clue.used ? "text-theme-text-muted" : ""} text-left`}>
+					<div className="flex flex-col gap-1">
+						{mystery.clues.map((clue) => <div key={clue.text} className={`${clue.used ? "text-theme-text-muted" : ""} text-left inline-flex items-baseline gap-2 justify-start pl-2`}>
 							<input type="checkbox" defaultChecked={clue.used} className="mr-2" onChange={() => markClue(clue.text)} />
-							{parseMarkupFromString(clue.text)}</li>)}</ul>
+							<button type="button" className="rounded-full bg-theme-bg-secondary w-4 h-4 text-xs hover:bg-theme-bg-accent text-theme-text-primary flex justify-center items-center leading-none" onClick={()=>removeClue(clue.text)}>X</button>
+							{parseMarkupFromString(clue.text)}</div>)}</div>
 			</div></div>
 
 			<form onSubmit={handleSubmit(addClue)} className="flex gap-2 items-center">
@@ -259,7 +267,7 @@ function MysteryForm({ mystery, closeModal }: {mystery?:Mystery, closeModal: () 
 						<div className="flex gap-2 justify-between"><button type="submit" className="formButton grow">
 							{mystery ? "Save Changes" : "Add Mystery"}
 				</button>
-				{mystery && <button type="button" className="formButton grow" onClick={removeMystery}>Remove Mystery</button>}
+				{mystery && mystery.id !== "tv-odyssey-mystery" && <button type="button" className="formButton grow" onClick={removeMystery}>Remove Mystery</button>}
 				</div>
 					</form>
 				</Dialog.Content>
