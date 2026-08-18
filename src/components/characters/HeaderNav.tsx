@@ -20,7 +20,7 @@ export function HeaderNav({activeCharacter, setActiveCharacter}: {activeCharacte
     }
 
     return (
-        <div className="flex items-center justify-evenly max-h-20 md:max-h-24 relative min-h-10">
+        <div className="flex items-center justify-evenly max-h-20 md:max-h-24 relative min-h-10 isolate overflow-visible z-80">
             <KeeperOverviewButton onClick={() => setActiveCharacter(null)} />
             {allCharacters.map((character, index) => (
 				<CharacterPortrait 

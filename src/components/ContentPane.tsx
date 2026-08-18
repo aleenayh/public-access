@@ -30,30 +30,30 @@ export function ContentPane() {
         <StyledPane>
             <CharacterCreateModal showTrigger={false} />
             <div className="-mt-4 -mx-4 flex align-center justify-stretch gap-1 mb-4 relative overflow-visible h-fit items-start border-b border-theme-border isolate flex-wrap md:flex-nowrap">
-            <button type="button" className={`navButton ${contentTitle === "Mysteries" ? "activeNav" : ""}`} onClick={() => onClick("Mysteries", <MysteryPane/>)}>
+            <button type="button" className={`navButton group ${contentTitle === "Mysteries" ? "activeNav" : ""}`} onClick={() => onClick("Mysteries", <MysteryPane/>)}>
                 <MagnifyingGlass height={24}/> <TextOnHover text="Mysteries" expanded={contentTitle === "Mysteries"} />
                 </button>
-                <div className="block md:hidden"><button type="button" className={`navButton ${contentTitle === "Latchkeys" ? "activeNav" : ""}`} onClick={() => onClick("Latchkeys", <CharacterInterior/>)}>
+                <div className="block md:hidden"><button type="button" className={`navButton group ${contentTitle === "Latchkeys" ? "activeNav" : ""}`} onClick={() => onClick("Latchkeys", <CharacterInterior/>)}>
                 <Latchkey height={24}/> <TextOnHover text="Latchkeys" expanded={contentTitle === "Latchkeys"} />
                 </button>
                 </div>
-            <button type="button" className={`navButton ${contentTitle === "Reference Sheet" ? "activeNav" : ""}`} onClick={() => onClick("Reference Sheet", <ReferenceSheet/>)}>
+            <button type="button" className={`navButton group ${contentTitle === "Reference Sheet" ? "activeNav" : ""}`} onClick={() => onClick("Reference Sheet", <ReferenceSheet/>)}>
                 <Book height={24}/> <TextOnHover text="Reference Sheet" expanded={contentTitle === "Reference Sheet"} />
             </button>
-            <button type="button" className={`navButton ${contentTitle === "TV Odyssey Mystery" ? "activeNav" : ""}`} onClick={() => onClick("TV Odyssey Mystery", <MysteryContent mysteryId="tv-odyssey-mystery"/>)}>
+            <button type="button" className={`navButton group ${contentTitle === "TV Odyssey Mystery" ? "activeNav" : ""}`} onClick={() => onClick("TV Odyssey Mystery", <MysteryContent mysteryId="tv-odyssey-mystery"/>)}>
                 <Television height={24}/> <TextOnHover text="TV Odyssey Mystery" expanded={contentTitle === "TV Odyssey Mystery"} />
             </button>
-            <button type="button" className={`navButton ${contentTitle === "Odyssey Tapes" ? "activeNav" : ""}`} onClick={() => onClick("Odyssey Tapes", <OdysseyTapesSheet/>)}>
+            <button type="button" className={`navButton group ${contentTitle === "Odyssey Tapes" ? "activeNav" : ""}`} onClick={() => onClick("Odyssey Tapes", <OdysseyTapesSheet/>)}>
                 <VHS height={24}/> <TextOnHover text="Odyssey Tapes" expanded={contentTitle === "Odyssey Tapes"} />
             </button>
-            <button type="button" className={`navButton ${contentTitle === "Personal Notes" ? "activeNav" : ""}`} onClick={() => onClick("Personal Notes", <NotesSheet/>)}>
+            <button type="button" className={`navButton group ${contentTitle === "Personal Notes" ? "activeNav" : ""}`} onClick={() => onClick("Personal Notes", <NotesSheet/>)}>
                 <Pencil height={24}/> <TextOnHover text="Personal Notes" expanded={contentTitle === "Personal Notes"} />
             </button>
 
-            <button type="button" className={`navButton ${contentTitle === "Safety Tools" ? "activeNav" : ""}`} onClick={() => onClick("Safety Tools", <SafetySheet/>)}>
+            <button type="button" className={`navButton group ${contentTitle === "Safety Tools" ? "activeNav" : ""}`} onClick={() => onClick("Safety Tools", <SafetySheet/>)}>
                 <Heartshield height={24}/> <TextOnHover text="Safety Tools" expanded={contentTitle === "Safety Tools"} />
                 </button>
-				<button type="button" className={`navButton ${contentTitle === "Settings" ? "activeNav" : ""}`} onClick={() => onClick("Settings", <SettingsSheet/>)}>
+				<button type="button" className={`navButton group ${contentTitle === "Settings" ? "activeNav" : ""}`} onClick={() => onClick("Settings", <SettingsSheet/>)}>
                 <Cog height={24}/> <TextOnHover text="Settings" expanded={contentTitle === "Settings"} />
                 </button>
             </div>

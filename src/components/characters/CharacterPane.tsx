@@ -27,10 +27,10 @@ export function CharacterInterior() {
 			setActiveCharacter(myChar?.name ?? null)
 		}
 	}, [myChar?.name])
-	return <div className="w-full overflow-y-auto h-full">
+	return <div className="w-full overflow-y-visible h-full">
 				<HeaderNav activeCharacter={activeCharacterRaw} setActiveCharacter={setActiveCharacter}/>
 			<Divider/>
-		<div className="max-h-full min-h-0 overflow-y-auto scrollbar-gutter-stable">{activeCharacter ? <CharacterSheet character={activeCharacter} /> : <KeeperCharacterOverview />}</div>
+		<div className="max-h-full min-h-0 overflow-y-auto scrollbar-gutter-stable pb-30">{activeCharacter ? <CharacterSheet character={activeCharacter} /> : <KeeperCharacterOverview />}</div>
 	</div>
 
 }
