@@ -4,6 +4,7 @@ import { type GameState, gameStateSchema } from "../context/types";
 import {
 	checkGameExists,
 	createNewGame,
+	createNewGameFromState,
 	generateGameHash,
 	nameToPlayerId,
 } from "../lib/firebase";
@@ -113,8 +114,15 @@ export function LandingPage({
 
 		try {
 			const newHash = generateGameHash();
-			setStartingState(gameState);
+			setStartingState({ ...gameState, gameHash: newHash });
+			await createNewGameFromState({gameHash: newHash, gameState: gameState})
+
+			// Update URL with the game hash for easy sharing
+			const newUrl = `${window.location.origin}${window.location.pathname}?gameHash=${newHash}`;
+			window.history.pushState({}, "", newUrl);
 			setGameHash(newHash);
+			setUserId(playerId);
+			setUserName(playerName.trim());
 			updateSavedName();
 		} catch (err) {
 			console.error("Failed to create game:", err);
@@ -528,7 +536,7 @@ function UploadGameFileStep({
 			</p>
 			<p className="text-theme-text-muted text-sm text-left">
 				If you didn't rename the file, it should look something like:
-				"TheBetween-game-abc123.json"
+				"PublicAccess-game-abc123.json"
 			</p>
 			<input
 				name="game-file-input"

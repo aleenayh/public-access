@@ -8,9 +8,10 @@ import { LatchkeyMoves } from "./components/LatchkeyMoves";
 import type { Character } from "./types";
 import { EditCharacterModal } from "./components/EditModal";
 import { DiceIndicator } from "../shared/Dice";
+import { PlayerRole } from "../../context/types";
 
 export function CharacterSheet({character}: {character: Character}) {
-    const {gameState, user: {id}} = useGame();
+    const {gameState, user: {id, role}} = useGame();
     const activePlayer = gameState.players.find((player) => player.character?.id === character.id);
     const editable = activePlayer?.id === id;
 
@@ -31,7 +32,7 @@ export function CharacterSheet({character}: {character: Character}) {
 
         <p className="text-left"><strong className="text-theme-text-accent">Look:</strong> {character.look}</p>
             <p className="text-left"><strong className="text-theme-text-accent">Takes You Back:</strong> {character.takesYouBack}</p>
-            {editable && <EditCharacterModal character={character} />}
+            {(editable || role === PlayerRole.KEEPER )&& <EditCharacterModal character={character} />}
         </div>
     )
 }

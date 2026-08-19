@@ -86,6 +86,23 @@ export async function createNewGame(gameHash: string, player: { id: string; name
   return newState
 }
 
+export async function createNewGameFromState({ gameHash, gameState }: { gameHash:string, gameState: Partial<GameState> }) {
+  const gameRef = ref(db, `games/${gameHash}`)
+  const newState: GameState = {
+    ...defaultGameState,
+    ...gameState,
+    gameHash,
+  }
+
+  await set(gameRef, {
+    ...newState,
+    timestamp: new Date().toISOString(),
+  })
+
+  return newState
+}
+
+
 /**
  * Generate a random game hash
  */
