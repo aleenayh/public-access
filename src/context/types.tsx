@@ -50,6 +50,7 @@ const questionSchema = z.object({
 	complexity: z.number().min(1).max(16).catch(6),
 	opportunity: z.string().optional().catch(undefined),
 })
+export type Questions = z.infer<typeof questionSchema>
 
 const clueSchema = z.object({
 	used: z.boolean().catch(false),

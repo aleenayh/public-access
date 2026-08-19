@@ -1,6 +1,6 @@
 import { Dialog } from "radix-ui";
 import { useGame } from "../context/GameContext";
-import { PlayerRole, type Mystery } from "../context/types";
+import { PlayerRole, type Mystery, type Questions } from "../context/types";
 import { parseMarkupFromString } from "../utils/parseMarkupFromString";
 import { CloseButton } from "./shared/CloseButton";
 import { useForm } from "react-hook-form";
@@ -32,6 +32,8 @@ export function MysteryPane() {
 }
 
 export function MysteryContent({ mysteryId }: { mysteryId: string }) {
+	const [confirmResolveModalOpen, setConfirmResolveModalOpen] = useState(false)
+	const [resolvingQuestion, setResolvingQuestion] = useState<Questions|null>(null)
 	const { gameState, updateGameState, user: {role} } = useGame();
 	const {register, handleSubmit, reset} = useForm<{clue:string}>({
 		defaultValues: {
@@ -70,9 +72,43 @@ export function MysteryContent({ mysteryId }: { mysteryId: string }) {
 			mysteries: gameState.mysteries.map((m) => m.id === mysteryId ? { ...m, clues: m.clues.filter((c) => c.text !== text) } : m),
 		})
 	}
+
+	const confirmResolve = (question: Questions) => {
+		setResolvingQuestion(question)
+		setConfirmResolveModalOpen(true);
+	}
+
+	const resolve = () => {
+		const newClues = mystery.clues.filter((c) => !c.used)
+		const newQuestions = mystery.questions.filter((q)=> q.text !== resolvingQuestion?.text)
+		updateGameState({
+			...gameState,
+			mysteries: gameState.mysteries.map((m) => 
+				m.id === mysteryId ? {
+					...m,
+					clues: newClues,
+					questions: newQuestions,
+				} : m
+			)
+		})
+		setConfirmResolveModalOpen(false)
+		setResolvingQuestion(null)
+	}
 	
 	return ( 
 		<div className={`flex-1 w-full h-full flex flex-col gap-2 overflow-auto`}>
+			<Dialog.Root open={confirmResolveModalOpen} onOpenChange={setConfirmResolveModalOpen}>
+				<Dialog.Portal>
+				<Dialog.Overlay className="DialogOverlay" />
+					<Dialog.Content className="DialogContent">
+						<Dialog.Title>Resolve the question: {resolvingQuestion?.text}</Dialog.Title>
+						<div className="flex flex-col justify-center items-center gap-6">
+						<div>This will remove the question and opportunity from the mystery view. Confirming will also clear {mystery.clues.filter((c) => c.used).length} explained Clues.</div>
+						<button type="button"  className="formButton" onClick={resolve}>Resolve Question</button></div>
+					</Dialog.Content>
+				</Dialog.Portal>
+				
+			</Dialog.Root>
 			<h3 className="text-lg font-bold text-theme-text-accent flex gap-2 items-center"><span className="grow">{mystery.name}</span> {role === PlayerRole.KEEPER && <EditMysteryButton mystery={mystery} />}</h3>
 
 			{mystery.intro && <div>
@@ -88,7 +124,9 @@ export function MysteryContent({ mysteryId }: { mysteryId: string }) {
 			<div className="flex flex-col gap-2 grow">
 			<div className="flex gap-2"><div className="border border-theme-border flex-1 p-2">
 				{mystery.questions.map((question) => <div key={question.text}>
-					<h4 className="text-sm font-bold text-theme-text-accent">{question.text}</h4><span className="text-xs text-theme-text-muted">Complexity: {question.complexity}</span>
+					<h4 className="text-sm font-bold text-theme-text-accent">{question.text}</h4>
+					<div className="flex gap-2 w-full justify-center"><span className="text-xs text-theme-text-muted">Complexity: {question.complexity}</span>
+						{role === PlayerRole.KEEPER && <button className="rounded-md bg-theme-bg-secondary px-2 text-xs hover:bg-theme-bg-accent text-theme-text-primary flex justify-center items-center leading-none" onClick={() => confirmResolve(question)}>Resolve</button>}</div>
 					{question.opportunity && <p className="text-xs text-left">Opportunity: <span className="italic">{question.opportunity}</span></p>}
 					</div>)}
 				</div>
