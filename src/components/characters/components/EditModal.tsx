@@ -56,7 +56,7 @@ export function EditCharacterModal({character}:{character:Character}) {
 }
 
 function EditForm({ character, close }: { character: Character, close:()=>void }) {
-    const { gameState, updateGameState, user } = useGame();
+    const { gameState, updateGameState } = useGame();
     let unusedIcons = getAllUnusedIcons(gameState);
     const { register, handleSubmit, setValue, watch } = useForm({ defaultValues: {
         name: character.name,
@@ -99,7 +99,7 @@ function EditForm({ character, close }: { character: Character, close:()=>void }
         }
         updateGameState({
             ...gameState,
-            players: gameState.players.map((player) => player.id === user.id ? { ...player, character: newCharacter } : player),
+            players: gameState.players.map((player) => player.id === character.id ? { ...player, character: newCharacter } : player),
         });
         close();
     };
