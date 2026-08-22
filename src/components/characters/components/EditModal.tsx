@@ -14,6 +14,7 @@ import { Lizard } from "../../svgs/portraitIcons/Lizard";
 import { getAllUnusedIcons } from "../utils";
 import type { Character} from "../types";
 import { EditMovesSection } from "./MoveSelector";
+import toast from "react-hot-toast";
 
 type Img = {type: "custom", url: string} | {type: "default", icon: string}
 type CharacterCreateInputs = {
@@ -57,6 +58,8 @@ export function EditCharacterModal({character}:{character:Character}) {
 
 function EditForm({ character, close }: { character: Character, close:()=>void }) {
     const { gameState, updateGameState } = useGame();
+    //snapshot before edit so we can match to gamestate, playerID not guaranteed to match for legacy games
+    const playerSnapshot = gameState.players.find((player)=> player.character && player.character.name === character.name)
     let unusedIcons = getAllUnusedIcons(gameState);
     const { register, handleSubmit, setValue, watch } = useForm({ defaultValues: {
         name: character.name,
@@ -81,6 +84,10 @@ function EditForm({ character, close }: { character: Character, close:()=>void }
         unusedIcons = [...unusedIcons, character.image.icon]
     }
     const confirmCharacter = (data: CharacterCreateInputs) => {
+        if (!playerSnapshot) {
+            toast.error(`You do not have permission to edit this Latchkey.`)
+            return;
+        }
         const { name, pronouns, look, image, abilities, takesYouBack } = data;
         const newCharacter = {
             ...character,
@@ -99,7 +106,7 @@ function EditForm({ character, close }: { character: Character, close:()=>void }
         }
         updateGameState({
             ...gameState,
-            players: gameState.players.map((player) => player.id === character.id ? { ...player, character: newCharacter } : player),
+            players: gameState.players.map((p) => p.id === playerSnapshot.id ? { ...p, character: newCharacter } : p),
         });
         close();
     };
