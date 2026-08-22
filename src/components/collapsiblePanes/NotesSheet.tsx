@@ -19,6 +19,11 @@ export function NotesSheet() {
 			setButtonText("Save");
 		}, 3000);
     };
+    const saveOnBlur = (e:React.FocusEvent<HTMLTextAreaElement, Element>) => {
+        setNotes(e.target.value)
+        localStorage.setItem(`PublicAccess_notes_${gameHash}`, e.target.value);
+        
+    }
     
     return (
             <div className="flex flex-col gap-4 justify-stretch h-full">
@@ -28,7 +33,7 @@ export function NotesSheet() {
                 <textarea
                     className="flex-1 grow bg-theme-bg-primary text-theme-text-primary border-2 border-theme-border-accent rounded-lg p-2 w-full h-full"
                     defaultValue={notes}
-                    onBlur={(e) => setNotes(e.target.value)}
+                onBlur={(e) => saveOnBlur(e)}
                 />
                 <button type="button" className="formButton"
                     onClick={saveLocal}
