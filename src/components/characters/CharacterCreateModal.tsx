@@ -662,7 +662,7 @@ function MovePicker({
       <h4 className="text-center text-theme-text-accent">
         Choose One Latchkey Move
       </h4>
-      <div className="w-full grid grid-cols-2 lg:grid-cols-3 gap-4 align-start">
+      <div className="w-full grid grid-cols-2 lg:grid-cols-3 gap-4 align-stretch">
         {Object.entries(moves).map(([name, description]) => {
           if (movesInPlay.includes(name)) {
             return null;
@@ -679,7 +679,7 @@ function MovePicker({
               >
                 {name}
               </h4>
-              <p className="text-xs text-theme-text-secondary text-left">
+              <p className={`${selectedMove === name ? "block" : "hidden"} transition-discrete text-xs text-theme-text-secondary text-left`}>
                 {parseMarkupFromString(
                   description.map((d) => d.trim()).join("\n"),
                 )}
