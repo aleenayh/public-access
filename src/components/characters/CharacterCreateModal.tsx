@@ -104,11 +104,11 @@ export function CharacterCreateModal({
     if (data && data.abilities) {
       const currentValues = getValues("abilities");
       const newValues = {
-        vitality: currentValues.vitality + data.abilities.vitality,
-        composure: currentValues.composure + data.abilities.composure,
-        reason: currentValues.reason + data.abilities.reason,
-        presence: currentValues.presence + data.abilities.presence,
-        sensitivity: currentValues.sensitivity + data.abilities.sensitivity,
+        vitality: Number(currentValues.vitality) + Number(data.abilities.vitality),
+        composure:  Number(currentValues.composure)  + Number(  data.abilities.composure),  
+        reason: Number(currentValues.reason) + Number(data.abilities.reason),
+        presence: Number(currentValues.presence) + Number(data.abilities.presence),
+        sensitivity: Number(currentValues.sensitivity) + Number(data.abilities.sensitivity),
       };
       setValue("abilities", newValues);
     }
