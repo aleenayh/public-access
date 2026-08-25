@@ -80,11 +80,11 @@ function AddMove({ onConfirm, advancements }: { onConfirm: () => void, advanceme
         let newAbilities = existingCharacter.abilities
         if (data && data.abilities) {
             newAbilities = {
-                vitality: newAbilities.vitality + data.abilities.vitality,
-                composure: newAbilities.composure + data.abilities.composure,
-                reason: newAbilities.reason + data.abilities.reason,
-                presence: newAbilities.presence + data.abilities.presence,
-                sensitivity: newAbilities.sensitivity + data.abilities.sensitivity,
+                vitality: Number(newAbilities.vitality) + Number(data.abilities.vitality),
+                composure:  Number(newAbilities.composure)  + Number(  data.abilities.composure),  
+                reason: Number(newAbilities.reason) + Number(data.abilities.reason),
+                presence: Number(newAbilities.presence) + Number(data.abilities.presence),
+                sensitivity: Number(newAbilities.sensitivity) + Number(data.abilities.sensitivity),
             }
         }
             let newCornerOfTheHouse = existingCharacter.cornerOfTheHouse
