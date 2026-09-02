@@ -11,7 +11,7 @@ export function Conditions({character}: {character: Character}) {
         const conditions = character.conditions.map((condition, i) => i === index ? value : condition);
         updateGameState({
             ...gameState,
-            players: gameState.players.map((player) => player.character && player.id === id ? { ...player, character: { ...player.character, conditions } } : player),
+            players: gameState.players.map((player) => player.character && player.character.id === character.id ? { ...player, character: { ...player.character, conditions } } : player),
         });
     }
     return (
