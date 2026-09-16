@@ -57,7 +57,7 @@ export const characterSchema = z.object({
 	abilities: abilitiySchema,
     moves: z.array(moveSchema).catch([]),
 	questions: z.array(z.boolean()).catch([true, false, false, false, false, false, false]),
-    keysOfTheChild: z.array(z.boolean()).catch([false, false, false, false, false]),
+    keysOfTheChild: z.array(z.boolean()).catch([false, false, false, false, false, false, false]),
     keysOfDesolation: z.array(z.boolean()).catch([false, false, false, false, false]),
     advancements: advancementSchema.catch(emptyAdvancements),
 });
