@@ -65,11 +65,11 @@ function OdysseyTape({ tape }: { tape: OdysseyTape }) {
 				layout
 
 				className={`shrink flex flex-col items-center justify-center gap-2 transform-all ${expanded ? "scale-y-100" : "scale-y-0"} ${prefersReducedMotion ? "duration-0" : "duration-500"} overflow-clip origin-top`}><p className="italic text-sm text-left">{tape.intro}</p>
-				<ul className="list-inside list-[upper-roman] text-left text-sm flex flex-col gap-2">
+				<ol className="list-inside list-[upper-roman] text-left text-sm flex flex-col gap-2">
 					{tape.prompts.map((prompt) => <li>
 						{prompt}
 					</li>)}
-				</ul>
+				</ol>
 				<div className="flex gap-2"><button type="button" className="formButton" onClick={markWatched}>{tape.watched ? "Mark Unwatched" : "Mark Watched"}</button>
 					{role === PlayerRole.KEEPER && <button type="button" className="formButton" onClick={removeTape}>Remove Tape</button>}</div>
 			</motion.div>}
