@@ -27,10 +27,11 @@ export function NewMoveOnAdvance({ onConfirm }: { onConfirm: () => void }) {
         ...character.advancements,
         ...(character.advancements.move1===true ? {move2:true} : {move1:true})
     };
+    const xp = [false, false, false, false, false, false]
 
     return <div className="flex flex-col gap-2 w-full">
         <CurrentLatchkeyMoves canRemove={false} myMoves={myMoves} />
-        <AddMove onConfirm={onConfirm} advancements={advancements} />
+        <AddMove onConfirm={onConfirm} advancements={advancements} xp={xp} />
 </div>
 }
 
@@ -65,7 +66,7 @@ function CurrentLatchkeyMoves({ canRemove, myMoves }: { canRemove: boolean,myMov
     </>
 }
 
-function AddMove({ onConfirm, advancements }: { onConfirm: () => void, advancements?: Advancements }) {
+function AddMove({ onConfirm, advancements, xp }: { onConfirm: () => void, advancements?: Advancements, xp?: Array<boolean> }) {
     const { gameState, updateGameState, user } = useGame();
     const movesInPlay = gameState.players.flatMap((player) => player.character?.moves || []).map((move) => move.name);
     const [selectedMove, setSelectedMove] = useState<string>("");
@@ -78,6 +79,7 @@ function AddMove({ onConfirm, advancements }: { onConfirm: () => void, advanceme
         const newMoves = [...existingCharacter.moves, move];
         const data = adjustForMove(selectedMove);
         let newAbilities = existingCharacter.abilities
+        const newXp = xp ?? existingCharacter.xp;
         if (data && data.abilities) {
             newAbilities = {
                 vitality: Number(newAbilities.vitality) + Number(data.abilities.vitality),
@@ -94,7 +96,7 @@ function AddMove({ onConfirm, advancements }: { onConfirm: () => void, advanceme
             const newCharacter = {
                 ...existingCharacter,
                 ...(advancements ? { advancements } : {}),
-                moves: newMoves, abilities: newAbilities, cornerOfTheHouse: newCornerOfTheHouse
+                moves: newMoves, abilities: newAbilities, cornerOfTheHouse: newCornerOfTheHouse, xp: newXp
             }
             updateGameState({
                 ...gameState,
