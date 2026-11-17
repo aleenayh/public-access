@@ -10,9 +10,4 @@ export default defineConfig({
     tailwindcss(),
     svgr()
   ],
-  server: {
-    watch: {
-      usePolling: true
-    }
-  }
 })
