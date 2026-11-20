@@ -74,7 +74,7 @@ function WriteCustomMove({ onConfirm }: { onConfirm: () => void }) {
     const character = gameState.players.find((player) => player.id === id)?.character
     if (!character) return;
     const advancements = { ...character.advancements, customMove:true };
-    
+    const xp = [false, false, false, false, false, false];
     const confirm = (data: Moves) => {
         const characterMoves = [...character.moves, data]
         updateGameState({
@@ -85,6 +85,7 @@ function WriteCustomMove({ onConfirm }: { onConfirm: () => void }) {
                     ...p.character,
                     moves: characterMoves,
                     advancements,
+                    xp
                 }
             } : p)
         })
@@ -132,6 +133,7 @@ function AbilityAdjust({ onConfirm }: { onConfirm: () => void }) {
             sensitivity: Number(data.sensitivity),
             presence: Number(data.presence),
         }
+        const xp = [false, false, false, false, false, false];
         updateGameState({
             ...gameState, 
             players: gameState.players.map((p) => p.id === id && p.character ? {
@@ -140,6 +142,7 @@ function AbilityAdjust({ onConfirm }: { onConfirm: () => void }) {
                     ...p.character,
                     abilities,
                     advancements,
+                    xp
                 }
             } : p)
         })
@@ -188,6 +191,7 @@ function UnmarkItems({ onConfirm }: { onConfirm: () => void }) {
 
     const handleConfirm = () => {
         const cornerOfTheHouse = character.cornerOfTheHouse.map((item) => { return { ...item, marked: false } })
+        const xp = [false, false, false, false, false, false];
         updateGameState({
             ...gameState, 
             players: gameState.players.map((p) => p.id === id && p.character ? {
@@ -196,6 +200,7 @@ function UnmarkItems({ onConfirm }: { onConfirm: () => void }) {
                     ...p.character,
                     cornerOfTheHouse,
                     advancements,
+                    xp
                 }
             } : p)
         })
